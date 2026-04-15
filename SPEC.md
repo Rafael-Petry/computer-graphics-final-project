@@ -9,8 +9,8 @@
 - **Aluno 1 - Nome**: Rafael Petry da Silva
 - **Aluno 1 - Cartão UFRGS**: 00581131
 
-- **Aluno 2 - Nome**: <mark>`<preencher>`</mark>
-- **Aluno 2 - Cartão UFRGS**: <mark>`<preencher>`</mark>
+- **Aluno 2 - Nome**: Thibault Pelenc
+- **Aluno 2 - Cartão UFRGS**: 00612013
 
 ## Detalhes do que será implementado
 
