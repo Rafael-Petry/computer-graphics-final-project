@@ -6,16 +6,16 @@
 
 ## Integrantes da dupla
 
-- **Aluno 1 - Nome**: <mark>`<preencher>`</mark>
-- **Aluno 1 - Cartão UFRGS**: <mark>`<preencher>`</mark>
+- **Aluno 1 - Nome**: Rafael Petry da Silva
+- **Aluno 1 - Cartão UFRGS**: 00581131
 
 - **Aluno 2 - Nome**: <mark>`<preencher>`</mark>
 - **Aluno 2 - Cartão UFRGS**: <mark>`<preencher>`</mark>
 
 ## Detalhes do que será implementado
 
-- **Título do trabalho**: <mark>`<preencher>`</mark>
-- **Parágrafo curto descrevendo o que será implementado**: <mark>`<preencher>`</mark>
+- **Título do trabalho**: Asteroids-3D
+- **Parágrafo curto descrevendo o que será implementado**: 
 
 ## Especificação visual
 
@@ -34,7 +34,7 @@
 >   do próprio repositório. Mas, garanta que qualquer um tenha
 >   permissão de acesso ao vídeo através deste link.
 
-<mark>`<preencher>`</mark>
+https://www.youtube.com/watch?v=5OtHX_sk6ko
 
 ### Vídeo - Timestamp
 
