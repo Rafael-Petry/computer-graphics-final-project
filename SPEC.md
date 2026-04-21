@@ -34,7 +34,7 @@
 >   do próprio repositório. Mas, garanta que qualquer um tenha
 >   permissão de acesso ao vídeo através deste link.
 
-https://www.youtube.com/watch?v=5OtHX_sk6ko
+<video src="outer_wilds_demo.mp4" type="video/mp4" />
 
 ### Vídeo - Timestamp
 
