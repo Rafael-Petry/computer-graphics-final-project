@@ -7,7 +7,7 @@
 int main()
 {
     Asteroid asteroid;
-    Sun sun;
+    Sun& sun = Sun::getInstance();
     Planet planet;
 
     asteroid.translate();
@@ -18,9 +18,9 @@ int main()
 
     planet.translate();
     planet.rotate();
-    planet.getSun().rotate();
 
     std::cout << "Celestial body model path: " << CelestialBody::getModel() << std::endl;
+    std::cout << "Celestial body default color: " << CelestialBody::getColor() << std::endl;
 
     return 0;
 }

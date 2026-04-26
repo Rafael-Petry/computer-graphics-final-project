@@ -13,13 +13,3 @@ void Planet::rotate()
 {
 	std::cout << "Rotating the planet..." << std::endl;
 }
-
-Sun& Planet::getSun()
-{
-	return sun;
-}
-
-const Sun& Planet::getSun() const
-{
-	return sun;
-}

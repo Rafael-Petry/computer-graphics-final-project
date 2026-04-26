@@ -7,3 +7,8 @@ const std::string& CelestialBody::getModel()
 {
 	return model;
 }
+
+const std::string& CelestialBody::getColor()
+{
+	return color;
+}

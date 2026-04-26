@@ -11,6 +11,7 @@ public:
 	virtual void rotate() = 0;
 
 	static const std::string& getModel();
+	static const std::string& getColor();
 
 protected:
 	static const std::string model;
