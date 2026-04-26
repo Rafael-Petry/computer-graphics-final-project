@@ -9,8 +9,7 @@ int main()
     spaceship.translate();
     spaceship.rotate();
     spaceship.shoot();
-
-    std::cout << "Model path: " << Spaceship::getModel() << std::endl;
+    std::cout << "Spaceship's model path: " << Spaceship::getModel() << std::endl;
 
     return 0;
 }
