@@ -1,4 +1,4 @@
-./bin/Linux/main: src/* include/* CMakeLists.txt CMakePresets.json
+./bin/Linux/main: src/* ../src/vendor/include/* CMakeLists.txt CMakePresets.json
 	cmake --preset default-config
 	cmake --build --preset default-build
 
