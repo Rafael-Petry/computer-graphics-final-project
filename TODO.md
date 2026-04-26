@@ -18,10 +18,10 @@ This file defines a bunch of to do lists for different tasks and functionalities
 
 ## 3. First Classes and Initial Assets
 * [x] Define a "Spaceship" class with a cube model
-* [] Define a abstract "CelestialBody" class with a sphere model
-* [] Define a "Sun" class that extends "CelestialBody" with a yellow color
-* [] Define a "Planet" class that extends "CelestialBody" with a green color
-* [] Define a "Asteroid" class that extends "CelestialBody" with a gray color
+* [x] Define an abstract "CelestialBody" class with a sphere model
+* [x] Define a "Sun" class that extends "CelestialBody" with a yellow color
+* [x] Define a "Planet" class that extends "CelestialBody" with a green color
+* [x] Define a "Asteroid" class that extends "CelestialBody" with a gray color
 * [] Edit application to have a "scene camera" that shows a spaceship, a sun, three planets and an asteroid 
 
 ## 4. Animation
