@@ -7,6 +7,7 @@
 # ser compilados.
 set(SOURCES
   src/main.cpp
+  src/spaceship/spaceship.cpp
   src/vendor/glad.c
 )
 

@@ -17,7 +17,7 @@ This file defines a bunch of to do lists for different tasks and functionalities
 * [] Add suport for unit tests (only if I get bored)
 
 ## 3. First Classes and Initial Assets
-* [] Define a "Spaceship" class with a cube model
+* [x] Define a "Spaceship" class with a cube model
 * [] Define a abstract "CelestialBody" class with a sphere model
 * [] Define a "Sun" class that extends "CelestialBody" with a yellow color
 * [] Define a "Planet" class that extends "CelestialBody" with a green color
