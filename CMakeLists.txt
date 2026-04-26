@@ -7,6 +7,7 @@
 # ser compilados.
 set(SOURCES
   src/main.cpp
+  src/camera/camera.cpp
   src/spaceship/spaceship.cpp
   src/celestialBody/celestialBody.cpp
   src/celestialBody/asteroid/asteroid.cpp
