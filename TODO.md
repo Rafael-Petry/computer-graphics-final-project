@@ -22,7 +22,8 @@ This file defines a bunch of to do lists for different tasks and functionalities
 * [x] Define a "Sun" class that extends "CelestialBody" with a yellow color
 * [x] Define a "Planet" class that extends "CelestialBody" with a green color
 * [x] Define a "Asteroid" class that extends "CelestialBody" with a gray color
-* [] Edit application to have a "scene camera" that shows a spaceship, a sun, three planets and an asteroid 
+* [x] Edit application to have a "scene camera" that shows a spaceship, a sun, three planets and an asteroid
+* [] Import better model meshes assets for the spaceship and celestial bodies
 
 ## 4. Animation
 
