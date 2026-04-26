@@ -45,6 +45,7 @@ referência para a forma que o jogo funcionará em termos da movimentação 3D.
 Um vídeo do Asteroids não foi adicionado, pois é um jogo 2D mais antigo que só será usado
 como ideia de mecânicas adicionais.
 
+**Fonte:** [/demo/outer_wilds_demo.mp4](https://github.com/Rafael-Petry/computer-graphics-final-project/blob/main/demo/outer_wilds_demo.mp4)
 <video src="https://github.com/user-attachments/assets/dae59547-6338-42a8-8fd7-77b62e747d72" type="video/mp4"></video>
 
 ### Vídeo - Timestamp
@@ -64,15 +65,15 @@ como ideia de mecânicas adicionais.
 >   irá usar como ilustração para as explicações que vêm abaixo.
 
 ___
-**1) Imagem de parte do sistema solar.**
+**1) Imagem de parte do sistema solar. (Fonte: [/demo/1.png](https://github.com/Rafael-Petry/computer-graphics-final-project/blob/main/demo/1.png))**
 <img width="1920" height="1080" alt="1" src="https://github.com/user-attachments/assets/fce5704c-28a1-4dce-a3a2-a9db81815588" />
 ___
 
-**2) Imagem de pouso em planeta.**
+**2) Imagem de pouso em planeta. (Fonte: [/demo/2.png](https://github.com/Rafael-Petry/computer-graphics-final-project/blob/main/demo/2.png))**
 <img width="1920" height="1080" alt="2" src="https://github.com/user-attachments/assets/bd9e0129-bc77-4972-95fc-8e198dfcc8e1" />
 ___
 
-**3) Imagem de exterior da nave.**
+**3) Imagem de exterior da nave. (Fonte: [/demo/3.png](https://github.com/Rafael-Petry/computer-graphics-final-project/blob/main/demo/3.png))**
 <img width="1920" height="1080" alt="3" src="https://github.com/user-attachments/assets/dbe2f3ba-b438-4a27-97e1-369da81bfbd6" />
 ___
 
