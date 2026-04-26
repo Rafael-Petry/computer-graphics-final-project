@@ -49,3 +49,7 @@ Read *prompts/0-limitations*. Change *src/main.cpp* to create an application win
 ## 6-scene
 
 Read *prompts/0-limitations*. On the window initialized on *src/main.cpp*, load scene with a camera that shows a **Spaceship**, a **Sun**, an **Asteroid** and three **Planets**. For that, on *src/spaceship/scapeship.cpp*, implement the render function so that I can just call render on the object from main to instantiate its model. Do the same for the render function on *src/celestialBody/celestialBody.cpp*, taking into account the color property of the object. The scene needs to have a free camera. Implement the camera operations on *src/camera/camera.cpp* and *src/camera/camera.h* files to keep *src/main.cpp* clean.
+
+## 7-organize-shaders-and-render-correct-models
+
+Move the fragment shader code from *src/main.cpp* into *src/shaders/fragment.glsl*. Also, move the vertex shader code from *src/main.cpp* into *src/shaders/vertex.glsl*. Change the render logic of **CelestialBody** and **Spaceship** to use the correct model, loaded on the *model* variable.

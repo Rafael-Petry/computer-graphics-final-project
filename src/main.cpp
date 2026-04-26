@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
 
 #include <glad/glad.h>
@@ -16,6 +18,20 @@
 namespace
 {
 Camera* g_camera = nullptr;
+
+std::string ReadTextFile(const std::string& path)
+{
+    std::ifstream file(path);
+    if (!file.is_open())
+    {
+        std::cerr << "Failed to open file: " << path << std::endl;
+        return "";
+    }
+
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    return buffer.str();
+}
 
 GLuint CompileShader(GLenum type, const char* source)
 {
@@ -40,28 +56,16 @@ GLuint CompileShader(GLenum type, const char* source)
 
 GLuint CreateShaderProgram()
 {
-    const char* vertexShaderSource =
-        "#version 330 core\n"
-        "layout (location = 0) in vec3 aPos;\n"
-        "uniform mat4 model;\n"
-        "uniform mat4 view;\n"
-        "uniform mat4 projection;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_Position = projection * view * model * vec4(aPos, 1.0);\n"
-        "}\n";
+    const std::string vertexShaderSource = ReadTextFile("src/shaders/vertex.glsl");
+    const std::string fragmentShaderSource = ReadTextFile("src/shaders/fragment.glsl");
 
-    const char* fragmentShaderSource =
-        "#version 330 core\n"
-        "uniform vec3 objectColor;\n"
-        "out vec4 FragColor;\n"
-        "void main()\n"
-        "{\n"
-        "    FragColor = vec4(objectColor, 1.0);\n"
-        "}\n";
+    if (vertexShaderSource.empty() || fragmentShaderSource.empty())
+    {
+        return 0;
+    }
 
-    GLuint vertexShader = CompileShader(GL_VERTEX_SHADER, vertexShaderSource);
-    GLuint fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
+    GLuint vertexShader = CompileShader(GL_VERTEX_SHADER, vertexShaderSource.c_str());
+    GLuint fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fragmentShaderSource.c_str());
 
     GLuint program = glCreateProgram();
     glAttachShader(program, vertexShader);
@@ -154,6 +158,12 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     const GLuint shaderProgram = CreateShaderProgram();
+    if (shaderProgram == 0)
+    {
+        glfwDestroyWindow(window);
+        glfwTerminate();
+        return -1;
+    }
     const GLint modelUniform = glGetUniformLocation(shaderProgram, "model");
     const GLint viewUniform = glGetUniformLocation(shaderProgram, "view");
     const GLint projectionUniform = glGetUniformLocation(shaderProgram, "projection");
