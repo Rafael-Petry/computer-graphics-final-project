@@ -8,6 +8,10 @@
 set(SOURCES
   src/main.cpp
   src/spaceship/spaceship.cpp
+  src/celestialBody/celestialBody.cpp
+  src/celestialBody/asteroid/asteroid.cpp
+  src/celestialBody/sun/sun.cpp
+  src/celestialBody/planet/planet.cpp
   src/vendor/glad.c
 )
 
