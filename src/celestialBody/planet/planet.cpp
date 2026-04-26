@@ -13,3 +13,8 @@ void Planet::rotate()
 {
 	std::cout << "Rotating the planet..." << std::endl;
 }
+
+const std::string& Planet::getColor() const
+{
+	return color;
+}

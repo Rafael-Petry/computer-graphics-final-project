@@ -14,6 +14,7 @@ public:
 
 	void translate() override;
 	void rotate() override;
+	const std::string& getColor() const override;
 
 	static const std::string color;
 

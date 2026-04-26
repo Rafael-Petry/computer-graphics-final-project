@@ -3,15 +3,22 @@
 
 #include <string>
 
+#include <glad/glad.h>
+
+#include <glm/mat4x4.hpp>
+
 class CelestialBody {
 public:
 	virtual ~CelestialBody() {}
 
 	virtual void translate() = 0;
 	virtual void rotate() = 0;
+	virtual const std::string& getColor() const;
+
+	void render(GLint modelUniform, GLint colorUniform, const glm::mat4& modelMatrix) const;
 
 	static const std::string& getModel();
-	static const std::string& getColor();
+ 
 
 protected:
 	static const std::string model;

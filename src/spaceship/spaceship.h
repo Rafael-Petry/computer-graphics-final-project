@@ -3,9 +3,14 @@
 
 #include <string>
 
+#include <glad/glad.h>
+
+#include <glm/mat4x4.hpp>
+
 class Spaceship
 {
 public:
+	void render(GLint modelUniform, GLint colorUniform, const glm::mat4& modelMatrix) const;
 	void translate() const;
 	void rotate() const;
 	void shoot() const;

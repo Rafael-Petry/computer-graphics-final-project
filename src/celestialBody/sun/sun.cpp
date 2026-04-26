@@ -19,3 +19,8 @@ void Sun::rotate()
 {
 	std::cout << "Rotating the sun..." << std::endl;
 }
+
+const std::string& Sun::getColor() const
+{
+	return color;
+}
