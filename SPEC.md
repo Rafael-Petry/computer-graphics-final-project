@@ -99,6 +99,7 @@ Os asteroides e as árvores terão mais de uma instância copiada.
 
 ### Testes de intersecção
 Haverão os testes de colisão da nave com os corpos celestes (planetas, sol e asteroides) e árvores que estiverem nos planetas.
+Também terá o teste de colisão dos tiros da nave com os asteroides.
 
 ### Modelos de Iluminação em todos os objetos
 Para a nave, será utilizado o *Phong Illumination* para definir uma superfície *glossy*, 
