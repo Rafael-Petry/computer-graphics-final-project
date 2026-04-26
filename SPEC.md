@@ -45,7 +45,7 @@ referência para a forma que o jogo funcionará em termos da movimentação 3D.
 Um vídeo do Asteroids não foi adicionado, pois é um jogo 2D mais antigo que só será usado
 como ideia de mecânicas adicionais.
 
-<video src="https://github.com/user-attachments/assets/da9470a1-3954-4ad2-9e38-dc3ee9d020fa" type="video/mp4"></video>
+<video src="https://github.com/user-attachments/assets/dae59547-6338-42a8-8fd7-77b62e747d72" type="video/mp4"></video>
 
 ### Vídeo - Timestamp
 
@@ -63,7 +63,18 @@ como ideia de mecânicas adicionais.
 > - Coloque aqui **três imagens** capturadas do vídeo acima, que você
 >   irá usar como ilustração para as explicações que vêm abaixo.
 
-<mark>`<preencher>`</mark>
+___
+**1) Imagem de parte do sistema solar.**
+<img width="1920" height="1080" alt="1" src="https://github.com/user-attachments/assets/fce5704c-28a1-4dce-a3a2-a9db81815588" />
+___
+
+**2) Imagem de pouso em planeta.**
+<img width="1920" height="1080" alt="2" src="https://github.com/user-attachments/assets/bd9e0129-bc77-4972-95fc-8e198dfcc8e1" />
+___
+
+**3) Imagem de exterior da nave.**
+<img width="1920" height="1080" alt="3" src="https://github.com/user-attachments/assets/dbe2f3ba-b438-4a27-97e1-369da81bfbd6" />
+___
 
 ## Especificação textual
 
@@ -110,11 +121,14 @@ A movimentação da nave, a órbita dos planetas e a movimentação dos asterói
 > - Para cada item, **explique por que** não será implementado ou por
 >   que será implementado parcialmente.
 
-1. Comandos visíveis no HUD, como "Equipar Onduloscópio" e "Ver Mapa": Não serão implementados porque são mecânicas mais específicas
+**1) Comandos visíveis no HUD, como "Equipar Onduloscópio" e "Ver Mapa":** Não serão implementados porque são mecânicas mais específicas
 e complicadas do Outer Wilds que ficariam desconexos na nossa versão.
 
-2. Sair da nave com o personagem: Não será implementado porque, igualmente, para a nossa versão, 
+**2) Sair da nave com o personagem:** Não será implementado porque, igualmente, para a nossa versão, 
 não seria uma mecânica muito necessária que só acabaria aumentando a complexidade.
 
-3. Detalhes dos planetas: Será implementado parcialmente, pois os planetas do Outer Wilds são muito detalhados, 
-com construções e objetos mais elaborados. A ideia é simplificar as "decorações" para termos planetas mais genéricos, mas ainda funcionais. 
+**3) Detalhes dos planetas:** Será implementado parcialmente, pois os planetas do Outer Wilds são muito detalhados, 
+com construções e objetos mais elaborados. A ideia é simplificar as "decorações" para termos planetas mais genéricos, mas ainda funcionais.
+
+**4) Modelos específicos dos objetos:** Os modelos que utilizaremos na implementação, provavelmente, não serão idênticos aos que estão no vídeo, mas
+buscaremos por objetos similares que cumpram o mesmo papel convincentemente.
