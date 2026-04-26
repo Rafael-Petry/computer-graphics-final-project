@@ -13,7 +13,7 @@ This file defines a bunch of to do lists for different tasks and functionalities
 
 * [x] Isolate the old application and external libraries into separate folders
 * [x] Create this TODO.md
-* [-] Create a simple application that compiles correctly
+* [x] Create a simple application that compiles correctly
 * [] Add suport for unit tests (only if I get bored)
 
 ## 3. First Classes and Initial Assets
