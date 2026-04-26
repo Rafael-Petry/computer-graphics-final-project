@@ -166,7 +166,7 @@ void HexToRgb(const std::string& hex, float& r, float& g, float& b)
 }
 } // namespace
 
-const std::string CelestialBody::model = "src/celestialBody/celestialBody.obj";
+const std::string CelestialBody::model = "../../src/celestialBody/celestialBody.obj";
 const std::string CelestialBody::color = "#808080";
 
 const std::string& CelestialBody::getColor() const

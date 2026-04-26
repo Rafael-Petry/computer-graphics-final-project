@@ -137,7 +137,7 @@ const MeshData& GetMesh(const std::string& path)
 }
 } // namespace
 
-const std::string Spaceship::model = "src/spaceship/spaceship.obj";
+const std::string Spaceship::model = "../../src/spaceship/spaceship.obj";
 
 void Spaceship::render(GLint modelUniform, GLint colorUniform, const glm::mat4& modelMatrix) const
 {

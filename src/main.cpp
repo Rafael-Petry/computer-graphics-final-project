@@ -56,8 +56,8 @@ GLuint CompileShader(GLenum type, const char* source)
 
 GLuint CreateShaderProgram()
 {
-    const std::string vertexShaderSource = ReadTextFile("src/shaders/vertex.glsl");
-    const std::string fragmentShaderSource = ReadTextFile("src/shaders/fragment.glsl");
+    const std::string vertexShaderSource = ReadTextFile("../../src/shaders/vertex.glsl");
+    const std::string fragmentShaderSource = ReadTextFile("../../src/shaders/fragment.glsl");
 
     if (vertexShaderSource.empty() || fragmentShaderSource.empty())
     {
