@@ -14,7 +14,7 @@
 
 ## Detalhes do que será implementado
 
-- **Título do trabalho**: Asteroids-3D
+- **Título do trabalho**: Asteroids 3D
 - **Parágrafo curto descrevendo o que será implementado**: 
 A ideia do projeto é mesclar mecânicas de dois jogos: *Outer Wilds* e *Asteroids*. O jogador
 deverá controlar uma nave espacial, em primeira pessoa, enquanto destrói asteroides que
