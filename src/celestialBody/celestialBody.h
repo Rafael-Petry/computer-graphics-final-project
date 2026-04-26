@@ -10,6 +10,8 @@ public:
 	virtual void translate() = 0;
 	virtual void rotate() = 0;
 
+	const void render();
+
 	static const std::string& getModel();
 	static const std::string& getColor();
 

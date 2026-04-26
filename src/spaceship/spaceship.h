@@ -6,6 +6,7 @@
 class Spaceship
 {
 public:
+	void render() const;
 	void translate() const;
 	void rotate() const;
 	void shoot() const;

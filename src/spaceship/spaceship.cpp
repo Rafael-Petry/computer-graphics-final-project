@@ -4,6 +4,11 @@
 
 const std::string Spaceship::model = "src/spaceship/spaceship.obj";
 
+void Spaceship::render() const
+{
+	std::cout << "Rendering the spaceship..." << std::endl;
+}
+
 void Spaceship::translate() const
 {
 	std::cout << "Moving the spaceship..." << std::endl;
