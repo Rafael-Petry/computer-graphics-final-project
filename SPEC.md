@@ -102,7 +102,7 @@ Haverão os testes de colisão da nave com os corpos celestes (planetas, sol e a
 Também terá o teste de colisão dos tiros da nave com os asteroides.
 
 ### Modelos de Iluminação em todos os objetos
-Para todos objetos, será utilizado o "Physically Based Shading" da Disney.
+Para todos, será utilizado o "Physically Based Shading" da Disney com configurações de parâmetros diferentes, dependendo do objeto.
 
 ### Mapeamento de texturas em todos os objetos
 Haverá uma textura metálica da nave, uma textura rochosa para os corpos celestes e uma textura de madeira para o tronco das árvores.
