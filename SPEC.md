@@ -95,7 +95,7 @@ Terá uma câmera livre controlada em primeira pessoa pelo jogador e uma câmera
 para auxiliar o jogador na aterrissagem em planetas.
 
 ### Instâncias de objetos
-Os asteroides e as árvores terão mais de uma instância copiada.
+Os asteroides, os planetas e as árvores terão mais de uma instância copiada.
 
 ### Testes de intersecção
 Haverão os testes de colisão da nave com os corpos celestes (planetas, sol e asteroides) e árvores que estiverem nos planetas.
