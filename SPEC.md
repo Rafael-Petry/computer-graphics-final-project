@@ -102,8 +102,7 @@ Haverão os testes de colisão da nave com os corpos celestes (planetas, sol e a
 Também terá o teste de colisão dos tiros da nave com os asteroides.
 
 ### Modelos de Iluminação em todos os objetos
-Para a nave, será utilizado o *Phong Illumination* para definir uma superfície *glossy*, 
-enquanto que para os demais objetos será usado o *Lambert Shading*, para superfícies difusas ideais.
+Para todos objetos será utilizado o *Lambert Shading*.
 
 ### Mapeamento de texturas em todos os objetos
 Haverá uma textura metálica da nave, uma textura rochosa para os corpos celestes e uma textura para o tronco das árvores.
