@@ -129,7 +129,7 @@ e complicadas do Outer Wilds que ficariam desconexos na nossa versão.
 não seria uma mecânica muito necessária que só acabaria aumentando a complexidade.
 
 **3) Detalhes dos planetas:** Será implementado parcialmente, pois os planetas do Outer Wilds são muito detalhados, 
-com construções e objetos mais elaborados. A ideia é simplificar as "decorações" para termos planetas mais genéricos, mas ainda funcionais.
+com construções e objetos mais elaborados. A ideia é simplificar as "decorações" para termos planetas mais genéricos, mas ainda funcionais (com objetos naturais, como árvores e arbustos).
 
 **4) Modelos específicos dos objetos:** Os modelos que utilizaremos na implementação, provavelmente, não serão idênticos aos que estão no vídeo, mas
 buscaremos por objetos similares que cumpram o mesmo papel convincentemente.
