@@ -3,6 +3,8 @@
 #include "planet.h"
 
 const std::string Planet::color = "#00FF00";
+const std::string Planet::model = "src/celestialBody/planet/planet.obj";
+
 
 void Planet::translate()
 {

@@ -16,6 +16,7 @@ public:
 	void rotate() override;
 	const std::string& getColor() const override;
 
+	static const std::string model;
 	static const std::string color;
 
 private:
