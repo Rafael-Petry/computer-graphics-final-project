@@ -20,8 +20,8 @@ A ideia do projeto é mesclar mecânicas de dois jogos: *Outer Wilds* e *Asteroi
 deverá controlar uma nave espacial, em primeira pessoa, enquanto destrói asteroides que
 tentam causar danos nela. Destruir um asteroide concede pontos ao jogador, sendo o objetivo
 do jogo fazer o maior número de pontos antes que a nave exploda com os danos. O cenário será
-um sistema solar, com alguns planetas orbitando um sol ao centro. O jogador também poderá pousar
-nos planetas para realizar reparos na nave, aguardando parado por um certo tempo para iniciar a recuperação.
+um sistema solar, com alguns planetas (que o jogador pode aterrisar) orbitando um sol ao centro.
+Os planetas terão uma decoração básica, como árvores e arbustos.
 
 ## Especificação visual
 
