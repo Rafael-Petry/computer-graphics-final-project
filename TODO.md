@@ -23,7 +23,7 @@ This file defines a bunch of to do lists for different tasks and functionalities
 * [x] Define a "Planet" class that extends "CelestialBody" with a green color
 * [x] Define a "Asteroid" class that extends "CelestialBody" with a gray color
 * [x] Edit application to have a "scene camera" that shows a spaceship, a sun, three planets and an asteroid
-* [] Import better model meshes assets for the spaceship and celestial bodies
+* [-] Import better model meshes assets for the spaceship and celestial bodies
 
 ## 4. Animation
 
@@ -44,8 +44,9 @@ This file defines a bunch of to do lists for different tasks and functionalities
 
 ## 5. Illumination
 
-* [] Implement Phong Illumination for the spaceship
-* [] Implement Lambert Shading for other objects
+* [] Import Disney's PBR code
+* [] Configure params for spaceship
+* [] ...
 
 ## 6. idk
 
