@@ -91,21 +91,21 @@ também, a rotação (*pitch*, *yaw* e *roll*) da nave com o mouse (o controle d
 será habilitado enquanto o jogador estiver pressionando a tecla **R**). 
 
 ### Diferentes tipos de câmeras
-Terá uma câmera livre controlada em primeira pessoa pelo jogador e uma câmera *look-at* que será utilizada
+Terá uma câmera livre, ancorada na nave e controlada em primeira pessoa pelo jogador, e uma câmera *look-at* que será utilizada
 para auxiliar o jogador na aterrissagem em planetas.
 
 ### Instâncias de objetos
-Os asteroides, os planetas e as árvores terão mais de uma instância copiada.
+Os asteroides, os planetas, as árvores e os arbustos terão mais de uma instância copiada.
 
 ### Testes de intersecção
-Haverão os testes de colisão da nave com os corpos celestes (planetas, sol e asteroides) e árvores que estiverem nos planetas.
+Haverá os testes de colisão da nave com os corpos celestes (planetas, sol e asteroides) e árvores que estiverem nos planetas.
 Também terá o teste de colisão dos tiros da nave com os asteroides.
 
 ### Modelos de Iluminação em todos os objetos
 Para todos, será utilizado o "Physically Based Shading" da Disney com configurações de parâmetros diferentes, dependendo do objeto.
 
 ### Mapeamento de texturas em todos os objetos
-Haverá uma textura metálica da nave, uma textura rochosa para os corpos celestes e uma textura de madeira para o tronco das árvores.
+Haverá uma textura metálica da nave, uma textura rochosa para os asteroides, uma textura de gramado para os planetas e uma textura de madeira para o tronco das árvores.
 
 ### Movimentação com curva Bézier cúbica
 A órbita dos planetas ao redor do sol será definida com curva de Bézier cúbica.
