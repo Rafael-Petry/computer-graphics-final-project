@@ -9,14 +9,14 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-#include "camera/camera.h"
-#include "celestialBody/asteroid/asteroid.h"
-#include "celestialBody/planet/planet.h"
-#include "celestialBody/sun/sun.h"
-#include "helpers/input/input.h"
-#include "shaders/loader/loader.h"
-#include "spaceship/spaceship.h"
-#include "vendor/include/matrices.h"
+#include "../camera/camera.h"
+#include "../celestialBody/asteroid/asteroid.h"
+#include "../celestialBody/planet/planet.h"
+#include "../celestialBody/sun/sun.h"
+#include "../helpers/input/input.h"
+#include "../shaders/loader/loader.h"
+#include "../spaceship/spaceship.h"
+#include "../vendor/include/matrices.h"
 
 Window::Window(int width, int height, std::string title)
 	: width_(width),
@@ -70,7 +70,7 @@ bool Window::initialize()
 	glViewport(0, 0, framebufferWidth, framebufferHeight);
 
 	const float aspectRatio = static_cast<float>(framebufferWidth) / static_cast<float>(framebufferHeight);
-	camera_ = std::make_unique<Camera>(aspectRatio);
+	camera_.reset(new Camera(aspectRatio));
 
 	glfwSetWindowUserPointer(window_, camera_.get());
 	setupCallbacks();

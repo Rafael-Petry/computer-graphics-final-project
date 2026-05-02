@@ -17,6 +17,7 @@ set(SOURCES
   src/helpers/color/color.cpp
   src/helpers/input/input.cpp
   src/shaders/loader/loader.cpp
+  src/window/window.cpp
   src/vendor/glad.c
 )
 
