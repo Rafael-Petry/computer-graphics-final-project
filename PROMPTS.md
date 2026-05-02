@@ -58,10 +58,14 @@ Move the fragment shader code from *src/main.cpp* into *src/shaders/fragment.gls
 
 On *src/helpers/render.cpp*, create a helper class that implements a static rendering function using the tiny_obj_loader library. Change the rendering logic on the **Spaceship** and **CelestialBody** class to just use this centralized rendering function on *src/helpers/render.cpp*.
 
-# 9-organize-shaders-color-input
+## 9-organize-shaders-color-input
 
 On *src/helpers/color.cpp*, create a helper class that implements a static hex to rgb color conversion function. On **CelestialBody**, use this new function instead.
 
 On *src/helpers/input.cpp*, create a helper class that processes all inputs on static functions. Change *src/main.cpp* and *src/camera/camera.cpp* to use the newly created function.
 
 Create a shader loader class on *src/shaders/loader/loader.cpp*, Move any shader loading functions from *src/main.cpp* to this class, create them as static.
+
+## 10-organize-window
+
+Create a instantiable window class on *src/window/window.cpp*. Move all window logic from *src/main.cpp/ to this newly created class.
