@@ -53,3 +53,7 @@ Read *prompts/0-limitations*. On the window initialized on *src/main.cpp*, load 
 ## 7-organize-shaders-and-render-correct-models
 
 Move the fragment shader code from *src/main.cpp* into *src/shaders/fragment.glsl*. Also, move the vertex shader code from *src/main.cpp* into *src/shaders/vertex.glsl*. Change the render logic of **CelestialBody** and **Spaceship** to use the correct model, loaded on the *model* variable.
+
+## 8-organize-rendering
+
+On *src/helpers/render.cpp*, create a helper class that implements a static rendering function using the tiny_obj_loader library. Change the rendering logic on the **Spaceship** and **CelestialBody** class to just use this centralized rendering function on *src/helpers/render.cpp*.

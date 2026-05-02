@@ -13,6 +13,7 @@ set(SOURCES
   src/celestialBody/asteroid/asteroid.cpp
   src/celestialBody/sun/sun.cpp
   src/celestialBody/planet/planet.cpp
+  src/helpers/render.cpp
   src/vendor/glad.c
 )
 
