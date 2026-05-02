@@ -1,6 +1,4 @@
 #include <iostream>
-#include <fstream>
-#include <sstream>
 #include <string>
 
 #include <glad/glad.h>
@@ -12,83 +10,14 @@
 #include "celestialBody/asteroid/asteroid.h"
 #include "celestialBody/planet/planet.h"
 #include "celestialBody/sun/sun.h"
+#include "helpers/input/input.h"
+#include "shaders/loader/loader.h"
 #include "spaceship/spaceship.h"
 #include "vendor/include/matrices.h"
 
 namespace
 {
     Camera *g_camera = nullptr;
-
-    std::string ReadTextFile(const std::string &path)
-    {
-        std::ifstream file(path);
-        if (!file.is_open())
-        {
-            std::cerr << "Failed to open file: " << path << std::endl;
-            return "";
-        }
-
-        std::stringstream buffer;
-        buffer << file.rdbuf();
-        return buffer.str();
-    }
-
-    GLuint CompileShader(GLenum type, const char *source)
-    {
-        GLuint shader = glCreateShader(type);
-        glShaderSource(shader, 1, &source, nullptr);
-        glCompileShader(shader);
-
-        GLint success = GL_FALSE;
-        glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-        if (success == GL_FALSE)
-        {
-            GLint logLength = 0;
-            glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
-
-            std::string log(static_cast<size_t>(logLength), '\0');
-            glGetShaderInfoLog(shader, logLength, nullptr, &log[0]);
-            std::cerr << "Shader compilation error: " << log << std::endl;
-        }
-
-        return shader;
-    }
-
-    GLuint CreateShaderProgram()
-    {
-        const std::string vertexShaderSource = ReadTextFile("../../src/shaders/vertex.glsl");
-        const std::string fragmentShaderSource = ReadTextFile("../../src/shaders/fragment.glsl");
-
-        if (vertexShaderSource.empty() || fragmentShaderSource.empty())
-        {
-            return 0;
-        }
-
-        GLuint vertexShader = CompileShader(GL_VERTEX_SHADER, vertexShaderSource.c_str());
-        GLuint fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fragmentShaderSource.c_str());
-
-        GLuint program = glCreateProgram();
-        glAttachShader(program, vertexShader);
-        glAttachShader(program, fragmentShader);
-        glLinkProgram(program);
-
-        GLint success = GL_FALSE;
-        glGetProgramiv(program, GL_LINK_STATUS, &success);
-        if (success == GL_FALSE)
-        {
-            GLint logLength = 0;
-            glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
-
-            std::string log(static_cast<size_t>(logLength), '\0');
-            glGetProgramInfoLog(program, logLength, nullptr, &log[0]);
-            std::cerr << "Shader link error: " << log << std::endl;
-        }
-
-        glDeleteShader(vertexShader);
-        glDeleteShader(fragmentShader);
-
-        return program;
-    }
 
     void FramebufferSizeCallback(GLFWwindow *window, int width, int height)
     {
@@ -101,13 +30,6 @@ namespace
         }
     }
 
-    void ProcessCommonInput(GLFWwindow *window)
-    {
-        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        {
-            glfwSetWindowShouldClose(window, GLFW_TRUE);
-        }
-    }
 } // namespace
 
 int main()
@@ -157,7 +79,9 @@ int main()
 
     glEnable(GL_DEPTH_TEST);
 
-    const GLuint shaderProgram = CreateShaderProgram();
+    const GLuint shaderProgram = ShaderLoader::CreateShaderProgram(
+        "../../src/shaders/vertex.glsl",
+        "../../src/shaders/fragment.glsl");
     if (shaderProgram == 0)
     {
         glfwDestroyWindow(window);
@@ -184,7 +108,7 @@ int main()
         const float deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        ProcessCommonInput(window);
+        InputHelper::ProcessCommonInput(window);
         camera.processKeyboard(window, deltaTime);
 
         glClearColor(0.02f, 0.02f, 0.08f, 1.0f);

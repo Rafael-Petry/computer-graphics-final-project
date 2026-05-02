@@ -4,6 +4,8 @@
 
 #include <glm/geometric.hpp>
 
+#include "../helpers/input/input.h"
+
 glm::mat4 Matrix_Camera_View(glm::vec4 position_c, glm::vec4 view_vector, glm::vec4 up_vector);
 glm::mat4 Matrix_Perspective(float field_of_view, float aspect, float n, float f);
 
@@ -39,31 +41,11 @@ void Camera::onResize(int width, int height)
 void Camera::processKeyboard(GLFWwindow* window, float deltaTime)
 {
     const float velocity = m_movementSpeed * deltaTime;
+    const glm::vec3 movement = InputHelper::GetCameraMovement(window);
 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    {
-        m_position += m_front * velocity;
-    }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    {
-        m_position -= m_front * velocity;
-    }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    {
-        m_position -= m_right * velocity;
-    }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    {
-        m_position += m_right * velocity;
-    }
-    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-    {
-        m_position -= m_worldUp * velocity;
-    }
-    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-    {
-        m_position += m_worldUp * velocity;
-    }
+    m_position += m_front * (movement.z * velocity);
+    m_position += m_right * (movement.x * velocity);
+    m_position += m_worldUp * (movement.y * velocity);
 }
 
 void Camera::processMouse(double xpos, double ypos)

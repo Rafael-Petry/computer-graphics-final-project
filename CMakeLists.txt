@@ -14,6 +14,9 @@ set(SOURCES
   src/celestialBody/sun/sun.cpp
   src/celestialBody/planet/planet.cpp
   src/helpers/render/render.cpp
+  src/helpers/color/color.cpp
+  src/helpers/input/input.cpp
+  src/shaders/loader/loader.cpp
   src/vendor/glad.c
 )
 
