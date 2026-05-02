@@ -4,7 +4,7 @@
 
 #include <glm/vec3.hpp>
 
-#include "../helpers/render.h"
+#include "../helpers/render/render.h"
 
 namespace
 {
@@ -55,12 +55,7 @@ void CelestialBody::render(GLint modelUniform, GLint colorUniform, const glm::ma
 	float b = 0.5f;
 	HexToRgb(getColor(), r, g, b);
 
-	RenderHelper::RenderModel(
-		modelUniform,
-		colorUniform,
-		modelMatrix,
-		getModel(),
-		glm::vec3(r, g, b));
+	RenderHelper::RenderModel(modelUniform, colorUniform, modelMatrix, getModel(), glm::vec3(r, g, b));
 }
 
 const std::string& CelestialBody::getModel()

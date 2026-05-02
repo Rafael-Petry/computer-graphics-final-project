@@ -17,97 +17,97 @@
 
 namespace
 {
-Camera* g_camera = nullptr;
+    Camera *g_camera = nullptr;
 
-std::string ReadTextFile(const std::string& path)
-{
-    std::ifstream file(path);
-    if (!file.is_open())
+    std::string ReadTextFile(const std::string &path)
     {
-        std::cerr << "Failed to open file: " << path << std::endl;
-        return "";
+        std::ifstream file(path);
+        if (!file.is_open())
+        {
+            std::cerr << "Failed to open file: " << path << std::endl;
+            return "";
+        }
+
+        std::stringstream buffer;
+        buffer << file.rdbuf();
+        return buffer.str();
     }
 
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    return buffer.str();
-}
-
-GLuint CompileShader(GLenum type, const char* source)
-{
-    GLuint shader = glCreateShader(type);
-    glShaderSource(shader, 1, &source, nullptr);
-    glCompileShader(shader);
-
-    GLint success = GL_FALSE;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-    if (success == GL_FALSE)
+    GLuint CompileShader(GLenum type, const char *source)
     {
-        GLint logLength = 0;
-        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
+        GLuint shader = glCreateShader(type);
+        glShaderSource(shader, 1, &source, nullptr);
+        glCompileShader(shader);
 
-        std::string log(static_cast<size_t>(logLength), '\0');
-        glGetShaderInfoLog(shader, logLength, nullptr, &log[0]);
-        std::cerr << "Shader compilation error: " << log << std::endl;
+        GLint success = GL_FALSE;
+        glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+        if (success == GL_FALSE)
+        {
+            GLint logLength = 0;
+            glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
+
+            std::string log(static_cast<size_t>(logLength), '\0');
+            glGetShaderInfoLog(shader, logLength, nullptr, &log[0]);
+            std::cerr << "Shader compilation error: " << log << std::endl;
+        }
+
+        return shader;
     }
 
-    return shader;
-}
-
-GLuint CreateShaderProgram()
-{
-    const std::string vertexShaderSource = ReadTextFile("../../src/shaders/vertex.glsl");
-    const std::string fragmentShaderSource = ReadTextFile("../../src/shaders/fragment.glsl");
-
-    if (vertexShaderSource.empty() || fragmentShaderSource.empty())
+    GLuint CreateShaderProgram()
     {
-        return 0;
+        const std::string vertexShaderSource = ReadTextFile("../../src/shaders/vertex.glsl");
+        const std::string fragmentShaderSource = ReadTextFile("../../src/shaders/fragment.glsl");
+
+        if (vertexShaderSource.empty() || fragmentShaderSource.empty())
+        {
+            return 0;
+        }
+
+        GLuint vertexShader = CompileShader(GL_VERTEX_SHADER, vertexShaderSource.c_str());
+        GLuint fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fragmentShaderSource.c_str());
+
+        GLuint program = glCreateProgram();
+        glAttachShader(program, vertexShader);
+        glAttachShader(program, fragmentShader);
+        glLinkProgram(program);
+
+        GLint success = GL_FALSE;
+        glGetProgramiv(program, GL_LINK_STATUS, &success);
+        if (success == GL_FALSE)
+        {
+            GLint logLength = 0;
+            glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
+
+            std::string log(static_cast<size_t>(logLength), '\0');
+            glGetProgramInfoLog(program, logLength, nullptr, &log[0]);
+            std::cerr << "Shader link error: " << log << std::endl;
+        }
+
+        glDeleteShader(vertexShader);
+        glDeleteShader(fragmentShader);
+
+        return program;
     }
 
-    GLuint vertexShader = CompileShader(GL_VERTEX_SHADER, vertexShaderSource.c_str());
-    GLuint fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fragmentShaderSource.c_str());
-
-    GLuint program = glCreateProgram();
-    glAttachShader(program, vertexShader);
-    glAttachShader(program, fragmentShader);
-    glLinkProgram(program);
-
-    GLint success = GL_FALSE;
-    glGetProgramiv(program, GL_LINK_STATUS, &success);
-    if (success == GL_FALSE)
+    void FramebufferSizeCallback(GLFWwindow *window, int width, int height)
     {
-        GLint logLength = 0;
-        glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
+        (void)window;
+        glViewport(0, 0, width, height);
 
-        std::string log(static_cast<size_t>(logLength), '\0');
-        glGetProgramInfoLog(program, logLength, nullptr, &log[0]);
-        std::cerr << "Shader link error: " << log << std::endl;
+        if (g_camera != nullptr)
+        {
+            g_camera->onResize(width, height);
+        }
     }
 
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    return program;
-}
-
-void FramebufferSizeCallback(GLFWwindow* window, int width, int height)
-{
-    (void)window;
-    glViewport(0, 0, width, height);
-
-    if (g_camera != nullptr)
+    void ProcessCommonInput(GLFWwindow *window)
     {
-        g_camera->onResize(width, height);
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        {
+            glfwSetWindowShouldClose(window, GLFW_TRUE);
+        }
     }
-}
-
-void ProcessCommonInput(GLFWwindow* window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    {
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
-    }
-}
 } // namespace
 
 int main()
@@ -123,7 +123,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Computer Graphics Final Project", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(1280, 720, "Computer Graphics Final Project", nullptr, nullptr);
     if (window == nullptr)
     {
         std::cerr << "Failed to create GLFW window." << std::endl;
@@ -170,7 +170,7 @@ int main()
     const GLint colorUniform = glGetUniformLocation(shaderProgram, "objectColor");
 
     Spaceship spaceship;
-    Sun& sun = Sun::getInstance();
+    Sun &sun = Sun::getInstance();
     Asteroid asteroid;
     Planet planetA;
     Planet planetB;
@@ -202,30 +202,23 @@ int main()
         sun.render(modelUniform, colorUniform, sunModel);
 
         const glm::mat4 spaceshipModel =
-            Matrix_Translate(0.0f, 0.2f, 5.0f)
-            * Matrix_Rotate_Y(currentFrame)
-            * Matrix_Scale(0.4f, 0.25f, 1.0f);
+            Matrix_Translate(0.0f, 0.2f, 5.0f) * Matrix_Rotate_Y(currentFrame) * Matrix_Scale(0.4f, 0.25f, 1.0f);
         spaceship.render(modelUniform, colorUniform, spaceshipModel);
 
         const glm::mat4 asteroidModel =
-            Matrix_Translate(2.7f * cosf(currentFrame * 0.8f), 0.4f, 2.7f * sinf(currentFrame * 0.8f))
-            * Matrix_Rotate_Y(currentFrame * 1.7f)
-            * Matrix_Scale(0.35f, 0.35f, 0.35f);
+            Matrix_Translate(2.7f * cosf(currentFrame * 0.8f), 0.4f, 2.7f * sinf(currentFrame * 0.8f)) * Matrix_Rotate_Y(currentFrame * 1.7f) * Matrix_Scale(0.35f, 0.35f, 0.35f);
         asteroid.render(modelUniform, colorUniform, asteroidModel);
 
         const glm::mat4 planetAModel =
-            Matrix_Translate(2.0f * cosf(currentFrame * 0.4f), 0.0f, 2.0f * sinf(currentFrame * 0.4f))
-            * Matrix_Scale(0.45f, 0.45f, 0.45f);
+            Matrix_Translate(2.0f * cosf(currentFrame * 0.4f), 0.0f, 2.0f * sinf(currentFrame * 0.4f)) * Matrix_Scale(0.45f, 0.45f, 0.45f);
         planetA.render(modelUniform, colorUniform, planetAModel);
 
         const glm::mat4 planetBModel =
-            Matrix_Translate(3.3f * cosf(currentFrame * 0.25f), -0.1f, 3.3f * sinf(currentFrame * 0.25f))
-            * Matrix_Scale(0.6f, 0.6f, 0.6f);
+            Matrix_Translate(3.3f * cosf(currentFrame * 0.25f), -0.1f, 3.3f * sinf(currentFrame * 0.25f)) * Matrix_Scale(0.6f, 0.6f, 0.6f);
         planetB.render(modelUniform, colorUniform, planetBModel);
 
         const glm::mat4 planetCModel =
-            Matrix_Translate(4.6f * cosf(currentFrame * 0.18f), 0.15f, 4.6f * sinf(currentFrame * 0.18f))
-            * Matrix_Scale(0.35f, 0.35f, 0.35f);
+            Matrix_Translate(4.6f * cosf(currentFrame * 0.18f), 0.15f, 4.6f * sinf(currentFrame * 0.18f)) * Matrix_Scale(0.35f, 0.35f, 0.35f);
         planetC.render(modelUniform, colorUniform, planetCModel);
 
         glfwSwapBuffers(window);

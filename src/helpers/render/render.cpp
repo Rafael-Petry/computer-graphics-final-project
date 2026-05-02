@@ -8,7 +8,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-#include "../vendor/include/tiny_obj_loader.h"
+#include "../../vendor/include/tiny_obj_loader.h"
 
 namespace
 {
