@@ -3,7 +3,7 @@
 
 #include "asteroid.h"
 
-const std::string Asteroid::meshPath = "/home/aluno/computer-graphics-final-project/src/celestialBody/asteroid/asteroid.obj";
+const std::string Asteroid::meshPath = "../../src/objects/celestialBody/asteroid/asteroid.obj";
 
 void Asteroid::translate() { std::cout << "Moving asteroid towards the spaceship..." << std::endl; }
 

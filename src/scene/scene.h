@@ -1,10 +1,10 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "../celestialBody/asteroid/asteroid.h"
-#include "../celestialBody/planet/planet.h"
-#include "../celestialBody/sun/sun.h"
-#include "../spaceship/spaceship.h"
+#include "../objects/celestialBody/asteroid/asteroid.h"
+#include "../objects/celestialBody/planet/planet.h"
+#include "../objects/celestialBody/sun/sun.h"
+#include "../objects/spaceship/spaceship.h"
 
 class Scene
 {

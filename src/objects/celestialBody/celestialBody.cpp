@@ -5,7 +5,7 @@
 
 #include "celestialBody.h"
 
-const std::string CelestialBody::meshPath = "../../src/celestialBody/celestialBody.obj";
+const std::string CelestialBody::meshPath = "../../src/objects/celestialBody/celestialBody.obj";
 const std::string CelestialBody::color = "#808080";
 
 const std::string &CelestialBody::getColor() const { return color; }

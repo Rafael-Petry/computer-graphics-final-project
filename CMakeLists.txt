@@ -8,11 +8,11 @@
 set(SOURCES
   src/main.cpp
   src/camera/camera.cpp
-  src/spaceship/spaceship.cpp
-  src/celestialBody/celestialBody.cpp
-  src/celestialBody/asteroid/asteroid.cpp
-  src/celestialBody/sun/sun.cpp
-  src/celestialBody/planet/planet.cpp
+  src/objects/spaceship/spaceship.cpp
+  src/objects/celestialBody/celestialBody.cpp
+  src/objects/celestialBody/asteroid/asteroid.cpp
+  src/objects/celestialBody/sun/sun.cpp
+  src/objects/celestialBody/planet/planet.cpp
   src/helpers/render/render.cpp
   src/helpers/color/color.cpp
   src/scene/scene.cpp

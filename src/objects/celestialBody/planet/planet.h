@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "../celestialBody.h"
+#include "../../objects/celestialBody/celestialBody.h"
 
 class Planet : public CelestialBody
 {

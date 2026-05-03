@@ -4,11 +4,11 @@
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 
-#include "../helpers/render/render.h"
-#include "../vendor/include/matrices.h"
+#include "../../helpers/render/render.h"
 #include "spaceship.h"
+#include "../../vendor/include/matrices.h"
 
-const std::string Spaceship::meshPath = "../../src/spaceship/spaceship.obj";
+const std::string Spaceship::meshPath = "../../src/objects/spaceship/spaceship.obj";
 
 void Spaceship::update(GLint modelUniform, GLint colorUniform, float currentFrame) const
 {
