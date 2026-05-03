@@ -1,3 +1,10 @@
+#include <iostream>
+#include <string>
+
+#include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
+
+#include "../helpers/render/render.h"
 #include "spaceship.h"
 
 const std::string Spaceship::meshPath = "../../src/spaceship/spaceship.obj";

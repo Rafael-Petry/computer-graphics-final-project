@@ -4,8 +4,10 @@
 #include <string>
 
 #include <glad/glad.h>
-
 #include <glm/mat4x4.hpp>
+
+#include "../helpers/color/color.h"
+#include "../helpers/render/render.h"
 
 class CelestialBody
 {

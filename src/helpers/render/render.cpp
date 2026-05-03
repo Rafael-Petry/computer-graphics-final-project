@@ -2,14 +2,6 @@
 
 #include "render.h"
 
-#include <iostream>
-#include <unordered_map>
-#include <vector>
-
-#include <glm/gtc/type_ptr.hpp>
-
-#include "../../vendor/include/tiny_obj_loader.h"
-
 namespace {
     struct MeshData
     {

@@ -1,3 +1,8 @@
+#include <iostream>
+#include <cmath>
+#include <string>
+#include <utility>
+
 #include "window.h"
 
 Window &Window::getInstance()
@@ -24,7 +29,7 @@ void Window::setupCallbacks()
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
-void Window::initialize(int width, int height, std::string title)
+bool Window::initialize(int width, int height, std::string title)
 {
     this->width = width;
     this->height = height;
@@ -40,7 +45,7 @@ void Window::initialize(int width, int height, std::string title)
     if (window == nullptr) {
         std::cerr << "Failed to create GLFW window." << std::endl;
         close();
-        return;
+        return false;
     }
 
     glfwMakeContextCurrent(window);
@@ -48,7 +53,7 @@ void Window::initialize(int width, int height, std::string title)
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cerr << "Failed to initialize GLAD." << std::endl;
         close();
-        return;
+        return false;
     }
 
     int framebufferWidth = 0;
@@ -59,11 +64,13 @@ void Window::initialize(int width, int height, std::string title)
     const float aspectRatio = static_cast<float>(framebufferWidth) / static_cast<float>(framebufferHeight);
     camera.reset(new Camera(aspectRatio));
 
+    lastFrame = static_cast<float>(glfwGetTime());
+
     glfwSetWindowUserPointer(window, camera.get());
     setupCallbacks();
     glEnable(GL_DEPTH_TEST);
 
-    return;
+    return true;
 }
 
 void Window::close()
@@ -91,39 +98,28 @@ void Window::update(GLuint shaderProgram)
     const GLint projectionUniform = glGetUniformLocation(shaderProgram, "projection");
     const GLint colorUniform = glGetUniformLocation(shaderProgram, "objectColor");
 
-    float lastFrame = static_cast<float>(glfwGetTime());
+    const float currentFrame = static_cast<float>(glfwGetTime());
+    const float deltaTime = currentFrame - lastFrame;
+    lastFrame = currentFrame;
 
-    Scene scene = Scene();
+    InputHelper::getWindowInputs(window);
+    camera->update(window, deltaTime);
 
-    while (!glfwWindowShouldClose(window)) {
-        const float currentFrame = static_cast<float>(glfwGetTime());
-        const float deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
+    glClearColor(0.02f, 0.02f, 0.08f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        InputHelper::getWindowInputs(window);
-        camera->update(window, deltaTime);
+    glUseProgram(shaderProgram);
 
-        glClearColor(0.02f, 0.02f, 0.08f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    const glm::mat4 view = camera->getViewMatrix();
+    const glm::mat4 projection = camera->getProjectionMatrix();
 
-        glUseProgram(shaderProgram);
+    glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(projectionUniform, 1, GL_FALSE, glm::value_ptr(projection));
 
-        const glm::mat4 view = camera->getViewMatrix();
-        const glm::mat4 projection = camera->getProjectionMatrix();
+    scene.update(modelUniform, colorUniform, currentFrame);
 
-        glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(view));
-        glUniformMatrix4fv(projectionUniform, 1, GL_FALSE, glm::value_ptr(projection));
-
-        scene.update(modelUniform, colorUniform, currentFrame);
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-
-    glDeleteProgram(shaderProgram);
-    close();
-
-    return;
+    glfwSwapBuffers(window);
+    glfwPollEvents();
 }
 
 GLFWwindow *Window::getWindow() const { return window; }

@@ -1,6 +1,8 @@
 #ifndef ASTEROID_H
 #define ASTEROID_H
 
+#include <string>
+
 #include "../celestialBody.h"
 
 class Asteroid : public CelestialBody

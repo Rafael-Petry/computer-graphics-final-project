@@ -1,5 +1,6 @@
-#include "scene.h"
 #include "../vendor/include/matrices.h"
+#include "../celestialBody/sun/sun.h"
+#include "scene.h"
 
 Scene::Scene() : spaceship(), asteroid(), planet1(), planet2(), planet3(), sun(Sun::getInstance()) {};
 

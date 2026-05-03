@@ -1,17 +1,21 @@
-#include "camera.h"
-
 #include <cmath>
 
-#include <glm/geometric.hpp>
+#include <GLFW/glfw3.h>
 
+#include <glm/geometric.hpp>
+#include <glm/vec4.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
+
+#include "camera.h"
 #include "../helpers/input/input.h"
 
 glm::mat4 Matrix_cameraView(glm::vec4 position_c, glm::vec4 view_vector, glm::vec4 up_vector);
 glm::mat4 Matrix_Perspective(float field_of_view, float aspect, float n, float f);
 
 Camera::Camera(float initialAspectRatio)
-    : position(0.0f, 1.0f, 7.0f), front(0.0f, 0.0f, -1.0f), up(0.0f, 1.0f, 0.0f), right(1.0f, 0.0f, 0.0f), worldUp(0.0f, 1.0f, 0.0f), yaw(-90.0f), pitch(0.0f), mouseSensitivity(0.12f),
-      movementSpeed(5.0f), zoomRadians(3.1415926f / 3.0f), aspectRatio(initialAspectRatio), firstMouseUpdate(true), lastMouseX(0.0f), lastMouseY(0.0f)
+    : position(0.0f, 1.0f, 7.0f), front(0.0f, 0.0f, -1.0f), up(0.0f, 1.0f, 0.0f), right(1.0f, 0.0f, 0.0f), worldUp(0.0f, 1.0f, 0.0f), yaw(-90.0f), pitch(0.0f),
+      mouseSensitivity(0.12f), movementSpeed(5.0f), zoomRadians(3.1415926f / 3.0f), aspectRatio(initialAspectRatio), firstMouseUpdate(true), lastMouseX(0.0f), lastMouseY(0.0f)
 {
     updateDirectionVectors();
 }

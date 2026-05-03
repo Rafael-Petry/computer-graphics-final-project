@@ -1,11 +1,8 @@
-#ifndef cameraH
-#define cameraH
-
-#include <GLFW/glfw3.h>
+#ifndef CAMERA_H
+#define CAMERA_H
 
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
 
 class Camera
 {

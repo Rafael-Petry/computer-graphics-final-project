@@ -1,12 +1,8 @@
-#ifndef windowH
-#define windowH
+#ifndef WINDOW_H
+#define WINDOW_H
 
-#include <memory>
 #include <string>
-
-#include <cmath>
-#include <iostream>
-#include <utility>
+#include <memory>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -28,7 +24,7 @@ public:
 
     static Window &getInstance();
 
-    void initialize(int width, int height, std::string title);
+    bool initialize(int width, int height, std::string title);
     void update(GLuint shaderProgram);
     void close();
 
@@ -43,7 +39,9 @@ private:
     std::string title;
     GLFWwindow *window = nullptr;
     std::unique_ptr<Camera> camera;
+    Scene scene;
     bool glfwInitialized = false;
+    float lastFrame = 0.0f;
 
     Window() = default;
 };

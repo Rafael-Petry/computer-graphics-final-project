@@ -13,14 +13,18 @@ int main()
         return -1;
     }
 
-    Window::getInstance().initialize(1280, 720, "Asteroids 3D");
+    if (!Window::getInstance().initialize(1280, 720, "Asteroids 3D")) {
+        return -1;
+    }
+
     const GLuint shaderProgram = ShaderLoader::createShaderProgram("../../src/shaders/vertex.glsl", "../../src/shaders/fragment.glsl");
 
     while (!glfwWindowShouldClose(Window::getInstance().getWindow())) {
         Window::getInstance().update(shaderProgram);
     }
 
-    Window::getInstance().close();
     glDeleteProgram(shaderProgram);
+    Window::getInstance().close();
+
     return 0;
 }

@@ -1,3 +1,10 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+
+#include <glad/glad.h>
+
 #include "loader.h"
 
 std::string ShaderLoader::readTextFile(const std::string &path)

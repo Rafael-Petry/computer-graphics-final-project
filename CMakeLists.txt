@@ -26,6 +26,9 @@ cmake_minimum_required(VERSION 3.5.0)
 
 project(LAB_FCG VERSION 1.0.0)
 
+# Export compile commands for IDE tooling.
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 set(CMAKE_CXX_STANDARD          11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS        OFF)
@@ -65,7 +68,10 @@ endforeach()
 
 add_executable(${EXECUTABLE_NAME} ${SOURCES})
 
-target_include_directories(${EXECUTABLE_NAME} BEFORE PRIVATE ${PROJECT_SOURCE_DIR}/src/vendor/include)
+target_include_directories(${EXECUTABLE_NAME} BEFORE PRIVATE
+  ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_SOURCE_DIR}/src/vendor/include
+)
 
 if(WIN32)
 

@@ -1,6 +1,5 @@
-#include "color.h"
-
 #include <cctype>
+#include "color.h"
 
 float hexDigitToFloat(char c)
 {
