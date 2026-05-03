@@ -24,7 +24,6 @@ This file defines a bunch of to do lists for different tasks and functionalities
 - [x] Define a "Asteroid" class that extends "CelestialBody" with a gray color
 - [x] Edit application to have a "scene camera" that shows a spaceship, a sun, three planets and an asteroid
 - [x] Fix architectural problems on the project
-- [-] Import better model meshes assets for the spaceship and celestial bodies
 
 ## 4. Animation
 
@@ -43,12 +42,14 @@ This file defines a bunch of to do lists for different tasks and functionalities
 - [] Implement planets' "orbit movement" with cubic Bézier curves
 - [] Implement asteroids' "liniar movement" towards the spaceship
 
-## 5. Illumination
+## 5. Visuals
 
-- [] Import Disney's PBR code
-- [] Configure params for spaceship
+- [-] Import better meshes for the objects
+- [] Import Disney's PBR shader code from other labs
+- [] Make textures work
+- [] Make lighting work
 - [] ...
 
-## 6. idk
+## 6. idk, probably collisions
 
 - ...

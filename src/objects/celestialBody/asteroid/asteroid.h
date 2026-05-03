@@ -10,7 +10,7 @@
 class Asteroid : public CelestialBody
 {
 public:
-    Asteroid(const std::string &meshPath = "../../src/objects/celestialBody/celestialBody.obj", const glm::vec3 &color = glm::vec3(0.5f, 0.5f, 0.5f));
+    Asteroid(const std::string &meshPath = "../../src/objects/celestialBody/asteroid/asteroid.obj", const glm::vec3 &color = glm::vec3(0.5f, 0.5f, 0.5f));
 
 protected:
     glm::mat4 translate(float currentFrame) const override;

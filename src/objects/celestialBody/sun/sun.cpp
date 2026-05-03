@@ -7,7 +7,7 @@
 #include "sun.h"
 #include "../../vendor/include/matrices.h"
 
-Sun::Sun() : CelestialBody("../../src/objects/celestialBody/celestialBody.obj", glm::vec3(1.0f, 1.0f, 0.0f)) {}
+Sun::Sun() : CelestialBody("../../src/objects/celestialBody/sun/sun.obj", glm::vec3(1.0f, 1.0f, 0.0f)) {}
 
 Sun &Sun::getInstance()
 {

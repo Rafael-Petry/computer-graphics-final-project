@@ -10,7 +10,7 @@
 class Planet : public CelestialBody
 {
 public:
-    Planet(const std::string &meshPath = "../../src/objects/celestialBody/celestialBody.obj", const glm::vec3 &color = glm::vec3(0.0f, 1.0f, 0.0f));
+    Planet(const std::string &meshPath = "../../src/objects/celestialBody/planet/planet.obj", const glm::vec3 &color = glm::vec3(0.0f, 1.0f, 0.0f));
 
 protected:
     glm::mat4 translate(float currentFrame) const override;
