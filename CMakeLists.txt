@@ -8,6 +8,7 @@
 set(SOURCES
   src/main.cpp
   src/camera/camera.cpp
+  src/objects/object.cpp
   src/objects/spaceship/spaceship.cpp
   src/objects/celestialBody/celestialBody.cpp
   src/objects/celestialBody/asteroid/asteroid.cpp

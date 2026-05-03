@@ -8,6 +8,7 @@
 #include <glm/vec3.hpp>
 
 #include "camera.h"
+#include "../../vendor/include/matrices.h"
 
 namespace {
     float getMovementAxis(GLFWwindow *window, int positiveKey, int negativeKey)

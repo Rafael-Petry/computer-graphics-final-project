@@ -4,6 +4,7 @@
 #include <glm/vec3.hpp>
 
 #include "celestialBody.h"
+#include "../../vendor/include/matrices.h"
 
 const std::string CelestialBody::meshPath = "../../src/objects/celestialBody/celestialBody.obj";
 const std::string CelestialBody::color = "#808080";

@@ -6,17 +6,19 @@
 #include <glad/glad.h>
 #include <glm/mat4x4.hpp>
 
-class Spaceship
+#include "../object.h"
+
+class Spaceship : public Object
 {
 public:
-    void update(GLint modelUniform, GLint colorUniform, float currentFrame) const;
-    static const std::string &getMeshPath();
+    Spaceship();
+
+protected:
+    glm::mat4 translate(float currentFrame) const override;
+    glm::mat4 rotate(float currentFrame) const override;
 
 private:
-    glm::mat4 translate(float currentFrame) const;
-    glm::mat4 rotate(float currentFrame) const;
     void shoot() const;
-    static const std::string meshPath;
 };
 
 #endif
