@@ -1,50 +1,46 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
 
 class Camera
 {
 public:
     Camera(float initialAspectRatio);
 
-    void onResize(int width, int height);
-    void processKeyboard(GLFWwindow* window, float deltaTime);
-    void processMouse(double xpos, double ypos);
+    void updateAspectRatio(int width, int height);
+    void update(GLFWwindow *window, float deltaTime);
+    void rotate(double xpos, double ypos);
     void processScroll(double yoffset);
 
     glm::mat4 getViewMatrix() const;
     glm::mat4 getProjectionMatrix() const;
 
-    static void CursorPosCallback(GLFWwindow* window, double xpos, double ypos);
-    static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+    static void rotate(GLFWwindow *window, double xpos, double ypos);
+    static void zoom(GLFWwindow *window, double xoffset, double yoffset);
 
 private:
-    glm::vec3 m_position;
-    glm::vec3 m_front;
-    glm::vec3 m_up;
-    glm::vec3 m_right;
-    glm::vec3 m_worldUp;
+    glm::vec3 position;
+    glm::vec3 front;
+    glm::vec3 up;
+    glm::vec3 right;
+    glm::vec3 worldUp;
 
-    float m_yaw;
-    float m_pitch;
+    float yaw;
+    float pitch;
 
-    float m_mouseSensitivity;
-    float m_movementSpeed;
-    float m_zoomRadians;
+    float mouseSensitivity;
+    float movementSpeed;
+    float zoomRadians;
 
-    float m_aspectRatio;
+    float aspectRatio;
 
-    bool m_firstMouseUpdate;
-    float m_lastMouseX;
-    float m_lastMouseY;
+    bool firstMouseUpdate;
+    float lastMouseX;
+    float lastMouseY;
 
-    void updateDirectionVectors();
+    void updateOrientation();
 };
 
 #endif

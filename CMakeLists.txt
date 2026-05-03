@@ -8,17 +8,25 @@
 set(SOURCES
   src/main.cpp
   src/camera/camera.cpp
-  src/spaceship/spaceship.cpp
-  src/celestialBody/celestialBody.cpp
-  src/celestialBody/asteroid/asteroid.cpp
-  src/celestialBody/sun/sun.cpp
-  src/celestialBody/planet/planet.cpp
+  src/objects/object.cpp
+  src/objects/spaceship/spaceship.cpp
+  src/objects/celestialBody/celestialBody.cpp
+  src/objects/celestialBody/asteroid/asteroid.cpp
+  src/objects/celestialBody/sun/sun.cpp
+  src/objects/celestialBody/planet/planet.cpp
+  src/helpers/render/render.cpp
+  src/scene/scene.cpp
+  src/shaders/loader/loader.cpp
+  src/window/window.cpp
   src/vendor/glad.c
 )
 
 cmake_minimum_required(VERSION 3.5.0)
 
 project(LAB_FCG VERSION 1.0.0)
+
+# Export compile commands for IDE tooling.
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_CXX_STANDARD          11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -59,7 +67,10 @@ endforeach()
 
 add_executable(${EXECUTABLE_NAME} ${SOURCES})
 
-target_include_directories(${EXECUTABLE_NAME} BEFORE PRIVATE ${PROJECT_SOURCE_DIR}/src/vendor/include)
+target_include_directories(${EXECUTABLE_NAME} BEFORE PRIVATE
+  ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_SOURCE_DIR}/src/vendor/include
+)
 
 if(WIN32)
 
