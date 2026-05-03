@@ -7,22 +7,22 @@
 
 #include <glm/mat4x4.hpp>
 
-class CelestialBody {
+class CelestialBody
+{
 public:
-	virtual ~CelestialBody() {}
+    virtual ~CelestialBody() {}
 
-	virtual void translate() = 0;
-	virtual void rotate() = 0;
-	virtual const std::string& getColor() const;
+    virtual void translate() = 0;
+    virtual void rotate() = 0;
+    virtual const std::string &getColor() const;
 
-	void render(GLint modelUniform, GLint colorUniform, const glm::mat4& modelMatrix) const;
+    void render(GLint modelUniform, GLint colorUniform, const glm::mat4 &modelMatrix) const;
 
-	static const std::string& getModel();
- 
+    static const std::string &getModel();
 
 protected:
-	static const std::string model;
-	static const std::string color;
+    static const std::string model;
+    static const std::string color;
 };
 
 #endif

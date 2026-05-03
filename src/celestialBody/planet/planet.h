@@ -5,14 +5,15 @@
 
 #include "../celestialBody.h"
 
-class Planet : public CelestialBody {
+class Planet : public CelestialBody
+{
 public:
-	void translate() override;
-	void rotate() override;
-	const std::string& getColor() const override;
+    void translate() override;
+    void rotate() override;
+    const std::string &getColor() const override;
 
-	static const std::string color;
-	static const std::string model;
+    static const std::string color;
+    static const std::string model;
 };
 
 #endif

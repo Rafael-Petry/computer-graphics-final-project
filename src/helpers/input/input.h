@@ -8,10 +8,13 @@
 
 class InputHelper
 {
+
 public:
-	static void ProcessCommonInput(GLFWwindow* window);
-	static float GetAxis(GLFWwindow* window, int positiveKey, int negativeKey);
-	static glm::vec3 GetCameraMovement(GLFWwindow* window);
+    static void ListenWindowInputs(GLFWwindow *window);
+    static glm::vec3 GetCameraMovement(GLFWwindow *window);
+
+private:
+    static float GetAxis(GLFWwindow *window, int positiveKey, int negativeKey);
 };
 
 #endif

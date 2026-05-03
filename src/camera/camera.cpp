@@ -6,7 +6,7 @@
 
 #include "../helpers/input/input.h"
 
-glm::mat4 Matrix_Camera_View(glm::vec4 position_c, glm::vec4 view_vector, glm::vec4 up_vector);
+glm::mat4 Matrix_cameraView(glm::vec4 position_c, glm::vec4 view_vector, glm::vec4 up_vector);
 glm::mat4 Matrix_Perspective(float field_of_view, float aspect, float n, float f);
 
 Camera::Camera(float initialAspectRatio)
@@ -30,15 +30,14 @@ Camera::Camera(float initialAspectRatio)
 
 void Camera::onResize(int width, int height)
 {
-    if (height <= 0)
-    {
+    if (height <= 0) {
         return;
     }
 
     m_aspectRatio = static_cast<float>(width) / static_cast<float>(height);
 }
 
-void Camera::processKeyboard(GLFWwindow* window, float deltaTime)
+void Camera::processKeyboard(GLFWwindow *window, float deltaTime)
 {
     const float velocity = m_movementSpeed * deltaTime;
     const glm::vec3 movement = InputHelper::GetCameraMovement(window);
@@ -50,8 +49,7 @@ void Camera::processKeyboard(GLFWwindow* window, float deltaTime)
 
 void Camera::processMouse(double xpos, double ypos)
 {
-    if (m_firstMouseUpdate)
-    {
+    if (m_firstMouseUpdate) {
         m_lastMouseX = static_cast<float>(xpos);
         m_lastMouseY = static_cast<float>(ypos);
         m_firstMouseUpdate = false;
@@ -69,12 +67,10 @@ void Camera::processMouse(double xpos, double ypos)
     m_yaw += xoffset;
     m_pitch += yoffset;
 
-    if (m_pitch > 89.0f)
-    {
+    if (m_pitch > 89.0f) {
         m_pitch = 89.0f;
     }
-    if (m_pitch < -89.0f)
-    {
+    if (m_pitch < -89.0f) {
         m_pitch = -89.0f;
     }
 
@@ -88,19 +84,17 @@ void Camera::processScroll(double yoffset)
     const float minZoom = 3.1415926f / 12.0f;
     const float maxZoom = 3.1415926f / 1.5f;
 
-    if (m_zoomRadians < minZoom)
-    {
+    if (m_zoomRadians < minZoom) {
         m_zoomRadians = minZoom;
     }
-    if (m_zoomRadians > maxZoom)
-    {
+    if (m_zoomRadians > maxZoom) {
         m_zoomRadians = maxZoom;
     }
 }
 
 glm::mat4 Camera::getViewMatrix() const
 {
-    return Matrix_Camera_View(
+    return Matrix_cameraView(
         glm::vec4(m_position, 1.0f),
         glm::vec4(m_front, 0.0f),
         glm::vec4(m_up, 0.0f));
@@ -111,22 +105,20 @@ glm::mat4 Camera::getProjectionMatrix() const
     return Matrix_Perspective(m_zoomRadians, m_aspectRatio, -0.1f, -100.0f);
 }
 
-void Camera::CursorPosCallback(GLFWwindow* window, double xpos, double ypos)
+void Camera::CursorPosCallback(GLFWwindow *window, double xpos, double ypos)
 {
-    Camera* camera = static_cast<Camera*>(glfwGetWindowUserPointer(window));
-    if (camera != nullptr)
-    {
+    Camera *camera = static_cast<Camera *>(glfwGetWindowUserPointer(window));
+    if (camera != nullptr) {
         camera->processMouse(xpos, ypos);
     }
 }
 
-void Camera::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+void Camera::ScrollCallback(GLFWwindow *window, double xoffset, double yoffset)
 {
     (void)xoffset;
 
-    Camera* camera = static_cast<Camera*>(glfwGetWindowUserPointer(window));
-    if (camera != nullptr)
-    {
+    Camera *camera = static_cast<Camera *>(glfwGetWindowUserPointer(window));
+    if (camera != nullptr) {
         camera->processScroll(yoffset);
     }
 }

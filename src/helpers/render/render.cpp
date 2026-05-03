@@ -10,17 +10,14 @@
 
 #include "../../vendor/include/tiny_obj_loader.h"
 
-namespace
-{
-    struct MeshData
-    {
+namespace {
+    struct MeshData {
         GLuint vao = 0;
         GLuint vbo = 0;
         GLsizei vertexCount = 0;
     };
 
-    MeshData LoadObjMesh(const std::string &path)
-    {
+    MeshData LoadObjMesh(const std::string &path) {
         MeshData mesh;
 
         tinyobj::attrib_t attrib;
@@ -39,18 +36,15 @@ namespace
             nullptr,
             true);
 
-        if (!warn.empty())
-        {
+        if (!warn.empty()) {
             std::cerr << "OBJ load warning: " << warn << std::endl;
         }
 
-        if (!err.empty())
-        {
+        if (!err.empty()) {
             std::cerr << "OBJ load error: " << err << std::endl;
         }
 
-        if (!loaded)
-        {
+        if (!loaded) {
             std::cerr << "Failed to load OBJ file: " << path << std::endl;
             return mesh;
         }
@@ -58,19 +52,15 @@ namespace
         std::vector<float> trianglePositions;
         trianglePositions.reserve(shapes.size() * 9);
 
-        for (const auto &shape : shapes)
-        {
-            for (const auto &index : shape.mesh.indices)
-            {
+        for (const auto &shape : shapes) {
+            for (const auto &index : shape.mesh.indices) {
                 const int vertexIndex = index.vertex_index;
-                if (vertexIndex < 0)
-                {
+                if (vertexIndex < 0) {
                     continue;
                 }
 
                 const size_t base = static_cast<size_t>(vertexIndex) * 3;
-                if (base + 2 >= attrib.vertices.size())
-                {
+                if (base + 2 >= attrib.vertices.size()) {
                     continue;
                 }
 
@@ -80,8 +70,7 @@ namespace
             }
         }
 
-        if (trianglePositions.empty())
-        {
+        if (trianglePositions.empty()) {
             std::cerr << "No triangles parsed from OBJ file: " << path << std::endl;
             return mesh;
         }
@@ -105,12 +94,10 @@ namespace
         return mesh;
     }
 
-    const MeshData &GetMesh(const std::string &path)
-    {
+    const MeshData &GetMesh(const std::string &path) {
         static std::unordered_map<std::string, MeshData> cache;
         const auto it = cache.find(path);
-        if (it != cache.end())
-        {
+        if (it != cache.end()) {
             return it->second;
         }
 
@@ -125,14 +112,12 @@ void RenderHelper::RenderModel(
     GLint colorUniform,
     const glm::mat4 &modelMatrix,
     const std::string &modelPath,
-    const glm::vec3 &color)
-{
+    const glm::vec3 &color) {
     glUniformMatrix4fv(modelUniform, 1, GL_FALSE, glm::value_ptr(modelMatrix));
     glUniform3f(colorUniform, color.x, color.y, color.z);
 
     const MeshData &mesh = GetMesh(modelPath);
-    if (mesh.vao == 0 || mesh.vertexCount <= 0)
-    {
+    if (mesh.vao == 0 || mesh.vertexCount <= 0) {
         return;
     }
 

@@ -10,22 +10,22 @@ class Camera;
 class Window
 {
 public:
-	Window(int width, int height, std::string title);
-	~Window();
+    Window(int width, int height, std::string title);
+    ~Window();
 
-	int run();
+    int run();
 
 private:
-	bool initialize();
-	void setupCallbacks();
-	void cleanup();
+    bool initialize();
+    void setupCallbacks();
+    void cleanup();
 
-	static void FramebufferSizeCallback(GLFWwindow *window, int width, int height);
+    static void FramebufferSizeCallback(GLFWwindow *window, int width, int height);
 
-	int width_;
-	int height_;
-	std::string title_;
-	GLFWwindow *window_;
-	std::unique_ptr<Camera> camera_;
-	bool glfwInitialized_;
+    int width;
+    int height;
+    std::string title;
+    GLFWwindow *window;
+    std::unique_ptr<Camera> camera;
+    bool glfwInitialized;
 };

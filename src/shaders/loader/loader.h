@@ -8,10 +8,9 @@
 class ShaderLoader
 {
 public:
-	static std::string ReadTextFile(const std::string& path);
-	static GLuint CompileShader(GLenum type, const char* source);
-	static GLuint CreateShaderProgram(const std::string& vertexShaderPath,
-									  const std::string& fragmentShaderPath);
+    static std::string ReadTextFile(const std::string &path);
+    static GLuint CompileShader(GLenum type, const char *source);
+    static GLuint CreateShaderProgram(const std::string &vertexShaderPath, const std::string &fragmentShaderPath);
 };
 
 #endif

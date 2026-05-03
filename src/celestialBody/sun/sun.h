@@ -5,22 +5,23 @@
 
 #include "../celestialBody.h"
 
-class Sun : public CelestialBody {
+class Sun : public CelestialBody
+{
 public:
-	Sun(const Sun&) = delete;
-	Sun& operator=(const Sun&) = delete;
+    Sun(const Sun &) = delete;
+    Sun &operator=(const Sun &) = delete;
 
-	static Sun& getInstance();
+    static Sun &getInstance();
 
-	void translate() override;
-	void rotate() override;
-	const std::string& getColor() const override;
+    void translate() override;
+    void rotate() override;
+    const std::string &getColor() const override;
 
-	static const std::string model;
-	static const std::string color;
+    static const std::string model;
+    static const std::string color;
 
 private:
-	Sun() = default;
+    Sun() = default;
 };
 
 #endif

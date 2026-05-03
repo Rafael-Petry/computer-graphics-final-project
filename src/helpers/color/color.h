@@ -6,10 +6,9 @@
 
 #include <glm/vec3.hpp>
 
-class ColorHelper
-{
+class ColorHelper {
 public:
-	static glm::vec3 HexToRgb(const std::string& hex);
+    static glm::vec3 HexToRgb(const std::string &hex);
 };
 
 #endif

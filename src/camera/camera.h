@@ -1,5 +1,5 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef cameraH
+#define cameraH
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -14,15 +14,15 @@ public:
     Camera(float initialAspectRatio);
 
     void onResize(int width, int height);
-    void processKeyboard(GLFWwindow* window, float deltaTime);
+    void processKeyboard(GLFWwindow *window, float deltaTime);
     void processMouse(double xpos, double ypos);
     void processScroll(double yoffset);
 
     glm::mat4 getViewMatrix() const;
     glm::mat4 getProjectionMatrix() const;
 
-    static void CursorPosCallback(GLFWwindow* window, double xpos, double ypos);
-    static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+    static void CursorPosCallback(GLFWwindow *window, double xpos, double ypos);
+    static void ScrollCallback(GLFWwindow *window, double xoffset, double yoffset);
 
 private:
     glm::vec3 m_position;
