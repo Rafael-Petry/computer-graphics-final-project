@@ -23,8 +23,9 @@ int main()
         Window::getInstance().update(shaderProgram);
     }
 
-    glDeleteProgram(shaderProgram);
     Window::getInstance().close();
+    glDeleteProgram(shaderProgram);
+    glfwTerminate();
 
     return 0;
 }

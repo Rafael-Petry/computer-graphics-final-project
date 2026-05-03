@@ -31,10 +31,7 @@ public:
 
 private:
     static void framebufferSizeCallback(GLFWwindow *glfwWindow, int width, int height);
-    void setupCallbacks();
 
-    int width = 0;
-    int height = 0;
     std::string title;
     GLFWwindow *glfwWindow = nullptr;
     std::unique_ptr<Camera> camera;

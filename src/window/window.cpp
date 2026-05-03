@@ -21,20 +21,9 @@ void Window::framebufferSizeCallback(GLFWwindow *glfwWindow, int width, int heig
     }
 }
 
-void Window::setupCallbacks()
-{
-    glfwSetFramebufferSizeCallback(glfwWindow, framebufferSizeCallback);
-    glfwSetCursorPosCallback(glfwWindow, Camera::rotate);
-    glfwSetScrollCallback(glfwWindow, Camera::zoom);
-    glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-}
-
 bool Window::initialize(int width, int height, std::string title)
 {
-    this->width = width;
-    this->height = height;
     this->title = std::move(title);
-    glfwInitialized = true;
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -67,23 +56,15 @@ bool Window::initialize(int width, int height, std::string title)
     lastFrame = static_cast<float>(glfwGetTime());
 
     glfwSetWindowUserPointer(glfwWindow, camera.get());
-    setupCallbacks();
+    glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    glfwSetFramebufferSizeCallback(glfwWindow, framebufferSizeCallback);
+    glfwSetCursorPosCallback(glfwWindow, Camera::rotate);
+    glfwSetScrollCallback(glfwWindow, Camera::zoom);
+
     glEnable(GL_DEPTH_TEST);
 
     return true;
-}
-
-void Window::close()
-{
-    if (glfwWindow != nullptr) {
-        glfwDestroyWindow(glfwWindow);
-        glfwWindow = nullptr;
-    }
-
-    if (glfwInitialized) {
-        glfwTerminate();
-        glfwInitialized = false;
-    }
 }
 
 void Window::update(GLuint shaderProgram)
@@ -123,6 +104,12 @@ void Window::update(GLuint shaderProgram)
 
     glfwSwapBuffers(glfwWindow);
     glfwPollEvents();
+}
+
+void Window::close()
+{
+    glfwDestroyWindow(glfwWindow);
+    glfwWindow = nullptr;
 }
 
 GLFWwindow *Window::getGlfwWindow() const { return glfwWindow; }
