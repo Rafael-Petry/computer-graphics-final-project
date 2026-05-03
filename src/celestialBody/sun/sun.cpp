@@ -3,7 +3,7 @@
 #include "sun.h"
 
 const std::string Sun::color = "#FFFF00";
-const std::string Sun::model = "/home/aluno/computer-graphics-final-project/src/celestialBody/sun/sun.obj";
+const std::string Sun::meshPath = "/home/aluno/computer-graphics-final-project/src/celestialBody/sun/sun.obj";
 
 Sun &Sun::getInstance()
 {

@@ -9,24 +9,7 @@
 glm::mat4 Matrix_cameraView(glm::vec4 position_c, glm::vec4 view_vector, glm::vec4 up_vector);
 glm::mat4 Matrix_Perspective(float field_of_view, float aspect, float n, float f);
 
-Camera::Camera(float initialAspectRatio)
-    : m_position(0.0f, 1.0f, 7.0f),
-      m_front(0.0f, 0.0f, -1.0f),
-      m_up(0.0f, 1.0f, 0.0f),
-      m_right(1.0f, 0.0f, 0.0f),
-      m_worldUp(0.0f, 1.0f, 0.0f),
-      m_yaw(-90.0f),
-      m_pitch(0.0f),
-      m_mouseSensitivity(0.12f),
-      m_movementSpeed(5.0f),
-      m_zoomRadians(3.1415926f / 3.0f),
-      m_aspectRatio(initialAspectRatio),
-      m_firstMouseUpdate(true),
-      m_lastMouseX(0.0f),
-      m_lastMouseY(0.0f)
-{
-    updateDirectionVectors();
-}
+Camera::Camera(float initialAspectRatio) : m_position(0.0f, 1.0f, 7.0f), m_front(0.0f, 0.0f, -1.0f), m_up(0.0f, 1.0f, 0.0f), m_right(1.0f, 0.0f, 0.0f), m_worldUp(0.0f, 1.0f, 0.0f), m_yaw(-90.0f), m_pitch(0.0f), m_mouseSensitivity(0.12f), m_movementSpeed(5.0f), m_zoomRadians(3.1415926f / 3.0f), m_aspectRatio(initialAspectRatio), m_firstMouseUpdate(true), m_lastMouseX(0.0f), m_lastMouseY(0.0f) { updateDirectionVectors(); }
 
 void Camera::onResize(int width, int height)
 {
@@ -92,18 +75,9 @@ void Camera::processScroll(double yoffset)
     }
 }
 
-glm::mat4 Camera::getViewMatrix() const
-{
-    return Matrix_cameraView(
-        glm::vec4(m_position, 1.0f),
-        glm::vec4(m_front, 0.0f),
-        glm::vec4(m_up, 0.0f));
-}
+glm::mat4 Camera::getViewMatrix() const { return Matrix_cameraView(glm::vec4(m_position, 1.0f), glm::vec4(m_front, 0.0f), glm::vec4(m_up, 0.0f)); }
 
-glm::mat4 Camera::getProjectionMatrix() const
-{
-    return Matrix_Perspective(m_zoomRadians, m_aspectRatio, -0.1f, -100.0f);
-}
+glm::mat4 Camera::getProjectionMatrix() const { return Matrix_Perspective(m_zoomRadians, m_aspectRatio, -0.1f, -100.0f); }
 
 void Camera::CursorPosCallback(GLFWwindow *window, double xpos, double ypos)
 {

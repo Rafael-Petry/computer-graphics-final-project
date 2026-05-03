@@ -10,23 +10,13 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "../camera/camera.h"
-#include "../celestialBody/asteroid/asteroid.h"
-#include "../celestialBody/planet/planet.h"
-#include "../celestialBody/sun/sun.h"
+#include "../scene/scene.h"
 #include "../helpers/input/input.h"
 #include "../shaders/loader/loader.h"
-#include "../spaceship/spaceship.h"
-#include "../vendor/include/matrices.h"
 
-Window::Window(int width, int height, std::string title) : width(width), height(height), title(std::move(title)), window(nullptr), camera(nullptr), glfwInitialized(false)
-{
-    initialize();
-}
+Window::Window(int width, int height, std::string title) : width(width), height(height), title(std::move(title)), window(nullptr), camera(nullptr), glfwInitialized(false) { initialize(); }
 
-Window::~Window()
-{
-    cleanup();
-}
+Window::~Window() { cleanup(); }
 
 bool Window::initialize()
 {
@@ -117,14 +107,9 @@ int Window::run()
     const GLint projectionUniform = glGetUniformLocation(shaderProgram, "projection");
     const GLint colorUniform = glGetUniformLocation(shaderProgram, "objectColor");
 
-    Spaceship spaceship;
-    Sun &sun = Sun::getInstance();
-    Asteroid asteroid;
-    Planet planetA;
-    Planet planetB;
-    Planet planetC;
-
     float lastFrame = static_cast<float>(glfwGetTime());
+
+    Scene scene = Scene();
 
     while (!glfwWindowShouldClose(window)) {
         const float currentFrame = static_cast<float>(glfwGetTime());
@@ -145,23 +130,7 @@ int Window::run()
         glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projectionUniform, 1, GL_FALSE, glm::value_ptr(projection));
 
-        const glm::mat4 sunModel = Matrix_Scale(1.1f, 1.1f, 1.1f);
-        sun.render(modelUniform, colorUniform, sunModel);
-
-        const glm::mat4 spaceshipModel = Matrix_Translate(0.0f, 0.2f, 5.0f) * Matrix_Rotate_Y(currentFrame);
-        spaceship.render(modelUniform, colorUniform, spaceshipModel);
-
-        const glm::mat4 asteroidModel = Matrix_Translate(2.7f * cosf(currentFrame * 0.8f), 0.4f, 2.7f * sinf(currentFrame * 0.8f)) * Matrix_Rotate_Y(currentFrame * 1.7f) * Matrix_Scale(0.35f, 0.35f, 0.35f);
-        asteroid.render(modelUniform, colorUniform, asteroidModel);
-
-        const glm::mat4 planetAModel = Matrix_Translate(2.0f * cosf(currentFrame * 0.4f), 0.0f, 2.0f * sinf(currentFrame * 0.4f)) * Matrix_Scale(0.45f, 0.45f, 0.45f);
-        planetA.render(modelUniform, colorUniform, planetAModel);
-
-        const glm::mat4 planetBModel = Matrix_Translate(3.3f * cosf(currentFrame * 0.25f), -0.1f, 3.3f * sinf(currentFrame * 0.25f)) * Matrix_Scale(0.6f, 0.6f, 0.6f);
-        planetB.render(modelUniform, colorUniform, planetBModel);
-
-        const glm::mat4 planetCModel = Matrix_Translate(4.6f * cosf(currentFrame * 0.18f), 0.15f, 4.6f * sinf(currentFrame * 0.18f)) * Matrix_Scale(0.35f, 0.35f, 0.35f);
-        planetC.render(modelUniform, colorUniform, planetCModel);
+        scene.render(modelUniform, colorUniform, currentFrame);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

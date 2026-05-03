@@ -11,13 +11,15 @@
 #include "../../vendor/include/tiny_obj_loader.h"
 
 namespace {
-    struct MeshData {
+    struct MeshData
+    {
         GLuint vao = 0;
         GLuint vbo = 0;
         GLsizei vertexCount = 0;
     };
 
-    MeshData LoadObjMesh(const std::string &path) {
+    MeshData loadObjMesh(const std::string &path)
+    {
         MeshData mesh;
 
         tinyobj::attrib_t attrib;
@@ -26,15 +28,7 @@ namespace {
         std::string warn;
         std::string err;
 
-        const bool loaded = tinyobj::LoadObj(
-            &attrib,
-            &shapes,
-            &materials,
-            &warn,
-            &err,
-            path.c_str(),
-            nullptr,
-            true);
+        const bool loaded = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, path.c_str(), nullptr, true);
 
         if (!warn.empty()) {
             std::cerr << "OBJ load warning: " << warn << std::endl;
@@ -80,13 +74,8 @@ namespace {
 
         glBindVertexArray(mesh.vao);
         glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);
-        glBufferData(
-            GL_ARRAY_BUFFER,
-            trianglePositions.size() * sizeof(float),
-            trianglePositions.data(),
-            GL_STATIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * static_cast<GLsizei>(sizeof(float)),
-                              reinterpret_cast<void *>(0));
+        glBufferData(GL_ARRAY_BUFFER, trianglePositions.size() * sizeof(float), trianglePositions.data(), GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * static_cast<GLsizei>(sizeof(float)), reinterpret_cast<void *>(0));
         glEnableVertexAttribArray(0);
         glBindVertexArray(0);
 
@@ -94,29 +83,26 @@ namespace {
         return mesh;
     }
 
-    const MeshData &GetMesh(const std::string &path) {
+    const MeshData &getMesh(const std::string &path)
+    {
         static std::unordered_map<std::string, MeshData> cache;
         const auto it = cache.find(path);
         if (it != cache.end()) {
             return it->second;
         }
 
-        const MeshData mesh = LoadObjMesh(path);
+        const MeshData mesh = loadObjMesh(path);
         const auto inserted = cache.emplace(path, mesh);
         return inserted.first->second;
     }
-} // namespace
+}
 
-void RenderHelper::RenderModel(
-    GLint modelUniform,
-    GLint colorUniform,
-    const glm::mat4 &modelMatrix,
-    const std::string &modelPath,
-    const glm::vec3 &color) {
+void RenderHelper::renderModel(GLint modelUniform, GLint colorUniform, const glm::mat4 &modelMatrix, const std::string &modelPath, const glm::vec3 &color)
+{
     glUniformMatrix4fv(modelUniform, 1, GL_FALSE, glm::value_ptr(modelMatrix));
     glUniform3f(colorUniform, color.x, color.y, color.z);
 
-    const MeshData &mesh = GetMesh(modelPath);
+    const MeshData &mesh = getMesh(modelPath);
     if (mesh.vao == 0 || mesh.vertexCount <= 0) {
         return;
     }

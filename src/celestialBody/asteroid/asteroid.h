@@ -9,7 +9,7 @@ public:
     void translate() override;
     void rotate() override;
 
-    static const std::string model;
+    static const std::string meshPath;
     static const std::string color;
 };
 
