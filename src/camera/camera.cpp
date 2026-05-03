@@ -9,7 +9,12 @@
 glm::mat4 Matrix_cameraView(glm::vec4 position_c, glm::vec4 view_vector, glm::vec4 up_vector);
 glm::mat4 Matrix_Perspective(float field_of_view, float aspect, float n, float f);
 
-Camera::Camera(float initialAspectRatio) : m_position(0.0f, 1.0f, 7.0f), m_front(0.0f, 0.0f, -1.0f), m_up(0.0f, 1.0f, 0.0f), m_right(1.0f, 0.0f, 0.0f), m_worldUp(0.0f, 1.0f, 0.0f), m_yaw(-90.0f), m_pitch(0.0f), m_mouseSensitivity(0.12f), m_movementSpeed(5.0f), m_zoomRadians(3.1415926f / 3.0f), m_aspectRatio(initialAspectRatio), m_firstMouseUpdate(true), m_lastMouseX(0.0f), m_lastMouseY(0.0f) { updateDirectionVectors(); }
+Camera::Camera(float initialAspectRatio)
+    : position(0.0f, 1.0f, 7.0f), front(0.0f, 0.0f, -1.0f), up(0.0f, 1.0f, 0.0f), right(1.0f, 0.0f, 0.0f), worldUp(0.0f, 1.0f, 0.0f), yaw(-90.0f), pitch(0.0f), mouseSensitivity(0.12f),
+      movementSpeed(5.0f), zoomRadians(3.1415926f / 3.0f), aspectRatio(initialAspectRatio), firstMouseUpdate(true), lastMouseX(0.0f), lastMouseY(0.0f)
+{
+    updateDirectionVectors();
+}
 
 void Camera::onResize(int width, int height)
 {
@@ -17,44 +22,44 @@ void Camera::onResize(int width, int height)
         return;
     }
 
-    m_aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+    aspectRatio = static_cast<float>(width) / static_cast<float>(height);
 }
 
-void Camera::processKeyboard(GLFWwindow *window, float deltaTime)
+void Camera::update(GLFWwindow *window, float deltaTime)
 {
-    const float velocity = m_movementSpeed * deltaTime;
-    const glm::vec3 movement = InputHelper::GetCameraMovement(window);
+    const float velocity = movementSpeed * deltaTime;
+    const glm::vec3 movement = InputHelper::getMovementInputs(window);
 
-    m_position += m_front * (movement.z * velocity);
-    m_position += m_right * (movement.x * velocity);
-    m_position += m_worldUp * (movement.y * velocity);
+    position += front * (movement.z * velocity);
+    position += right * (movement.x * velocity);
+    position += worldUp * (movement.y * velocity);
 }
 
 void Camera::processMouse(double xpos, double ypos)
 {
-    if (m_firstMouseUpdate) {
-        m_lastMouseX = static_cast<float>(xpos);
-        m_lastMouseY = static_cast<float>(ypos);
-        m_firstMouseUpdate = false;
+    if (firstMouseUpdate) {
+        lastMouseX = static_cast<float>(xpos);
+        lastMouseY = static_cast<float>(ypos);
+        firstMouseUpdate = false;
     }
 
-    float xoffset = static_cast<float>(xpos) - m_lastMouseX;
-    float yoffset = m_lastMouseY - static_cast<float>(ypos);
+    float xoffset = static_cast<float>(xpos) - lastMouseX;
+    float yoffset = lastMouseY - static_cast<float>(ypos);
 
-    m_lastMouseX = static_cast<float>(xpos);
-    m_lastMouseY = static_cast<float>(ypos);
+    lastMouseX = static_cast<float>(xpos);
+    lastMouseY = static_cast<float>(ypos);
 
-    xoffset *= m_mouseSensitivity;
-    yoffset *= m_mouseSensitivity;
+    xoffset *= mouseSensitivity;
+    yoffset *= mouseSensitivity;
 
-    m_yaw += xoffset;
-    m_pitch += yoffset;
+    yaw += xoffset;
+    pitch += yoffset;
 
-    if (m_pitch > 89.0f) {
-        m_pitch = 89.0f;
+    if (pitch > 89.0f) {
+        pitch = 89.0f;
     }
-    if (m_pitch < -89.0f) {
-        m_pitch = -89.0f;
+    if (pitch < -89.0f) {
+        pitch = -89.0f;
     }
 
     updateDirectionVectors();
@@ -62,24 +67,25 @@ void Camera::processMouse(double xpos, double ypos)
 
 void Camera::processScroll(double yoffset)
 {
-    m_zoomRadians -= static_cast<float>(yoffset) * 0.03f;
+    zoomRadians -= static_cast<float>(yoffset) * 0.03f;
 
     const float minZoom = 3.1415926f / 12.0f;
     const float maxZoom = 3.1415926f / 1.5f;
 
-    if (m_zoomRadians < minZoom) {
-        m_zoomRadians = minZoom;
+    if (zoomRadians < minZoom) {
+        zoomRadians = minZoom;
     }
-    if (m_zoomRadians > maxZoom) {
-        m_zoomRadians = maxZoom;
+
+    if (zoomRadians > maxZoom) {
+        zoomRadians = maxZoom;
     }
 }
 
-glm::mat4 Camera::getViewMatrix() const { return Matrix_cameraView(glm::vec4(m_position, 1.0f), glm::vec4(m_front, 0.0f), glm::vec4(m_up, 0.0f)); }
+glm::mat4 Camera::getViewMatrix() const { return Matrix_cameraView(glm::vec4(position, 1.0f), glm::vec4(front, 0.0f), glm::vec4(up, 0.0f)); }
 
-glm::mat4 Camera::getProjectionMatrix() const { return Matrix_Perspective(m_zoomRadians, m_aspectRatio, -0.1f, -100.0f); }
+glm::mat4 Camera::getProjectionMatrix() const { return Matrix_Perspective(zoomRadians, aspectRatio, -0.1f, -100.0f); }
 
-void Camera::CursorPosCallback(GLFWwindow *window, double xpos, double ypos)
+void Camera::cursorPosCallback(GLFWwindow *window, double xpos, double ypos)
 {
     Camera *camera = static_cast<Camera *>(glfwGetWindowUserPointer(window));
     if (camera != nullptr) {
@@ -87,27 +93,37 @@ void Camera::CursorPosCallback(GLFWwindow *window, double xpos, double ypos)
     }
 }
 
-void Camera::ScrollCallback(GLFWwindow *window, double xoffset, double yoffset)
+void Camera::scrollCallback(GLFWwindow *window, double xoffset, double yoffset)
 {
     (void)xoffset;
 
     Camera *camera = static_cast<Camera *>(glfwGetWindowUserPointer(window));
     if (camera != nullptr) {
-        camera->processScroll(yoffset);
+        camera->zoomRadians -= static_cast<float>(yoffset) * 0.03f;
+
+        const float minZoom = 3.1415926f / 12.0f;
+        const float maxZoom = 3.1415926f / 1.5f;
+
+        if (camera->zoomRadians < minZoom) {
+            camera->zoomRadians = minZoom;
+        }
+        if (camera->zoomRadians > maxZoom) {
+            camera->zoomRadians = maxZoom;
+        }
     }
 }
 
 void Camera::updateDirectionVectors()
 {
-    const float yawRad = m_yaw * (3.1415926f / 180.0f);
-    const float pitchRad = m_pitch * (3.1415926f / 180.0f);
+    const float yawRad = yaw * (3.1415926f / 180.0f);
+    const float pitchRad = pitch * (3.1415926f / 180.0f);
 
-    glm::vec3 front;
-    front.x = cosf(yawRad) * cosf(pitchRad);
-    front.y = sinf(pitchRad);
-    front.z = sinf(yawRad) * cosf(pitchRad);
+    glm::vec3 newFront;
+    newFront.x = cosf(yawRad) * cosf(pitchRad);
+    newFront.y = sinf(pitchRad);
+    newFront.z = sinf(yawRad) * cosf(pitchRad);
 
-    m_front = glm::normalize(front);
-    m_right = glm::normalize(glm::cross(m_front, m_worldUp));
-    m_up = glm::normalize(glm::cross(m_right, m_front));
+    front = glm::normalize(newFront);
+    right = glm::normalize(glm::cross(front, worldUp));
+    up = glm::normalize(glm::cross(right, front));
 }

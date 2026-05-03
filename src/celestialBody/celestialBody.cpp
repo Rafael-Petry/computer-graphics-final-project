@@ -10,9 +10,9 @@ const std::string CelestialBody::color = "#808080";
 
 const std::string &CelestialBody::getColor() const { return color; }
 
-void CelestialBody::render(GLint modelUniform, GLint colorUniform, const glm::mat4 &modelMatrix) const
+void CelestialBody::update(GLint modelUniform, GLint colorUniform, const glm::mat4 &modelMatrix) const
 {
-    const glm::vec3 colorRgb = ColorHelper::HexToRgb(getColor());
+    const glm::vec3 colorRgb = ColorHelper::hexToRgb(getColor());
     RenderHelper::renderModel(modelUniform, colorUniform, modelMatrix, getMeshPath(), colorRgb);
 }
 

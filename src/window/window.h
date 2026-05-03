@@ -1,8 +1,21 @@
-// Window class that owns GLFW setup and the render loop.
-#pragma once
+#ifndef windowH
+#define windowH
 
 #include <memory>
 #include <string>
+
+#include <cmath>
+#include <iostream>
+#include <utility>
+
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
+#include <glm/gtc/type_ptr.hpp>
+
+#include "../camera/camera.h"
+#include "../scene/scene.h"
+#include "../helpers/input/input.h"
 
 struct GLFWwindow;
 class Camera;
@@ -10,22 +23,29 @@ class Camera;
 class Window
 {
 public:
-    Window(int width, int height, std::string title);
-    ~Window();
+    Window(const Window &) = delete;
+    Window &operator=(const Window &) = delete;
 
-    int run();
+    static Window &getInstance();
+
+    void initialize(int width, int height, std::string title);
+    void update(GLuint shaderProgram);
+    void close();
+
+    GLFWwindow *getWindow() const;
 
 private:
-    bool initialize();
+    static void framebufferSizeCallback(GLFWwindow *window, int width, int height);
     void setupCallbacks();
-    void cleanup();
 
-    static void FramebufferSizeCallback(GLFWwindow *window, int width, int height);
-
-    int width;
-    int height;
+    int width = 0;
+    int height = 0;
     std::string title;
-    GLFWwindow *window;
+    GLFWwindow *window = nullptr;
     std::unique_ptr<Camera> camera;
-    bool glfwInitialized;
+    bool glfwInitialized = false;
+
+    Window() = default;
 };
+
+#endif

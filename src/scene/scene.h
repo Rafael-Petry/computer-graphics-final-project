@@ -10,7 +10,7 @@ class Scene
 {
 public:
     Scene();
-    void render(GLint modelUniform, GLint colorUniform, float currentFrame) const;
+    void update(GLint modelUniform, GLint colorUniform, float currentFrame) const;
 
 private:
     Spaceship spaceship;

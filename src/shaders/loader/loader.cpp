@@ -1,12 +1,9 @@
 #include "loader.h"
 
-#include <fstream>
-#include <iostream>
-#include <sstream>
-
-std::string ShaderLoader::ReadTextFile(const std::string &path) {
+std::string ShaderLoader::readTextFile(const std::string &path)
+{
     std::ifstream file(path);
-	
+
     if (!file.is_open()) {
         std::cerr << "Failed to open file: " << path << std::endl;
         return "";
@@ -17,7 +14,8 @@ std::string ShaderLoader::ReadTextFile(const std::string &path) {
     return buffer.str();
 }
 
-GLuint ShaderLoader::CompileShader(GLenum type, const char *source) {
+GLuint ShaderLoader::compileShader(GLenum type, const char *source)
+{
     GLuint shader = glCreateShader(type);
     glShaderSource(shader, 1, &source, nullptr);
     glCompileShader(shader);
@@ -36,16 +34,17 @@ GLuint ShaderLoader::CompileShader(GLenum type, const char *source) {
     return shader;
 }
 
-GLuint ShaderLoader::CreateShaderProgram(const std::string &vertexShaderPath, const std::string &fragmentShaderPath) {
-    const std::string vertexShaderSource = ReadTextFile(vertexShaderPath);
-    const std::string fragmentShaderSource = ReadTextFile(fragmentShaderPath);
+GLuint ShaderLoader::createShaderProgram(const std::string &vertexShaderPath, const std::string &fragmentShaderPath)
+{
+    const std::string vertexShaderSource = readTextFile(vertexShaderPath);
+    const std::string fragmentShaderSource = readTextFile(fragmentShaderPath);
 
     if (vertexShaderSource.empty() || fragmentShaderSource.empty()) {
         return 0;
     }
 
-    GLuint vertexShader = CompileShader(GL_VERTEX_SHADER, vertexShaderSource.c_str());
-    GLuint fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fragmentShaderSource.c_str());
+    GLuint vertexShader = compileShader(GL_VERTEX_SHADER, vertexShaderSource.c_str());
+    GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, fragmentShaderSource.c_str());
 
     GLuint program = glCreateProgram();
     glAttachShader(program, vertexShader);
