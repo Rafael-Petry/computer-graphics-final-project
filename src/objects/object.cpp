@@ -10,12 +10,6 @@ Object::Object(std::string meshPath, glm::vec3 color) : meshPath(meshPath), colo
 
 void Object::update(GLint modelUniform, GLint colorUniform, float currentFrame) const
 {
-    const glm::mat4 model = translate(currentFrame) * rotate(currentFrame);
+    const glm::mat4 model = translate(currentFrame) * rotate(currentFrame) * scale(currentFrame);
     RenderHelper::renderModel(modelUniform, colorUniform, model, meshPath, color);
 }
-
-/*
-const std::string &Object::getMeshPath() const { return meshPath; }
-
-const glm::vec3 &Object::getColor() const { return color; }
-*/

@@ -1,13 +1,13 @@
 #include <iostream>
 #include <string>
 
+#include <glm/mat4x4.hpp>
+
 #include "planet.h"
+#include "../../vendor/include/matrices.h"
 
-const std::string Planet::color = "#00FF00";
-const std::string Planet::meshPath = "../../src/objects/celestialBody/planet/planet.obj";
+Planet::Planet(const std::string &meshPath, const glm::vec3 &color) : CelestialBody(meshPath, color) {}
 
-void Planet::translate() { std::cout << "The planet is orbiting the sun..." << std::endl; }
-
-void Planet::rotate() { std::cout << "Rotating the planet..." << std::endl; }
-
-const std::string &Planet::getColor() const { return color; }
+glm::mat4 Planet::translate(float currentFrame) const { return Matrix_Translate(2.0f * cosf(currentFrame * 0.4f), 0.0f, 2.0f * sinf(currentFrame * 0.4f)); }
+glm::mat4 Planet::rotate(float currentFrame) const { return Matrix_Rotate_Y(currentFrame * 1.7f); }
+glm::mat4 Planet::scale(float currentFrame) const { return Matrix_Scale(0.6f, 0.6f, 0.6f); }

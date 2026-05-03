@@ -2,9 +2,10 @@
 #include <string>
 
 #include "asteroid.h"
+#include "../../vendor/include/matrices.h"
 
-const std::string Asteroid::meshPath = "../../src/objects/celestialBody/asteroid/asteroid.obj";
+Asteroid::Asteroid(const std::string &meshPath, const glm::vec3 &color) : CelestialBody(meshPath, color) {}
 
-void Asteroid::translate() { std::cout << "Moving asteroid towards the spaceship..." << std::endl; }
-
-void Asteroid::rotate() { std::cout << "Rotating the asteroid..." << std::endl; }
+glm::mat4 Asteroid::translate(float currentFrame) const { return Matrix_Translate(2.7f * cosf(currentFrame * 0.8f), 0.4f, 2.7f * sinf(currentFrame * 0.8f)); }
+glm::mat4 Asteroid::rotate(float currentFrame) const { return Matrix_Rotate_Y(currentFrame * 1.7f); }
+glm::mat4 Asteroid::scale(float currentFrame) const { return Matrix_Scale(0.35f, 0.35f, 0.35f); }

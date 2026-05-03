@@ -20,6 +20,7 @@ protected:
 
     virtual glm::mat4 translate(float currentFrame) const = 0;
     virtual glm::mat4 rotate(float currentFrame) const = 0;
+    virtual glm::mat4 scale(float currentFrame) const = 0;
 };
 
 #endif

@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include <glm/mat4x4.hpp>
+
 #include "../../objects/celestialBody/celestialBody.h"
 
 class Sun : public CelestialBody
@@ -13,15 +15,13 @@ public:
 
     static Sun &getInstance();
 
-    void translate() override;
-    void rotate() override;
-    const std::string &getColor() const override;
-
-    static const std::string meshPath;
-    static const std::string color;
+protected:
+    glm::mat4 translate(float currentFrame) const override;
+    glm::mat4 rotate(float currentFrame) const override;
+    glm::mat4 scale(float currentFrame) const override;
 
 private:
-    Sun() = default;
+    Sun();
 };
 
 #endif

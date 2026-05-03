@@ -1,10 +1,13 @@
 #include <iostream>
 #include <string>
 
-#include "sun.h"
+#include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
 
-const std::string Sun::color = "#FFFF00";
-const std::string Sun::meshPath = "../../src/objects/celestialBody/sun/sun.obj";
+#include "sun.h"
+#include "../../vendor/include/matrices.h"
+
+Sun::Sun() : CelestialBody("../../src/objects/celestialBody/celestialBody.obj", glm::vec3(1.0f, 1.0f, 0.0f)) {}
 
 Sun &Sun::getInstance()
 {
@@ -12,8 +15,6 @@ Sun &Sun::getInstance()
     return instance;
 }
 
-void Sun::translate() { std::cout << "The sun stands still..." << std::endl; }
-
-void Sun::rotate() { std::cout << "Rotating the sun..." << std::endl; }
-
-const std::string &Sun::getColor() const { return color; }
+glm::mat4 Sun::translate(float currentFrame) const { return Matrix_Translate(0.0f, 0.0f, 0.0f); }
+glm::mat4 Sun::rotate(float currentFrame) const { return Matrix_Rotate_Y(currentFrame * 0.1f); }
+glm::mat4 Sun::scale(float currentFrame) const { return Matrix_Scale(1.1f, 1.1f, 1.1f); }

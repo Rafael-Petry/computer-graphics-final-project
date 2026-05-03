@@ -15,9 +15,7 @@ public:
 private:
     Spaceship spaceship;
     Asteroid asteroid;
-    Planet planet1;
-    Planet planet2;
-    Planet planet3;
+    Planet planet;
     Sun &sun;
 };
 

@@ -3,16 +3,19 @@
 
 #include <string>
 
+#include <glm/mat4x4.hpp>
+
 #include "../../objects/celestialBody/celestialBody.h"
 
 class Asteroid : public CelestialBody
 {
 public:
-    void translate() override;
-    void rotate() override;
+    Asteroid(const std::string &meshPath = "../../src/objects/celestialBody/celestialBody.obj", const glm::vec3 &color = glm::vec3(0.5f, 0.5f, 0.5f));
 
-    static const std::string meshPath;
-    static const std::string color;
+protected:
+    glm::mat4 translate(float currentFrame) const override;
+    glm::mat4 rotate(float currentFrame) const override;
+    glm::mat4 scale(float currentFrame) const override;
 };
 
 #endif
