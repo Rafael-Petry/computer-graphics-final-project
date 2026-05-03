@@ -11,7 +11,6 @@
 
 #include "../camera/camera.h"
 #include "../scene/scene.h"
-#include "../helpers/input/input.h"
 
 struct GLFWwindow;
 class Camera;

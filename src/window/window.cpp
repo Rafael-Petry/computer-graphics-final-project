@@ -102,7 +102,10 @@ void Window::update(GLuint shaderProgram)
     const float deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
 
-    InputHelper::getWindowInputs(window);
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
+    }
+
     camera->update(window, deltaTime);
 
     glClearColor(0.02f, 0.02f, 0.08f, 1.0f);

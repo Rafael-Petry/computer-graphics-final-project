@@ -15,7 +15,6 @@ set(SOURCES
   src/celestialBody/planet/planet.cpp
   src/helpers/render/render.cpp
   src/helpers/color/color.cpp
-  src/helpers/input/input.cpp
   src/scene/scene.cpp
   src/shaders/loader/loader.cpp
   src/window/window.cpp

@@ -11,7 +11,7 @@ public:
 
     void onResize(int width, int height);
     void update(GLFWwindow *window, float deltaTime);
-    void processMouse(double xpos, double ypos);
+    void rotate(double xpos, double ypos);
     void processScroll(double yoffset);
 
     glm::mat4 getViewMatrix() const;
