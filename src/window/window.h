@@ -35,7 +35,7 @@ private:
     std::string title;
     GLFWwindow *glfwWindow = nullptr;
     std::unique_ptr<Camera> camera;
-    Scene scene;
+    std::unique_ptr<Scene> scene;
     bool glfwInitialized = false;
     float lastFrame = 0.0f;
 

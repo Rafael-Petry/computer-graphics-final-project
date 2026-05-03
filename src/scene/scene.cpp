@@ -1,4 +1,3 @@
-#include "../vendor/include/matrices.h"
 #include "../celestialBody/sun/sun.h"
 #include "scene.h"
 
@@ -6,11 +5,11 @@ Scene::Scene() : spaceship(), asteroid(), planet1(), planet2(), planet3(), sun(S
 
 void Scene::update(GLint modelUniform, GLint colorUniform, float currentFrame) const
 {
+    spaceship.update(modelUniform, colorUniform, currentFrame);
+
+    /*
     const glm::mat4 sunModel = Matrix_Scale(1.1f, 1.1f, 1.1f);
     sun.update(modelUniform, colorUniform, sunModel);
-
-    const glm::mat4 spaceshipModel = Matrix_Translate(0.0f, 0.2f, 5.0f) * Matrix_Rotate_Y(currentFrame);
-    spaceship.update(modelUniform, colorUniform, spaceshipModel);
 
     const glm::mat4 asteroidModel =
         Matrix_Translate(2.7f * cosf(currentFrame * 0.8f), 0.4f, 2.7f * sinf(currentFrame * 0.8f)) * Matrix_Rotate_Y(currentFrame * 1.7f) * Matrix_Scale(0.35f, 0.35f, 0.35f);
@@ -24,4 +23,5 @@ void Scene::update(GLint modelUniform, GLint colorUniform, float currentFrame) c
 
     const glm::mat4 planet3Model = Matrix_Translate(4.6f * cosf(currentFrame * 0.18f), 0.15f, 4.6f * sinf(currentFrame * 0.18f)) * Matrix_Scale(0.35f, 0.35f, 0.35f);
     planet3.update(modelUniform, colorUniform, planet3Model);
+    */
 }

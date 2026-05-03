@@ -50,6 +50,8 @@ bool Window::initialize(int width, int height, std::string title)
     glfwGetFramebufferSize(glfwWindow, &framebufferWidth, &framebufferHeight);
     glViewport(0, 0, framebufferWidth, framebufferHeight);
 
+    scene.reset(new Scene());
+
     const float aspectRatio = static_cast<float>(framebufferWidth) / static_cast<float>(framebufferHeight);
     camera.reset(new Camera(aspectRatio));
 
@@ -100,7 +102,7 @@ void Window::update(GLuint shaderProgram)
     glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(projectionUniform, 1, GL_FALSE, glm::value_ptr(projection));
 
-    scene.update(modelUniform, colorUniform, currentFrame);
+    scene->update(modelUniform, colorUniform, currentFrame);
 
     glfwSwapBuffers(glfwWindow);
     glfwPollEvents();

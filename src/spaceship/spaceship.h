@@ -9,14 +9,13 @@
 class Spaceship
 {
 public:
-    void update(GLint modelUniform, GLint colorUniform, const glm::mat4 &modelMatrix) const;
-    void translate() const;
-    void rotate() const;
-    void shoot() const;
-
+    void update(GLint modelUniform, GLint colorUniform, float currentFrame) const;
     static const std::string &getMeshPath();
 
 private:
+    glm::mat4 translate(float currentFrame) const;
+    glm::mat4 rotate(float currentFrame) const;
+    void shoot() const;
     static const std::string meshPath;
 };
 
