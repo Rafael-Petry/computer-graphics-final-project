@@ -11,22 +11,22 @@ Window &Window::getInstance()
     return instance;
 }
 
-void Window::framebufferSizeCallback(GLFWwindow *window, int width, int height)
+void Window::framebufferSizeCallback(GLFWwindow *glfwWindow, int width, int height)
 {
     glViewport(0, 0, width, height);
 
-    Camera *camera = static_cast<Camera *>(glfwGetWindowUserPointer(window));
+    Camera *camera = static_cast<Camera *>(glfwGetWindowUserPointer(glfwWindow));
     if (camera != nullptr) {
-        camera->onResize(width, height);
+        camera->updateAspectRatio(width, height);
     }
 }
 
 void Window::setupCallbacks()
 {
-    glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
-    glfwSetCursorPosCallback(window, Camera::cursorPosCallback);
-    glfwSetScrollCallback(window, Camera::scrollCallback);
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetFramebufferSizeCallback(glfwWindow, framebufferSizeCallback);
+    glfwSetCursorPosCallback(glfwWindow, Camera::rotate);
+    glfwSetScrollCallback(glfwWindow, Camera::zoom);
+    glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 bool Window::initialize(int width, int height, std::string title)
@@ -41,14 +41,14 @@ bool Window::initialize(int width, int height, std::string title)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-    window = glfwCreateWindow(width, height, this->title.c_str(), nullptr, nullptr);
-    if (window == nullptr) {
-        std::cerr << "Failed to create GLFW window." << std::endl;
+    glfwWindow = glfwCreateWindow(width, height, this->title.c_str(), nullptr, nullptr);
+    if (glfwWindow == nullptr) {
+        std::cerr << "Failed to create GLFW glfwWindow." << std::endl;
         close();
         return false;
     }
 
-    glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent(glfwWindow);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cerr << "Failed to initialize GLAD." << std::endl;
@@ -58,7 +58,7 @@ bool Window::initialize(int width, int height, std::string title)
 
     int framebufferWidth = 0;
     int framebufferHeight = 0;
-    glfwGetFramebufferSize(window, &framebufferWidth, &framebufferHeight);
+    glfwGetFramebufferSize(glfwWindow, &framebufferWidth, &framebufferHeight);
     glViewport(0, 0, framebufferWidth, framebufferHeight);
 
     const float aspectRatio = static_cast<float>(framebufferWidth) / static_cast<float>(framebufferHeight);
@@ -66,7 +66,7 @@ bool Window::initialize(int width, int height, std::string title)
 
     lastFrame = static_cast<float>(glfwGetTime());
 
-    glfwSetWindowUserPointer(window, camera.get());
+    glfwSetWindowUserPointer(glfwWindow, camera.get());
     setupCallbacks();
     glEnable(GL_DEPTH_TEST);
 
@@ -75,9 +75,9 @@ bool Window::initialize(int width, int height, std::string title)
 
 void Window::close()
 {
-    if (window != nullptr) {
-        glfwDestroyWindow(window);
-        window = nullptr;
+    if (glfwWindow != nullptr) {
+        glfwDestroyWindow(glfwWindow);
+        glfwWindow = nullptr;
     }
 
     if (glfwInitialized) {
@@ -102,11 +102,11 @@ void Window::update(GLuint shaderProgram)
     const float deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
 
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
+    if (glfwGetKey(glfwWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
     }
 
-    camera->update(window, deltaTime);
+    camera->update(glfwWindow, deltaTime); // This will be removed when the camere is dependant of scene's spaceship
 
     glClearColor(0.02f, 0.02f, 0.08f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -121,8 +121,8 @@ void Window::update(GLuint shaderProgram)
 
     scene.update(modelUniform, colorUniform, currentFrame);
 
-    glfwSwapBuffers(window);
+    glfwSwapBuffers(glfwWindow);
     glfwPollEvents();
 }
 
-GLFWwindow *Window::getWindow() const { return window; }
+GLFWwindow *Window::getGlfwWindow() const { return glfwWindow; }

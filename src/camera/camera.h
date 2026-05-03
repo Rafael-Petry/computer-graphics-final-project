@@ -9,7 +9,7 @@ class Camera
 public:
     Camera(float initialAspectRatio);
 
-    void onResize(int width, int height);
+    void updateAspectRatio(int width, int height);
     void update(GLFWwindow *window, float deltaTime);
     void rotate(double xpos, double ypos);
     void processScroll(double yoffset);
@@ -17,8 +17,8 @@ public:
     glm::mat4 getViewMatrix() const;
     glm::mat4 getProjectionMatrix() const;
 
-    static void cursorPosCallback(GLFWwindow *window, double xpos, double ypos);
-    static void scrollCallback(GLFWwindow *window, double xoffset, double yoffset);
+    static void rotate(GLFWwindow *window, double xpos, double ypos);
+    static void zoom(GLFWwindow *window, double xoffset, double yoffset);
 
 private:
     glm::vec3 position;
@@ -40,7 +40,7 @@ private:
     float lastMouseX;
     float lastMouseY;
 
-    void updateDirectionVectors();
+    void updateOrientation();
 };
 
 #endif

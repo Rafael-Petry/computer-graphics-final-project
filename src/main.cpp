@@ -19,7 +19,7 @@ int main()
 
     const GLuint shaderProgram = ShaderLoader::createShaderProgram("../../src/shaders/vertex.glsl", "../../src/shaders/fragment.glsl");
 
-    while (!glfwWindowShouldClose(Window::getInstance().getWindow())) {
+    while (!glfwWindowShouldClose(Window::getInstance().getGlfwWindow())) {
         Window::getInstance().update(shaderProgram);
     }
 

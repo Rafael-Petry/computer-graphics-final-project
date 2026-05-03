@@ -27,16 +27,16 @@ public:
     void update(GLuint shaderProgram);
     void close();
 
-    GLFWwindow *getWindow() const;
+    GLFWwindow *getGlfwWindow() const;
 
 private:
-    static void framebufferSizeCallback(GLFWwindow *window, int width, int height);
+    static void framebufferSizeCallback(GLFWwindow *glfwWindow, int width, int height);
     void setupCallbacks();
 
     int width = 0;
     int height = 0;
     std::string title;
-    GLFWwindow *window = nullptr;
+    GLFWwindow *glfwWindow = nullptr;
     std::unique_ptr<Camera> camera;
     Scene scene;
     bool glfwInitialized = false;
