@@ -10,9 +10,10 @@ class Scene
 {
 public:
     Scene();
-    void update(GLint modelUniform, GLint colorUniform, float currentFrame) const;
+    void update(GLint modelUniform, GLint colorUniform, float currentFrame);
 
 private:
+    float lastFrame;
     Spaceship spaceship;
     Asteroid asteroid;
     Planet planet;
