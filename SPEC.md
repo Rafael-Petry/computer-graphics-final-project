@@ -107,6 +107,8 @@ Para todos, será utilizado o "Physically Based Shading" da Disney com configura
 ### Mapeamento de texturas em todos os objetos
 Haverá uma textura metálica da nave, uma textura rochosa para os asteroides, uma textura de gramado para os planetas e uma textura de madeira para o tronco das árvores.
 
+> Comentário Professor: Para os planetas, podem pesquisar sobre texturas procedurais (geradas com algoritmos de ruído, por exemplo), para ter uma textura de "resolução infinita." Isso talvez seja necessário pois o personagem pode chegar bem perto a superfície do planeta, e talvez uma imagem de textura não terá resolução suficiente para ficar visualmente bom.
+
 ### Movimentação com curva Bézier cúbica
 A órbita dos planetas ao redor do sol será definida com curva de Bézier cúbica.
 
