@@ -7,6 +7,8 @@
 
 #include "../../objects/celestialBody/celestialBody.h"
 
+class Window;
+
 class Sun : public CelestialBody
 {
 public:
@@ -16,9 +18,9 @@ public:
     static Sun &getInstance();
 
 protected:
-    glm::mat4 translate(float currentFrame) const override;
-    glm::mat4 rotate(float currentFrame) const override;
-    glm::mat4 scale(float currentFrame) const override;
+    glm::mat4 translate(Window *window) const override;
+    glm::mat4 rotate(Window *window) const override;
+    glm::mat4 scale(Window *window) const override;
 
 private:
     Sun();

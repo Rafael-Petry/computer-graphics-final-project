@@ -9,11 +9,8 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-#include "../camera/camera.h"
-#include "../scene/scene.h"
-
-struct GLFWwindow;
 class Camera;
+class Scene;
 
 class Window
 {
@@ -28,6 +25,8 @@ public:
     void close();
 
     GLFWwindow *getGlfwWindow() const;
+    float getDeltaTime() const;
+    float getCurrentFrame() const;
 
 private:
     static void framebufferSizeCallback(GLFWwindow *glfwWindow, int width, int height);
@@ -37,7 +36,9 @@ private:
     std::unique_ptr<Camera> camera;
     std::unique_ptr<Scene> scene;
     bool glfwInitialized = false;
+    float currentFrame = 0.0f;
     float lastFrame = 0.0f;
+    float deltaTime = 0.0f;
 
     Window() = default;
 };

@@ -3,6 +3,11 @@
 #include <string>
 #include <utility>
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
+#include "../camera/camera.h"
+#include "../scene/scene.h"
 #include "window.h"
 
 Window &Window::getInstance()
@@ -81,8 +86,8 @@ void Window::update(GLuint shaderProgram)
     const GLint projectionUniform = glGetUniformLocation(shaderProgram, "projection");
     const GLint colorUniform = glGetUniformLocation(shaderProgram, "objectColor");
 
-    const float currentFrame = static_cast<float>(glfwGetTime());
-    const float deltaTime = currentFrame - lastFrame;
+    currentFrame = static_cast<float>(glfwGetTime());
+    deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
 
     if (glfwGetKey(glfwWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -102,7 +107,7 @@ void Window::update(GLuint shaderProgram)
     glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(projectionUniform, 1, GL_FALSE, glm::value_ptr(projection));
 
-    scene->update(modelUniform, colorUniform, currentFrame);
+    scene->update(modelUniform, colorUniform, this);
 
     glfwSwapBuffers(glfwWindow);
     glfwPollEvents();
@@ -115,3 +120,5 @@ void Window::close()
 }
 
 GLFWwindow *Window::getGlfwWindow() const { return glfwWindow; }
+float Window::getDeltaTime() const { return deltaTime; }
+float Window::getCurrentFrame() const { return currentFrame; }
