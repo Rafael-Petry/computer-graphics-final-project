@@ -94,7 +94,7 @@ void Window::update(GLuint shaderProgram)
         glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
     }
 
-    camera->update(glfwWindow, deltaTime); // This will be removed when the camere is dependant of scene's spaceship
+    // camera->update(glfwWindow, deltaTime); // This will be removed when the camere is dependant of scene's spaceship
 
     glClearColor(0.02f, 0.02f, 0.08f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

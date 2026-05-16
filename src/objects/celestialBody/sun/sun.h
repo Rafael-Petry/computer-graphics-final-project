@@ -18,9 +18,9 @@ public:
     static Sun &getInstance();
 
 protected:
-    glm::mat4 translate(Window *window) const override;
-    glm::mat4 rotate(Window *window) const override;
-    glm::mat4 scale(Window *window) const override;
+    glm::mat4 translate(Window *window) override;
+    glm::mat4 rotate(Window *window) override;
+    glm::mat4 scale(Window *window) override;
 
 private:
     Sun();
