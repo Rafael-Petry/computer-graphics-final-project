@@ -18,6 +18,11 @@ protected:
     glm::mat4 translate(Window *window) override;
     glm::mat4 rotate(Window *window) override;
     glm::mat4 scale(Window *window) override;
+
+private:
+    float orbitPhase = 0.0f;
+    float orbitSpeed = 0.25f;
+    float orbitRadius = 2.0f;
 };
 
 #endif

@@ -4,6 +4,7 @@
 #include <string>
 
 #include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
 
 #include "../../objects/celestialBody/celestialBody.h"
 
@@ -17,6 +18,8 @@ public:
 
     static Sun &getInstance();
 
+    glm::vec3 getPosition() const;
+
 protected:
     glm::mat4 translate(Window *window) override;
     glm::mat4 rotate(Window *window) override;
@@ -24,6 +27,8 @@ protected:
 
 private:
     Sun();
+
+    glm::vec3 position;
 };
 
 #endif
