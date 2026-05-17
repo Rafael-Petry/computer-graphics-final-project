@@ -44,6 +44,8 @@ private:
     bool firstMouseUpdate = true;
     float lastMouseX = 0.0f;
     float lastMouseY = 0.0f;
+
+    bool isRolling = false;
 };
 
 #endif

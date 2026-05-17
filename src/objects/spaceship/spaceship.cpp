@@ -23,8 +23,9 @@ void Spaceship::update(GLint modelUniform, GLint colorUniform, Window *window)
 {
     Object::update(modelUniform, colorUniform, window);
 
+    isRolling = false;
     if (glfwGetKey(window->getGlfwWindow(), GLFW_KEY_R) == GLFW_PRESS) {
-        std::cout << "They see me rolling, they hating" << std::endl;
+        isRolling = true;
     }
 }
 
@@ -74,8 +75,8 @@ void Spaceship::updateOrientation()
     newFront.z = sinf(yawRad) * cosf(pitchRad);
 
     front = glm::normalize(newFront);
-    right = glm::normalize(glm::cross(front, worldUp));
-    up = glm::normalize(glm::cross(right, front));
+    right = glm::normalize(crossproduct(glm::vec4(front, 0.0f), glm::vec4(worldUp, 0.0f)));
+    up = glm::normalize(crossproduct(glm::vec4(right, 0.0f), glm::vec4(front, 0.0f)));
 }
 
 glm::mat4 Spaceship::translate(Window *window)
