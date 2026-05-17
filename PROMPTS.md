@@ -69,3 +69,7 @@ Create a shader loader class on *src/shaders/loader/loader.cpp*, Move any shader
 ## 10-organize-window
 
 Create a instantiable window class on *src/window/window.cpp*. Move all window logic from *src/main.cpp/ to this newly created class.
+
+## 11-spaceship-update-extension
+
+On the Spaceship class, extend the parent update function so when the user is holding the R key, it prints "They see me rolling, they hating" on the terminal.

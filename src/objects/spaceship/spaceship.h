@@ -15,6 +15,8 @@ class Spaceship : public Object
 public:
     Spaceship(const std::string &meshPath = "../../src/objects/spaceship/spaceship.obj", const glm::vec3 &color = glm::vec3(0.73f, 0.79f, 0.88f));
 
+    void update(GLint modelUniform, GLint colorUniform, Window *window);
+
     glm::mat4 getViewMatrix() const;
     static void updateView(GLFWwindow *window, double xpos, double ypos);
 

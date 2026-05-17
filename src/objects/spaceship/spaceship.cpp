@@ -19,6 +19,15 @@ Spaceship::Spaceship(const std::string &meshPath, const glm::vec3 &color) : Obje
     position = glm::vec3(0.0f, 0.2f, 5.0f);
 }
 
+void Spaceship::update(GLint modelUniform, GLint colorUniform, Window *window)
+{
+    Object::update(modelUniform, colorUniform, window);
+
+    if (glfwGetKey(window->getGlfwWindow(), GLFW_KEY_R) == GLFW_PRESS) {
+        std::cout << "They see me rolling, they hating" << std::endl;
+    }
+}
+
 void Spaceship::updateView(GLFWwindow *window, double xpos, double ypos)
 {
     Spaceship *spaceship = static_cast<Spaceship *>(glfwGetWindowUserPointer(window));
