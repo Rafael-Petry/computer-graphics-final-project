@@ -28,6 +28,44 @@ void Spaceship::update(GLint modelUniform, GLint colorUniform, Window *window)
     if (glfwGetKey(window->getGlfwWindow(), GLFW_KEY_R) == GLFW_PRESS) {
         isRolling = true;
     }
+
+    if (yawVelocity > maxRotationSpeed) {
+        yawVelocity = maxRotationSpeed;
+    }
+    if (yawVelocity < -maxRotationSpeed) {
+        yawVelocity = -maxRotationSpeed;
+    }
+
+    if (pitchVelocity > maxRotationSpeed) {
+        pitchVelocity = maxRotationSpeed;
+    }
+    if (pitchVelocity < -maxRotationSpeed) {
+        pitchVelocity = -maxRotationSpeed;
+    }
+
+    if (rollVelocity > maxRotationSpeed) {
+        rollVelocity = maxRotationSpeed;
+    }
+    if (rollVelocity < -maxRotationSpeed) {
+        rollVelocity = -maxRotationSpeed;
+    }
+
+    const float deltaTime = window->getDeltaTime();
+    yaw += yawVelocity * deltaTime;
+    pitch += pitchVelocity * deltaTime;
+    roll += rollVelocity * deltaTime;
+
+    if (pitch > 89.0f) {
+        pitch = 89.0f;
+        pitchVelocity = 0.0f;
+    }
+
+    if (pitch < -89.0f) {
+        pitch = -89.0f;
+        pitchVelocity = 0.0f;
+    }
+
+    updateOrientation();
 }
 
 void Spaceship::updateView(GLFWwindow *window, double xpos, double ypos)
@@ -35,6 +73,8 @@ void Spaceship::updateView(GLFWwindow *window, double xpos, double ypos)
     Spaceship *spaceship = static_cast<Spaceship *>(glfwGetWindowUserPointer(window));
 
     if (spaceship != nullptr) {
+        spaceship->isRolling = glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS;
+
         if (spaceship->firstMouseUpdate) {
             spaceship->lastMouseX = static_cast<float>(xpos);
             spaceship->lastMouseY = static_cast<float>(ypos);
@@ -51,22 +91,12 @@ void Spaceship::updateView(GLFWwindow *window, double xpos, double ypos)
         yoffset *= spaceship->mouseSensitivity;
 
         if (spaceship->isRolling) {
-            spaceship->roll += xoffset;
+            spaceship->rollVelocity += xoffset * spaceship->rotationAcceleration;
         }
         else {
-            spaceship->yaw += xoffset;
-            spaceship->pitch += yoffset;
-
-            if (spaceship->pitch > 89.0f) {
-                spaceship->pitch = 89.0f;
-            }
-
-            if (spaceship->pitch < -89.0f) {
-                spaceship->pitch = -89.0f;
-            }
+            spaceship->yawVelocity += xoffset * spaceship->rotationAcceleration;
+            spaceship->pitchVelocity += yoffset * spaceship->rotationAcceleration;
         }
-
-        spaceship->updateOrientation();
     }
 }
 

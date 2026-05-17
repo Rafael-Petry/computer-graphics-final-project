@@ -56,7 +56,7 @@ Move the fragment shader code from _src/main.cpp_ into _src/shaders/fragment.gls
 
 ## 8-organize-rendering
 
-On _src/helpers/render.cpp_, create a helper class that implements a static rendering function using the tiny_obj_loader library. Change the rendering logic on the **Spaceship** and **CelestialBody** class to just use this centralized rendering function on _src/helpers/render.cpp_.
+On _src/helpers/render.cpp_, create a helper class that implements a static rendering function using the tiny*obj_loader library. Change the rendering logic on the **Spaceship** and **CelestialBody** class to just use this centralized rendering function on \_src/helpers/render.cpp*.
 
 ## 9-organize-shaders-color-input
 
@@ -85,3 +85,7 @@ Read _prompts/0-limitations_. Change the spaceship's rotate method so the rotati
 ## 14-spaceship-inertia
 
 Read _prompts/0-limitations_. Change the spaceship's movement to have inertia as it is on outer space. Moving on a particular directions accelerates the spaceship and moving on the opposite decelerates it.
+
+## 15-spaceship-rotation-inertia
+
+Read _prompts/0-limitations_. Change the spaceship's rotation to have inertia as it is on outer space. Rotating on a particular axis accelerates the spaceship's rotationg and moving on the opposite decelerates it.

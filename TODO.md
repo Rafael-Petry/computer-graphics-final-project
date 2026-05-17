@@ -30,13 +30,13 @@ This file defines a bunch of to do lists for different tasks and functionalities
 - [x] Anchor first person camera to the spaceship
 - [x] Implement C key to transition between first person camera and the "scene camera"
 - [x] Fix spaceship rotate/translate to be consistant
-- [] Implement spaceship movement (with inertia)
-    - [] W needs to go forward
-    - [] S needs to go backwards
-    - [] A needs to go to the left
-    - [] D needs to go to the right
-    - [] Shift needs to go up
-    - [] Ctrl needs to go down
+- [x] Implement spaceship movement (with inertia)
+    - [x] W needs to go forward
+    - [x] S needs to go backwards
+    - [x] A needs to go to the left
+    - [x] D needs to go to the right
+    - [x] Shift needs to go up
+    - [x] Ctrl needs to go down
 - [x] Implement spaceship rotation
     - [x] Mouse controls pitch and yaw
     - [x] If player holds R, than mouse controlls roll

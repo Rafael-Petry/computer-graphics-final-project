@@ -40,6 +40,13 @@ private:
     float pitch = 0.0f;
     float roll = 0.0f;
 
+    float yawVelocity = 0.0f;
+    float pitchVelocity = 0.0f;
+    float rollVelocity = 0.0f;
+
+    float rotationAcceleration = 8.0f;
+    float maxRotationSpeed = 120.0f;
+
     float movementAcceleration = 8.0f;
     float maxMovementSpeed = 5.0f;
 
