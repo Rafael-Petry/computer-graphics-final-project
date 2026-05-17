@@ -1,3 +1,4 @@
+#include <cmath>
 #include <iostream>
 #include <string>
 
@@ -5,10 +6,53 @@
 
 #include "planet.h"
 #include "../../../window/window.h"
+#include "../sun/sun.h"
 #include "../../vendor/include/matrices.h"
+
+namespace {
+    glm::vec3 cubicBezier(const glm::vec3 &p0, const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3, float t)
+    {
+        const float u = 1.0f - t;
+        const float tt = t * t;
+        const float uu = u * u;
+        const float uuu = uu * u;
+        const float ttt = tt * t;
+
+        return (p0 * uuu) + (p1 * (3.0f * uu * t)) + (p2 * (3.0f * u * tt)) + (p3 * ttt);
+    }
+}
 
 Planet::Planet(const std::string &meshPath, const glm::vec3 &color) : CelestialBody(meshPath, color) {}
 
-glm::mat4 Planet::translate(Window *window) { return Matrix_Translate(2.0f * cosf(window->getCurrentFrame() * 0.4f), 0.0f, 2.0f * sinf(window->getCurrentFrame() * 0.4f)); }
+glm::mat4 Planet::translate(Window *window)
+{
+    orbitPhase += window->getDeltaTime() * orbitSpeed;
+    if (orbitPhase >= 2.0f) {
+        orbitPhase = fmodf(orbitPhase, 2.0f);
+    }
+
+    const Sun &sun = Sun::getInstance();
+    const glm::vec3 center = sun.getPosition();
+
+    const glm::vec3 curve1[4] = {center + glm::vec3(orbitRadius, 0.0f, 0.0f),
+                                 center + glm::vec3(orbitRadius, 0.0f, orbitRadius),
+                                 center + glm::vec3(-orbitRadius, 0.0f, orbitRadius),
+                                 center + glm::vec3(-orbitRadius, 0.0f, 0.0f)};
+
+    const glm::vec3 curve2[4] = {center + glm::vec3(-orbitRadius, 0.0f, 0.0f),
+                                 center + glm::vec3(-orbitRadius, 0.0f, -orbitRadius),
+                                 center + glm::vec3(orbitRadius, 0.0f, -orbitRadius),
+                                 center + glm::vec3(orbitRadius, 0.0f, 0.0f)};
+
+    glm::vec3 position(0.0f);
+    if (orbitPhase < 1.0f) {
+        position = cubicBezier(curve1[0], curve1[1], curve1[2], curve1[3], orbitPhase);
+    }
+    else {
+        position = cubicBezier(curve2[0], curve2[1], curve2[2], curve2[3], orbitPhase - 1.0f);
+    }
+
+    return Matrix_Translate(position.x, position.y, position.z);
+}
 glm::mat4 Planet::rotate(Window *window) { return Matrix_Rotate_Y(window->getCurrentFrame() * 1.7f); }
 glm::mat4 Planet::scale(Window *window) { return Matrix_Scale(0.6f, 0.6f, 0.6f); }
