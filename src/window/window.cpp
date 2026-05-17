@@ -27,6 +27,18 @@ void Window::framebufferSizeCallback(GLFWwindow *glfwWindow, int width, int heig
     Window::getInstance().aspectRatio = static_cast<float>(width) / static_cast<float>(height);
 }
 
+void Window::keyCallback(GLFWwindow *glfwWindow, int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
+    }
+
+    if (key == GLFW_KEY_C && action == GLFW_PRESS) {
+        Window &window = Window::getInstance();
+        window.setUseSceneCamera(!window.useSceneCamera);
+    }
+}
+
 bool Window::initialize(int width, int height, std::string title)
 {
     this->title = std::move(title);
@@ -80,14 +92,10 @@ void Window::update(GLuint shaderProgram)
     }
 
     updateShaderProgram(shaderProgram);
-
-    if (glfwGetKey(glfwWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
-    }
-
     updateTime();
     updateScene(shaderProgram);
 
+    glfwSetKeyCallback(glfwWindow, keyCallback);
     glfwSwapBuffers(glfwWindow);
     glfwPollEvents();
 }
@@ -97,8 +105,12 @@ void Window::updateShaderProgram(GLuint shaderProgram)
     const GLint viewUniform = glGetUniformLocation(shaderProgram, "view");
     const GLint projectionUniform = glGetUniformLocation(shaderProgram, "projection");
 
-    const glm::mat4 view = scene->getSpaceship().getViewMatrix();
     const glm::mat4 projection = Matrix_Perspective(M_PI / 3.0f, aspectRatio, -0.1f, -100.0f);
+
+    glm::mat4 view = scene->getSpaceship().getViewMatrix();
+    if (useSceneCamera) {
+        view = Matrix_cameraView(glm::vec4(0.0, 0.0, 10.0, 1.0f), glm::vec4(0.0, 0.0, -1.0, 0.0f), glm::vec4(0.0, 1.0, 0.0, 0.0f));
+    }
 
     glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(projectionUniform, 1, GL_FALSE, glm::value_ptr(projection));

@@ -27,8 +27,8 @@ This file defines a bunch of to do lists for different tasks and functionalities
 
 ## 4. Animation
 
-- [] Anchor first person camera to the spaceship
-- [] Implement C key to transition between first person camera and the "scene camera"
+- [x] Anchor first person camera to the spaceship
+- [x] Implement C key to transition between first person camera and the "scene camera"
 - [] Implement spaceship movement (with inertia)
     - [] W needs to go forward
     - [] S needs to go backwards
@@ -36,7 +36,7 @@ This file defines a bunch of to do lists for different tasks and functionalities
     - [] D needs to go to the right
     - [] Shift needs to go up
     - [] Ctrl needs to go down
-- [] Implement spaceship rotation
+- [-] Implement spaceship rotation
     - [] Mouse controls pitch and yaw
     - [] If player holds R, than mouse controlls roll
 - [] Implement planets' "orbit movement" with cubic Bézier curves

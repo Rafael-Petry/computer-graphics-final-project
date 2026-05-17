@@ -27,8 +27,11 @@ public:
     float getDeltaTime() const;
     float getCurrentFrame() const;
 
+    void setUseSceneCamera(bool useSceneCamera) { this->useSceneCamera = useSceneCamera; }
+
 private:
     static void framebufferSizeCallback(GLFWwindow *glfwWindow, int width, int height);
+    static void keyCallback(GLFWwindow *glfwWindow, int key, int scancode, int action, int mods);
     void updateShaderProgram(GLuint shaderProgram);
     void updateTime();
     void updateScene(GLuint shaderProgram);
@@ -42,6 +45,8 @@ private:
     float deltaTime = 0.0f;
 
     float aspectRatio;
+
+    bool useSceneCamera = false;
 
     Window() = default;
 };
