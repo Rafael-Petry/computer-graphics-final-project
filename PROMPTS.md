@@ -73,3 +73,7 @@ Create a instantiable window class on *src/window/window.cpp*. Move all window l
 ## 11-spaceship-update-extension
 
 On the Spaceship class, extend the parent update function so when the user is holding the R key, it prints "They see me rolling, they hating" on the terminal.
+
+## 12-spaceship-roll
+
+Read *prompts/0-limitations*. Change the spaceship's updateView method to, when the isRolling flag is true, instead of controlling pitch and yaw, it controlls the roll.

@@ -49,25 +49,33 @@ void Spaceship::updateView(GLFWwindow *window, double xpos, double ypos)
         xoffset *= spaceship->mouseSensitivity;
         yoffset *= spaceship->mouseSensitivity;
 
-        spaceship->yaw += xoffset;
-        spaceship->pitch += yoffset;
-
-        if (spaceship->pitch > 89.0f) {
-            spaceship->pitch = 89.0f;
+        if (spaceship->isRolling) {
+            spaceship->roll += xoffset;
         }
+        else {
+            spaceship->yaw += xoffset;
+            spaceship->pitch += yoffset;
 
-        if (spaceship->pitch < -89.0f) {
-            spaceship->pitch = -89.0f;
+            if (spaceship->pitch > 89.0f) {
+                spaceship->pitch = 89.0f;
+            }
+
+            if (spaceship->pitch < -89.0f) {
+                spaceship->pitch = -89.0f;
+            }
         }
 
         spaceship->updateOrientation();
     }
 }
 
+void Spaceship::shoot() const { std::cout << "The spaceship is shooting..." << std::endl; }
+
 void Spaceship::updateOrientation()
 {
     const float yawRad = yaw * (M_PI / 180.0f);
     const float pitchRad = pitch * (M_PI / 180.0f);
+    const float rollRad = roll * (M_PI / 180.0f);
 
     glm::vec3 newFront;
     newFront.x = cosf(yawRad) * cosf(pitchRad);
@@ -77,6 +85,13 @@ void Spaceship::updateOrientation()
     front = glm::normalize(newFront);
     right = glm::normalize(crossproduct(glm::vec4(front, 0.0f), glm::vec4(worldUp, 0.0f)));
     up = glm::normalize(crossproduct(glm::vec4(right, 0.0f), glm::vec4(front, 0.0f)));
+
+    if (rollRad != 0.0f) {
+        const glm::mat4 rollMatrix = Matrix_Rotate(rollRad, glm::vec4(front, 0.0f));
+        const glm::vec4 rolledRight = rollMatrix * glm::vec4(right, 0.0f);
+        right = glm::normalize(glm::vec3(rolledRight));
+        up = glm::normalize(glm::vec3(crossproduct(glm::vec4(right, 0.0f), glm::vec4(front, 0.0f))));
+    }
 }
 
 glm::mat4 Spaceship::translate(Window *window)
@@ -91,9 +106,15 @@ glm::mat4 Spaceship::translate(Window *window)
     return Matrix_Translate(position.x, position.y, position.z);
 }
 
-glm::mat4 Spaceship::rotate(Window *window) { return Matrix_Rotate_X(pitch * (M_PI / 180.0f)) * Matrix_Rotate_Y(yaw * (M_PI / 180.0f)); }
-glm::mat4 Spaceship::scale(Window *window) { return Matrix_Scale(0.3f, 0.3f, 0.3f); }
+glm::mat4 Spaceship::rotate(Window *window)
+{
+    const float pitchRad = pitch * (M_PI / 180.0f);
+    const float yawRad = yaw * (M_PI / 180.0f);
+    const float rollRad = roll * (M_PI / 180.0f);
 
-void Spaceship::shoot() const { std::cout << "The spaceship is shooting..." << std::endl; }
+    return Matrix_Rotate_X(pitchRad) * Matrix_Rotate_Y(yawRad) * Matrix_Rotate_Z(rollRad);
+}
+
+glm::mat4 Spaceship::scale(Window *window) { return Matrix_Scale(0.3f, 0.3f, 0.3f); }
 
 glm::mat4 Spaceship::getViewMatrix() const { return Matrix_cameraView(glm::vec4(position + front, 1.0f), glm::vec4(front, 0.0f), glm::vec4(up, 0.0f)); }
