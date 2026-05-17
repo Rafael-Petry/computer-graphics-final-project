@@ -18,7 +18,7 @@ public:
 
 private:
     float lastFrame;
-    Spaceship spaceship;
+    Spaceship &spaceship;
     Asteroid asteroid;
     Planet planet;
     Sun &sun;

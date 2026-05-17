@@ -4,6 +4,7 @@
 #include <string>
 
 #include <glm/mat4x4.hpp>
+#include <glm/vec4.hpp>
 
 #include "../../objects/celestialBody/celestialBody.h"
 
@@ -18,6 +19,10 @@ protected:
     glm::mat4 translate(Window *window) override;
     glm::mat4 rotate(Window *window) override;
     glm::mat4 scale(Window *window) override;
+
+private:
+    glm::vec4 position;
+    float chaseSpeed = 1.4f;
 };
 
 #endif

@@ -21,6 +21,12 @@ Spaceship::Spaceship(const std::string &meshPath, const glm::vec3 &color) : Obje
     velocity = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
+Spaceship &Spaceship::getInstance()
+{
+    static Spaceship instance;
+    return instance;
+}
+
 void Spaceship::update(GLint modelUniform, GLint colorUniform, Window *window)
 {
     Object::update(modelUniform, colorUniform, window);
@@ -84,6 +90,8 @@ void Spaceship::update(GLint modelUniform, GLint colorUniform, Window *window)
 
     updateOrientation();
 }
+
+glm::vec4 Spaceship::getPosition() const { return position; }
 
 void Spaceship::updateView(GLFWwindow *window, double xpos, double ypos)
 {

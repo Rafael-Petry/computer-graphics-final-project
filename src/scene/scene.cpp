@@ -6,7 +6,7 @@
 #include "scene.h"
 #include "../../vendor/include/matrices.h"
 
-Scene::Scene() : spaceship(), asteroid(), planet(), sun(Sun::getInstance()) { lastFrame = static_cast<float>(glfwGetTime()); };
+Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spaceship::getInstance()), asteroid(), planet(), sun(Sun::getInstance()) {}
 
 void Scene::update(GLint modelUniform, GLint colorUniform, Window *window)
 {
