@@ -95,7 +95,7 @@ glm::vec4 Spaceship::getPosition() const { return position; }
 
 void Spaceship::updateView(GLFWwindow *window, double xpos, double ypos)
 {
-    Spaceship *spaceship = static_cast<Spaceship *>(glfwGetWindowUserPointer(window));
+    Spaceship *spaceship = &Spaceship::getInstance();
 
     if (spaceship != nullptr) {
         spaceship->isRolling = glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS;

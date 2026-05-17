@@ -73,7 +73,6 @@ bool Window::initialize(int width, int height, std::string title)
     aspectRatio = static_cast<float>(framebufferWidth) / static_cast<float>(framebufferHeight);
     lastFrame = static_cast<float>(glfwGetTime());
 
-    glfwSetWindowUserPointer(glfwWindow, &(scene->getSpaceship()));
     glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glfwSetFramebufferSizeCallback(glfwWindow, framebufferSizeCallback);
@@ -107,7 +106,7 @@ void Window::updateShaderProgram(GLuint shaderProgram)
 
     const glm::mat4 projection = Matrix_Perspective(M_PI / 3.0f, aspectRatio, -0.1f, -100.0f);
 
-    glm::mat4 view = scene->getSpaceship().getViewMatrix();
+    glm::mat4 view = Spaceship::getInstance().getViewMatrix();
     if (useSceneCamera) {
         view = Matrix_cameraView(glm::vec4(0.0, 0.0, 10.0, 1.0f), glm::vec4(0.0, 0.0, -1.0, 0.0f), glm::vec4(0.0, 1.0, 0.0, 0.0f));
     }

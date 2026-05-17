@@ -14,8 +14,6 @@ public:
     Scene();
     void update(GLint modelUniform, GLint colorUniform, Window *window);
 
-    Spaceship &getSpaceship();
-
 private:
     float lastFrame;
     Spaceship &spaceship;
