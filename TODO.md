@@ -37,7 +37,7 @@ This file defines a bunch of to do lists for different tasks and functionalities
     - [] Shift needs to go up
     - [] Ctrl needs to go down
 - [-] Implement spaceship rotation
-    - [] Mouse controls pitch and yaw
+    - [x] Mouse controls pitch and yaw
     - [] If player holds R, than mouse controlls roll
 - [] Implement planets' "orbit movement" with cubic Bézier curves
 - [] Implement asteroids' "liniar movement" towards the spaceship

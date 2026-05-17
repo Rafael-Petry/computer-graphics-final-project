@@ -81,7 +81,7 @@ glm::mat4 Spaceship::translate(Window *window)
     return Matrix_Translate(position.x, position.y, position.z);
 }
 
-glm::mat4 Spaceship::rotate(Window *window) { return Matrix_Rotate_Y(window->getCurrentFrame()); }
+glm::mat4 Spaceship::rotate(Window *window) { return Matrix_Rotate_X(pitch * (M_PI / 180.0f)) * Matrix_Rotate_Y(yaw * (M_PI / 180.0f)); }
 glm::mat4 Spaceship::scale(Window *window) { return Matrix_Scale(0.3f, 0.3f, 0.3f); }
 
 void Spaceship::shoot() const { std::cout << "The spaceship is shooting..." << std::endl; }
