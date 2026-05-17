@@ -1,3 +1,4 @@
+#include <cmath>
 #include <iostream>
 #include <string>
 
@@ -29,6 +30,23 @@ void Spaceship::update(GLint modelUniform, GLint colorUniform, Window *window)
         isRolling = true;
     }
 
+    const float deltaTime = window->getDeltaTime();
+    const float rotationDamping = expf(-rotationDrag * deltaTime);
+
+    yawVelocity *= rotationDamping;
+    pitchVelocity *= rotationDamping;
+    rollVelocity *= rotationDamping;
+
+    if (fabsf(yawVelocity) < rotationVelocityEpsilon) {
+        yawVelocity = 0.0f;
+    }
+    if (fabsf(pitchVelocity) < rotationVelocityEpsilon) {
+        pitchVelocity = 0.0f;
+    }
+    if (fabsf(rollVelocity) < rotationVelocityEpsilon) {
+        rollVelocity = 0.0f;
+    }
+
     if (yawVelocity > maxRotationSpeed) {
         yawVelocity = maxRotationSpeed;
     }
@@ -50,7 +68,6 @@ void Spaceship::update(GLint modelUniform, GLint colorUniform, Window *window)
         rollVelocity = -maxRotationSpeed;
     }
 
-    const float deltaTime = window->getDeltaTime();
     yaw += yawVelocity * deltaTime;
     pitch += pitchVelocity * deltaTime;
     roll += rollVelocity * deltaTime;
@@ -136,6 +153,13 @@ glm::mat4 Spaceship::translate(Window *window)
     acceleration.w = 0.0f;
 
     velocity += acceleration * deltaTime;
+
+    const float movementDamping = expf(-movementDrag * deltaTime);
+    velocity *= movementDamping;
+
+    if (norm(velocity) < movementVelocityEpsilon) {
+        velocity = glm::vec4(0.0f);
+    }
 
     const float speed = norm(velocity);
     if (speed > maxMovementSpeed) {

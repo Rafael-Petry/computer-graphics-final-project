@@ -46,9 +46,13 @@ private:
 
     float rotationAcceleration = 8.0f;
     float maxRotationSpeed = 120.0f;
+    float rotationDrag = 3.0f;
+    float rotationVelocityEpsilon = 0.01f;
 
     float movementAcceleration = 8.0f;
     float maxMovementSpeed = 5.0f;
+    float movementDrag = 1.6f;
+    float movementVelocityEpsilon = 0.005f;
 
     float mouseSensitivity = 0.12f;
     bool firstMouseUpdate = true;
