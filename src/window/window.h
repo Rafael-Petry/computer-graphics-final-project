@@ -30,6 +30,9 @@ public:
 
 private:
     static void framebufferSizeCallback(GLFWwindow *glfwWindow, int width, int height);
+    void updateShaderProgram(GLuint shaderProgram);
+    void updateTime();
+    void updateScene(GLuint shaderProgram);
 
     std::string title;
     GLFWwindow *glfwWindow = nullptr;
@@ -39,6 +42,8 @@ private:
     float currentFrame = 0.0f;
     float lastFrame = 0.0f;
     float deltaTime = 0.0f;
+
+    float aspectRatio;
 
     Window() = default;
 };

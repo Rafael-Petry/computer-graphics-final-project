@@ -15,3 +15,5 @@ void Scene::update(GLint modelUniform, GLint colorUniform, Window *window)
     planet.update(modelUniform, colorUniform, window);
     asteroid.update(modelUniform, colorUniform, window);
 }
+
+Spaceship &Scene::getSpaceship() { return spaceship; }

@@ -15,6 +15,9 @@ class Spaceship : public Object
 public:
     Spaceship(const std::string &meshPath = "../../src/objects/spaceship/spaceship.obj", const glm::vec3 &color = glm::vec3(0.73f, 0.79f, 0.88f));
 
+    glm::mat4 getViewMatrix() const;
+    static void rotate(GLFWwindow *window, double xpos, double ypos);
+
 protected:
     glm::mat4 translate(Window *window) override;
     glm::mat4 rotate(Window *window) override;
@@ -29,7 +32,15 @@ private:
     glm::vec3 right;
     glm::vec3 worldUp;
 
+    float yaw = -90.0f;
+    float pitch = 0.0f;
+
     float movementSpeed = 5.0f;
+
+    float mouseSensitivity = 0.12f;
+    bool firstMouseUpdate = true;
+    float lastMouseX = 0.0f;
+    float lastMouseY = 0.0f;
 };
 
 #endif

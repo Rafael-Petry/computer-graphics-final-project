@@ -9,6 +9,7 @@
 #include "../camera/camera.h"
 #include "../scene/scene.h"
 #include "window.h"
+#include "../../vendor/include/matrices.h"
 
 Window &Window::getInstance()
 {
@@ -20,10 +21,11 @@ void Window::framebufferSizeCallback(GLFWwindow *glfwWindow, int width, int heig
 {
     glViewport(0, 0, width, height);
 
-    Camera *camera = static_cast<Camera *>(glfwGetWindowUserPointer(glfwWindow));
-    if (camera != nullptr) {
-        camera->updateAspectRatio(width, height);
+    if (height <= 0) {
+        return;
     }
+
+    Window::getInstance().aspectRatio = static_cast<float>(width) / static_cast<float>(height);
 }
 
 bool Window::initialize(int width, int height, std::string title)
@@ -57,17 +59,15 @@ bool Window::initialize(int width, int height, std::string title)
 
     scene.reset(new Scene());
 
-    const float aspectRatio = static_cast<float>(framebufferWidth) / static_cast<float>(framebufferHeight);
-    camera.reset(new Camera(aspectRatio));
-
+    aspectRatio = static_cast<float>(framebufferWidth) / static_cast<float>(framebufferHeight);
     lastFrame = static_cast<float>(glfwGetTime());
 
     glfwSetWindowUserPointer(glfwWindow, camera.get());
     glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glfwSetFramebufferSizeCallback(glfwWindow, framebufferSizeCallback);
-    glfwSetCursorPosCallback(glfwWindow, Camera::rotate);
-    glfwSetScrollCallback(glfwWindow, Camera::zoom);
+    // glfwSetCursorPosCallback(glfwWindow, &Camera::rotate);
+    // glfwSetScrollCallback(glfwWindow, &Camera::zoom);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -81,36 +81,48 @@ void Window::update(GLuint shaderProgram)
         return;
     }
 
-    const GLint modelUniform = glGetUniformLocation(shaderProgram, "model");
-    const GLint viewUniform = glGetUniformLocation(shaderProgram, "view");
-    const GLint projectionUniform = glGetUniformLocation(shaderProgram, "projection");
-    const GLint colorUniform = glGetUniformLocation(shaderProgram, "objectColor");
-
-    currentFrame = static_cast<float>(glfwGetTime());
-    deltaTime = currentFrame - lastFrame;
-    lastFrame = currentFrame;
+    updateShaderProgram(shaderProgram);
 
     if (glfwGetKey(glfwWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
     }
 
-    // camera->update(glfwWindow, deltaTime); // This will be removed when the camere is dependant of scene's spaceship
+    updateTime();
+    updateScene(shaderProgram);
 
-    glClearColor(0.02f, 0.02f, 0.08f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glfwSwapBuffers(glfwWindow);
+    glfwPollEvents();
+}
 
-    glUseProgram(shaderProgram);
+void Window::updateShaderProgram(GLuint shaderProgram)
+{
+    const GLint viewUniform = glGetUniformLocation(shaderProgram, "view");
+    const GLint projectionUniform = glGetUniformLocation(shaderProgram, "projection");
 
-    const glm::mat4 view = camera->getViewMatrix();
-    const glm::mat4 projection = camera->getProjectionMatrix();
+    const glm::mat4 view = scene->getSpaceship().getViewMatrix();
+    const glm::mat4 projection = Matrix_Perspective(M_PI / 3.0f, aspectRatio, -0.1f, -100.0f);
 
     glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(projectionUniform, 1, GL_FALSE, glm::value_ptr(projection));
 
-    scene->update(modelUniform, colorUniform, this);
+    glUseProgram(shaderProgram);
+}
 
-    glfwSwapBuffers(glfwWindow);
-    glfwPollEvents();
+void Window::updateTime()
+{
+    currentFrame = static_cast<float>(glfwGetTime());
+    deltaTime = currentFrame - lastFrame;
+    lastFrame = currentFrame;
+}
+
+void Window::updateScene(GLuint shaderProgram)
+{
+    glClearColor(0.02f, 0.02f, 0.08f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    const GLint modelUniform = glGetUniformLocation(shaderProgram, "model");
+    const GLint colorUniform = glGetUniformLocation(shaderProgram, "objectColor");
+    scene->update(modelUniform, colorUniform, this);
 }
 
 void Window::close()

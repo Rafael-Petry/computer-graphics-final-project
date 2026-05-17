@@ -3,6 +3,7 @@
 
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
 
 #include "spaceship.h"
 #include "../../helpers/movement/movement.h"
@@ -17,6 +18,8 @@ Spaceship::Spaceship(const std::string &meshPath, const glm::vec3 &color) : Obje
     worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
     position = glm::vec3(0.0f, 0.2f, 5.0f);
 }
+
+glm::mat4 Spaceship::getViewMatrix() const { return Matrix_cameraView(glm::vec4(position + front, 1.0f), glm::vec4(front, 0.0f), glm::vec4(up, 0.0f)); }
 
 glm::mat4 Spaceship::translate(Window *window)
 {
