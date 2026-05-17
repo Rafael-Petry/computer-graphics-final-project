@@ -77,3 +77,7 @@ On the Spaceship class, extend the parent update function so when the user is ho
 ## 12-spaceship-roll
 
 Read *prompts/0-limitations*. Change the spaceship's updateView method to, when the isRolling flag is true, instead of controlling pitch and yaw, it controlls the roll.
+
+## 13-spaceship-local-rotation
+
+Read *prompts/0-limitations*. Change the spaceship's rotate method so the rotation is local instead of global.
