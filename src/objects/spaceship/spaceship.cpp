@@ -17,6 +17,7 @@ Spaceship::Spaceship(const std::string &meshPath, const glm::vec3 &color) : Obje
     right = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
     worldUp = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
     position = glm::vec4(0.0f, 0.2f, 5.0f, 1.0f);
+    velocity = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
 void Spaceship::update(GLint modelUniform, GLint colorUniform, Window *window)
@@ -97,12 +98,21 @@ void Spaceship::updateOrientation()
 
 glm::mat4 Spaceship::translate(Window *window)
 {
-    const float velocity = movementSpeed * window->getDeltaTime();
+    const float deltaTime = window->getDeltaTime();
     const glm::vec3 movement = MovementHelper::getMovementInputs(window->getGlfwWindow());
 
-    position += front * (movement.z * velocity);
-    position += right * (movement.x * velocity);
-    position += up * (movement.y * velocity);
+    glm::vec4 acceleration = (front * movement.z) + (right * movement.x) + (up * movement.y);
+    acceleration *= movementAcceleration;
+    acceleration.w = 0.0f;
+
+    velocity += acceleration * deltaTime;
+
+    const float speed = norm(velocity);
+    if (speed > maxMovementSpeed) {
+        velocity = (velocity / speed) * maxMovementSpeed;
+    }
+
+    position += velocity * deltaTime;
 
     return Matrix_Translate(position.x, position.y, position.z);
 }

@@ -30,6 +30,7 @@ private:
     void updateOrientation();
 
     glm::vec4 position;
+    glm::vec4 velocity;
     glm::vec4 front;
     glm::vec4 up;
     glm::vec4 right;
@@ -39,7 +40,8 @@ private:
     float pitch = 0.0f;
     float roll = 0.0f;
 
-    float movementSpeed = 5.0f;
+    float movementAcceleration = 8.0f;
+    float maxMovementSpeed = 5.0f;
 
     float mouseSensitivity = 0.12f;
     bool firstMouseUpdate = true;

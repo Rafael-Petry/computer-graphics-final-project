@@ -1,74 +1,74 @@
 # Prompts
 
-Este arquivo agrupa todos prompts executados por agentes de IA durante o desenvolvimento do trabalho. Na prática, cada prompt foi executado separademente pedindo para o agente ler o arquivo isolado do prompt correspondente em ***prompts/***, com comandos como: `Run the prompt on prompts/*.md`.
+Este arquivo agrupa todos prompts executados por agentes de IA durante o desenvolvimento do trabalho. Na prática, cada prompt foi executado separademente pedindo para o agente ler o arquivo isolado do prompt correspondente em **_prompts/_**, com comandos como: `Run the prompt on prompts/*.md`.
 
 ## 0-limitations
 
-Run the following prompt knowing that the ambient has GLFW, glm and glad. Any matrices calculations need to be explicit, without the encapsulation of pre-defined functions from glm or other libraries. For example, you can't use pre-defined functions for camera and transform such as: gluLookAt(), gluOrtho2D(), gluPerspective(), gluPickMatrix(), gluProject(), gluUnProject(), glm::lookAt(), glm::ortho(), glm::perspective(), glm::pickMatrix(), glm::rotate(), glm::scale(), glm::translate(). Instead, use the functions on the *src/vendor/include/matrices.h* file.
+Run the following prompt knowing that the ambient has GLFW, glm and glad. Any matrices calculations need to be explicit, without the encapsulation of pre-defined functions from glm or other libraries. For example, you can't use pre-defined functions for camera and transform such as: gluLookAt(), gluOrtho2D(), gluPerspective(), gluPickMatrix(), gluProject(), gluUnProject(), glm::lookAt(), glm::ortho(), glm::perspective(), glm::pickMatrix(), glm::rotate(), glm::scale(), glm::translate(). Instead, use the functions on the _src/vendor/include/matrices.h_ file.
 
 ## 1-structure
 
-Create a folder *_old/*. Read the current project and reestructure it in a way so that what is current on *src/* folder becomes *_old/src/*. Next, move the *data/* folder to *_old/src/*. Move *src/main.cpp* to *_old/src/*. Move *CMakeLists.txt*, *CMakePresets.json*, *Makefile*, *Makefile.macOS* and *.dir-locals.el* to *_old/* so that compilation only happens if it is run with *_old/* as the target. Also, move *COMPILACAO.md* to *_old/*.
+Create a folder _\_old/_. Read the current project and reestructure it in a way so that what is current on _src/_ folder becomes _\_old/src/_. Next, move the _data/_ folder to _\_old/src/_. Move _src/main.cpp_ to _\_old/src/_. Move _CMakeLists.txt_, _CMakePresets.json_, _Makefile_, _Makefile.macOS_ and _.dir-locals.el_ to _\_old/_ so that compilation only happens if it is run with _\_old/_ as the target. Also, move _COMPILACAO.md_ to _\_old/_.
 
-Finally, move *lib-linux*, *lib-mingw-32*, *lib-migw-64*, *lib-ucrt-64*, *lib-vc2022* and *includes/* to a new folder *src/vendor*.
+Finally, move _lib-linux_, _lib-mingw-32_, _lib-migw-64_, _lib-ucrt-64_, _lib-vc2022_ and _includes/_ to a new folder _src/vendor_.
 
 Make the necessary changes on files that references those old paths so the project runs correctly.
 
 ## 2-spaceship-init
 
-On *src/spaceship/*, implement a Spaceship class editing the *src/spaceship/spaceship.cpp* and *src/spaceship/spaceship.h* files. The class needs to have a static variable called *model* referencing the *src/spaceship/spaceship.obj* file, that will store the model for this object. It needs to have a function called *translate()* that will print "Moving the spaceship...", a function called *rotate()* that will print "Rotating the spaceship", a function called *shoot()* that will print "The spaceship is shooting..." and a static function *getModel()* to return the *model* variable. 
+On _src/spaceship/_, implement a Spaceship class editing the _src/spaceship/spaceship.cpp_ and _src/spaceship/spaceship.h_ files. The class needs to have a static variable called _model_ referencing the _src/spaceship/spaceship.obj_ file, that will store the model for this object. It needs to have a function called _translate()_ that will print "Moving the spaceship...", a function called _rotate()_ that will print "Rotating the spaceship", a function called _shoot()_ that will print "The spaceship is shooting..." and a static function _getModel()_ to return the _model_ variable.
 
-Edit *src/spaceship/spaceship.obj* to store a simple cube model.
+Edit _src/spaceship/spaceship.obj_ to store a simple cube model.
 
-Edit *src/main.cpp* to instantiate an object of the Spaceship class and call all its functions.
+Edit _src/main.cpp_ to instantiate an object of the Spaceship class and call all its functions.
 
 Finally, make any changes to paths to compile the project correctly.
 
 ## 3-celestial-bodies-init
 
-On *src/celestialBody/*, implement an abstract **CelestialBody** class editing the *src/celestialBody/celestialBody.cpp* and *src/celestialBody/celestialBody.h* files. The class needs to have a static variable called *model* referencing the *src/celestialBody/celestialBody.obj* file, that will store the model for this object. It needs to have a static *color* variable that will store the gray color as a HEX string. It needs to have an abstract function called *translate()*, an abstract function called *rotate()* and a static function *getModel()* to return the *model* variable.
+On _src/celestialBody/_, implement an abstract **CelestialBody** class editing the _src/celestialBody/celestialBody.cpp_ and _src/celestialBody/celestialBody.h_ files. The class needs to have a static variable called _model_ referencing the _src/celestialBody/celestialBody.obj_ file, that will store the model for this object. It needs to have a static _color_ variable that will store the gray color as a HEX string. It needs to have an abstract function called _translate()_, an abstract function called _rotate()_ and a static function _getModel()_ to return the _model_ variable.
 
-Edit *src/celestialBody/asteroid/asteroid.cpp* and *src/celestialBody/asteroid/asteroid.h* to implement an **Asteroid** class that extends **CelestialBody**. It needs to override *translate()* to print "Moving asteroid towards the spaceship..." and *rotate()* to print "Rotating the asteroid...".
+Edit _src/celestialBody/asteroid/asteroid.cpp_ and _src/celestialBody/asteroid/asteroid.h_ to implement an **Asteroid** class that extends **CelestialBody**. It needs to override _translate()_ to print "Moving asteroid towards the spaceship..." and _rotate()_ to print "Rotating the asteroid...".
 
-Edit *src/celestialBody/sun/sun.cpp* and *src/celestialBody/sun/sun.h* to implement a **Sun** class that extends **CelestialBody**. It needs to override *translate()* to print "The sun stands still..." and *rotate()* to print "Rotating the sun...". It also needs to override the color variable to store a yellow color as a HEX string.
+Edit _src/celestialBody/sun/sun.cpp_ and _src/celestialBody/sun/sun.h_ to implement a **Sun** class that extends **CelestialBody**. It needs to override _translate()_ to print "The sun stands still..." and _rotate()_ to print "Rotating the sun...". It also needs to override the color variable to store a yellow color as a HEX string.
 
-Edit *src/celestialBody/planet/planet.cpp* and *src/celestialBody/planet/planet.h* to implement a **Planet** class that extends **CelestialBody**. It needs to have a variable *sun* that will reference an object of the **Sun** class. It needs to override the *color* variable to store a green color as a HEX string. It needs to override *translate()* to print "The planet is orbiting the sun..." and *rotate()* to print "Rotating the planet...". It needs to have a function *getSun()* that returns the *sun* variable.
+Edit _src/celestialBody/planet/planet.cpp_ and _src/celestialBody/planet/planet.h_ to implement a **Planet** class that extends **CelestialBody**. It needs to have a variable _sun_ that will reference an object of the **Sun** class. It needs to override the _color_ variable to store a green color as a HEX string. It needs to override _translate()_ to print "The planet is orbiting the sun..." and _rotate()_ to print "Rotating the planet...". It needs to have a function _getSun()_ that returns the _sun_ variable.
 
-Edit *src/main.cpp* to instantiate an object of the Asteroid, Sun and Planet classes and call all its functions.
+Edit _src/main.cpp_ to instantiate an object of the Asteroid, Sun and Planet classes and call all its functions.
 
 Finally, make any changes to paths to compile the project correctly.
 
 ## 4-celestial-bodies-init
 
-On *src/celestialBody/*, add a function *getColor()* to the **CelestialBody** class that returns the *color* variable. Change the **Sun** class to be a singleton. Remove the *sun* variable from **Planet** and its *getSun()* function.
+On _src/celestialBody/_, add a function _getColor()_ to the **CelestialBody** class that returns the _color_ variable. Change the **Sun** class to be a singleton. Remove the _sun_ variable from **Planet** and its _getSun()_ function.
 
 ## 5-window
 
-Read *prompts/0-limitations*. Change *src/main.cpp* to create an application window. It needs to be resizable.
+Read _prompts/0-limitations_. Change _src/main.cpp_ to create an application window. It needs to be resizable.
 
 ## 6-scene
 
-Read *prompts/0-limitations*. On the window initialized on *src/main.cpp*, load scene with a camera that shows a **Spaceship**, a **Sun**, an **Asteroid** and three **Planets**. For that, on *src/spaceship/scapeship.cpp*, implement the render function so that I can just call render on the object from main to instantiate its model. Do the same for the render function on *src/celestialBody/celestialBody.cpp*, taking into account the color property of the object. The scene needs to have a free camera. Implement the camera operations on *src/camera/camera.cpp* and *src/camera/camera.h* files to keep *src/main.cpp* clean.
+Read _prompts/0-limitations_. On the window initialized on _src/main.cpp_, load scene with a camera that shows a **Spaceship**, a **Sun**, an **Asteroid** and three **Planets**. For that, on _src/spaceship/scapeship.cpp_, implement the render function so that I can just call render on the object from main to instantiate its model. Do the same for the render function on _src/celestialBody/celestialBody.cpp_, taking into account the color property of the object. The scene needs to have a free camera. Implement the camera operations on _src/camera/camera.cpp_ and _src/camera/camera.h_ files to keep _src/main.cpp_ clean.
 
 ## 7-organize-shaders-and-render-correct-models
 
-Move the fragment shader code from *src/main.cpp* into *src/shaders/fragment.glsl*. Also, move the vertex shader code from *src/main.cpp* into *src/shaders/vertex.glsl*. Change the render logic of **CelestialBody** and **Spaceship** to use the correct model, loaded on the *model* variable.
+Move the fragment shader code from _src/main.cpp_ into _src/shaders/fragment.glsl_. Also, move the vertex shader code from _src/main.cpp_ into _src/shaders/vertex.glsl_. Change the render logic of **CelestialBody** and **Spaceship** to use the correct model, loaded on the _model_ variable.
 
 ## 8-organize-rendering
 
-On *src/helpers/render.cpp*, create a helper class that implements a static rendering function using the tiny_obj_loader library. Change the rendering logic on the **Spaceship** and **CelestialBody** class to just use this centralized rendering function on *src/helpers/render.cpp*.
+On _src/helpers/render.cpp_, create a helper class that implements a static rendering function using the tiny_obj_loader library. Change the rendering logic on the **Spaceship** and **CelestialBody** class to just use this centralized rendering function on _src/helpers/render.cpp_.
 
 ## 9-organize-shaders-color-input
 
-On *src/helpers/color.cpp*, create a helper class that implements a static hex to rgb color conversion function. On **CelestialBody**, use this new function instead.
+On _src/helpers/color.cpp_, create a helper class that implements a static hex to rgb color conversion function. On **CelestialBody**, use this new function instead.
 
-On *src/helpers/input.cpp*, create a helper class that processes all inputs on static functions. Change *src/main.cpp* and *src/camera/camera.cpp* to use the newly created function.
+On _src/helpers/input.cpp_, create a helper class that processes all inputs on static functions. Change _src/main.cpp_ and _src/camera/camera.cpp_ to use the newly created function.
 
-Create a shader loader class on *src/shaders/loader/loader.cpp*, Move any shader loading functions from *src/main.cpp* to this class, create them as static.
+Create a shader loader class on _src/shaders/loader/loader.cpp_, Move any shader loading functions from _src/main.cpp_ to this class, create them as static.
 
 ## 10-organize-window
 
-Create a instantiable window class on *src/window/window.cpp*. Move all window logic from *src/main.cpp/ to this newly created class.
+Create a instantiable window class on _src/window/window.cpp_. Move all window logic from \*src/main.cpp/ to this newly created class.
 
 ## 11-spaceship-update-extension
 
@@ -76,8 +76,12 @@ On the Spaceship class, extend the parent update function so when the user is ho
 
 ## 12-spaceship-roll
 
-Read *prompts/0-limitations*. Change the spaceship's updateView method to, when the isRolling flag is true, instead of controlling pitch and yaw, it controlls the roll.
+Read _prompts/0-limitations_. Change the spaceship's updateView method to, when the isRolling flag is true, instead of controlling pitch and yaw, it controlls the roll.
 
 ## 13-spaceship-local-rotation
 
-Read *prompts/0-limitations*. Change the spaceship's rotate method so the rotation is local instead of global.
+Read _prompts/0-limitations_. Change the spaceship's rotate method so the rotation is local instead of global.
+
+## 14-spaceship-inertia
+
+Read _prompts/0-limitations_. Change the spaceship's movement to have inertia as it is on outer space. Moving on a particular directions accelerates the spaceship and moving on the opposite decelerates it.
