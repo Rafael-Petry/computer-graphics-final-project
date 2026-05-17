@@ -6,7 +6,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "../camera/camera.h"
 #include "../scene/scene.h"
 #include "window.h"
 #include "../../vendor/include/matrices.h"
@@ -62,12 +61,11 @@ bool Window::initialize(int width, int height, std::string title)
     aspectRatio = static_cast<float>(framebufferWidth) / static_cast<float>(framebufferHeight);
     lastFrame = static_cast<float>(glfwGetTime());
 
-    glfwSetWindowUserPointer(glfwWindow, camera.get());
+    glfwSetWindowUserPointer(glfwWindow, &(scene->getSpaceship()));
     glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glfwSetFramebufferSizeCallback(glfwWindow, framebufferSizeCallback);
-    // glfwSetCursorPosCallback(glfwWindow, &Camera::rotate);
-    // glfwSetScrollCallback(glfwWindow, &Camera::zoom);
+    glfwSetCursorPosCallback(glfwWindow, &Spaceship::updateView);
 
     glEnable(GL_DEPTH_TEST);
 

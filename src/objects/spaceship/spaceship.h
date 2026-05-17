@@ -16,7 +16,7 @@ public:
     Spaceship(const std::string &meshPath = "../../src/objects/spaceship/spaceship.obj", const glm::vec3 &color = glm::vec3(0.73f, 0.79f, 0.88f));
 
     glm::mat4 getViewMatrix() const;
-    static void rotate(GLFWwindow *window, double xpos, double ypos);
+    static void updateView(GLFWwindow *window, double xpos, double ypos);
 
 protected:
     glm::mat4 translate(Window *window) override;
@@ -25,6 +25,7 @@ protected:
 
 private:
     void shoot() const;
+    void updateOrientation();
 
     glm::vec3 position;
     glm::vec3 front;

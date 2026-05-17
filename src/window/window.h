@@ -9,7 +9,6 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-class Camera;
 class Scene;
 
 class Window
@@ -36,7 +35,6 @@ private:
 
     std::string title;
     GLFWwindow *glfwWindow = nullptr;
-    std::unique_ptr<Camera> camera;
     std::unique_ptr<Scene> scene;
     bool glfwInitialized = false;
     float currentFrame = 0.0f;
