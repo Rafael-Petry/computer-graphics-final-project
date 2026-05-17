@@ -12,11 +12,11 @@
 
 Spaceship::Spaceship(const std::string &meshPath, const glm::vec3 &color) : Object(meshPath, color)
 {
-    front = glm::vec3(0.0f, 0.0f, -1.0f);
-    up = glm::vec3(0.0f, 1.0f, 0.0f);
-    right = glm::vec3(1.0f, 0.0f, 0.0f);
-    worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
-    position = glm::vec3(0.0f, 0.2f, 5.0f);
+    front = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
+    up = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
+    right = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
+    worldUp = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
+    position = glm::vec4(0.0f, 0.2f, 5.0f, 1.0f);
 }
 
 void Spaceship::update(GLint modelUniform, GLint colorUniform, Window *window)
@@ -77,20 +77,21 @@ void Spaceship::updateOrientation()
     const float pitchRad = pitch * (M_PI / 180.0f);
     const float rollRad = roll * (M_PI / 180.0f);
 
-    glm::vec3 newFront;
+    glm::vec4 newFront;
     newFront.x = cosf(yawRad) * cosf(pitchRad);
     newFront.y = sinf(pitchRad);
     newFront.z = sinf(yawRad) * cosf(pitchRad);
+    newFront.w = 0.0f;
 
-    front = glm::normalize(newFront);
-    right = glm::normalize(crossproduct(glm::vec4(front, 0.0f), glm::vec4(worldUp, 0.0f)));
-    up = glm::normalize(crossproduct(glm::vec4(right, 0.0f), glm::vec4(front, 0.0f)));
+    front = (newFront / norm(newFront));
+    right = (crossproduct(front, worldUp)) / norm(crossproduct(front, worldUp));
+    up = (crossproduct(right, front)) / norm(crossproduct(right, front));
 
     if (rollRad != 0.0f) {
-        const glm::mat4 rollMatrix = Matrix_Rotate(rollRad, glm::vec4(front, 0.0f));
-        const glm::vec4 rolledRight = rollMatrix * glm::vec4(right, 0.0f);
-        right = glm::normalize(glm::vec3(rolledRight));
-        up = glm::normalize(glm::vec3(crossproduct(glm::vec4(right, 0.0f), glm::vec4(front, 0.0f))));
+        const glm::mat4 rollMatrix = Matrix_Rotate(rollRad, front);
+        const glm::vec4 rolledRight = rollMatrix * right;
+        right = rolledRight / norm(rolledRight);
+        up = crossproduct(right, front) / norm(crossproduct(right, front));
     }
 }
 
@@ -101,7 +102,7 @@ glm::mat4 Spaceship::translate(Window *window)
 
     position += front * (movement.z * velocity);
     position += right * (movement.x * velocity);
-    position += worldUp * (movement.y * velocity);
+    position += up * (movement.y * velocity);
 
     return Matrix_Translate(position.x, position.y, position.z);
 }
@@ -109,10 +110,9 @@ glm::mat4 Spaceship::translate(Window *window)
 glm::mat4 Spaceship::rotate(Window *window)
 {
     const glm::vec3 forward = -front;
-
     return Matrix(right.x, up.x, forward.x, 0.0f, right.y, up.y, forward.y, 0.0f, right.z, up.z, forward.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 glm::mat4 Spaceship::scale(Window *window) { return Matrix_Scale(0.3f, 0.3f, 0.3f); }
 
-glm::mat4 Spaceship::getViewMatrix() const { return Matrix_cameraView(glm::vec4(position + front, 1.0f), glm::vec4(front, 0.0f), glm::vec4(up, 0.0f)); }
+glm::mat4 Spaceship::getViewMatrix() const { return Matrix_cameraView(position + front, front, up); }

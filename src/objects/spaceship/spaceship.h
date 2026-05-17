@@ -29,11 +29,11 @@ private:
     void shoot() const;
     void updateOrientation();
 
-    glm::vec3 position;
-    glm::vec3 front;
-    glm::vec3 up;
-    glm::vec3 right;
-    glm::vec3 worldUp;
+    glm::vec4 position;
+    glm::vec4 front;
+    glm::vec4 up;
+    glm::vec4 right;
+    glm::vec4 worldUp;
 
     float yaw = -90.0f;
     float pitch = 0.0f;
