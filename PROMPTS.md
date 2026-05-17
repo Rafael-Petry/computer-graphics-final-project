@@ -97,3 +97,7 @@ Read _prompts/0-limitations_. Change the spaceship's rotation and movement to ha
 ## 17-planet-animation
 
 Read _prompts/0-limitations_. Change the planets' translation method to use 2 cubic bezier curves around the sun instead. Change the Sun class to store its position and create a getPosition method that returns it. On planet, use the singleton sun to get the position and generate 4 points around it for the curves. It needs to be controlled by deltaTime.
+
+## 18-asteroid-animation
+
+Read _prompts/0-limitations_. Change the asteroid's translation method to trace a line towards the spaceship. Change the spaceship to be a singleton and then access its position on the asteroid's translation method.

@@ -5,6 +5,7 @@
 
 #include <glad/glad.h>
 #include <glm/mat4x4.hpp>
+#include <glm/vec4.hpp>
 
 #include "../object.h"
 
@@ -13,10 +14,14 @@ class Window;
 class Spaceship : public Object
 {
 public:
-    Spaceship(const std::string &meshPath = "../../src/objects/spaceship/spaceship.obj", const glm::vec3 &color = glm::vec3(0.73f, 0.79f, 0.88f));
+    Spaceship(const Spaceship &) = delete;
+    Spaceship &operator=(const Spaceship &) = delete;
+
+    static Spaceship &getInstance();
 
     void update(GLint modelUniform, GLint colorUniform, Window *window);
 
+    glm::vec4 getPosition() const;
     glm::mat4 getViewMatrix() const;
     static void updateView(GLFWwindow *window, double xpos, double ypos);
 
@@ -26,6 +31,8 @@ protected:
     glm::mat4 scale(Window *window) override;
 
 private:
+    Spaceship(const std::string &meshPath = "../../src/objects/spaceship/spaceship.obj", const glm::vec3 &color = glm::vec3(0.73f, 0.79f, 0.88f));
+
     void shoot() const;
     void updateOrientation();
 
