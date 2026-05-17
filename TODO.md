@@ -29,7 +29,7 @@ This file defines a bunch of to do lists for different tasks and functionalities
 
 - [x] Anchor first person camera to the spaceship
 - [x] Implement C key to transition between first person camera and the "scene camera"
-- [-] Fix spaceship rotate/translate to be consistant
+- [x] Fix spaceship rotate/translate to be consistant
 - [] Implement spaceship movement (with inertia)
     - [] W needs to go forward
     - [] S needs to go backwards
@@ -48,7 +48,7 @@ This file defines a bunch of to do lists for different tasks and functionalities
 - [-] Import better meshes for the objects
 - [] Import Disney's PBR shader code from other labs
 - [] Make textures work
-    - [] For planets, make an algorithm to generate the texture procedurally 
+    - [] For planets, make an algorithm to generate the texture procedurally
 - [] Make lighting work
 - [] ...
 
