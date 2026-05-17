@@ -40,7 +40,7 @@ This file defines a bunch of to do lists for different tasks and functionalities
 - [x] Implement spaceship rotation
     - [x] Mouse controls pitch and yaw
     - [x] If player holds R, than mouse controlls roll
-- [] Implement planets' "orbit movement" with cubic Bézier curves
+- [x] Implement planets' "orbit movement" with cubic Bézier curves
 - [] Implement asteroids' "liniar movement" towards the spaceship
 
 ## 5. Visuals
