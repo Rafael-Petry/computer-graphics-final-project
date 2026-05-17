@@ -3,7 +3,12 @@
 #include <string>
 #include <utility>
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
+#include "../scene/scene.h"
 #include "window.h"
+#include "../../vendor/include/matrices.h"
 
 Window &Window::getInstance()
 {
@@ -15,9 +20,22 @@ void Window::framebufferSizeCallback(GLFWwindow *glfwWindow, int width, int heig
 {
     glViewport(0, 0, width, height);
 
-    Camera *camera = static_cast<Camera *>(glfwGetWindowUserPointer(glfwWindow));
-    if (camera != nullptr) {
-        camera->updateAspectRatio(width, height);
+    if (height <= 0) {
+        return;
+    }
+
+    Window::getInstance().aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+}
+
+void Window::keyCallback(GLFWwindow *glfwWindow, int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
+    }
+
+    if (key == GLFW_KEY_C && action == GLFW_PRESS) {
+        Window &window = Window::getInstance();
+        window.setUseSceneCamera(!window.useSceneCamera);
     }
 }
 
@@ -52,17 +70,14 @@ bool Window::initialize(int width, int height, std::string title)
 
     scene.reset(new Scene());
 
-    const float aspectRatio = static_cast<float>(framebufferWidth) / static_cast<float>(framebufferHeight);
-    camera.reset(new Camera(aspectRatio));
-
+    aspectRatio = static_cast<float>(framebufferWidth) / static_cast<float>(framebufferHeight);
     lastFrame = static_cast<float>(glfwGetTime());
 
-    glfwSetWindowUserPointer(glfwWindow, camera.get());
+    glfwSetWindowUserPointer(glfwWindow, &(scene->getSpaceship()));
     glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glfwSetFramebufferSizeCallback(glfwWindow, framebufferSizeCallback);
-    glfwSetCursorPosCallback(glfwWindow, Camera::rotate);
-    glfwSetScrollCallback(glfwWindow, Camera::zoom);
+    glfwSetCursorPosCallback(glfwWindow, &Spaceship::updateView);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -76,36 +91,48 @@ void Window::update(GLuint shaderProgram)
         return;
     }
 
-    const GLint modelUniform = glGetUniformLocation(shaderProgram, "model");
+    updateShaderProgram(shaderProgram);
+    updateTime();
+    updateScene(shaderProgram);
+
+    glfwSetKeyCallback(glfwWindow, keyCallback);
+    glfwSwapBuffers(glfwWindow);
+    glfwPollEvents();
+}
+
+void Window::updateShaderProgram(GLuint shaderProgram)
+{
     const GLint viewUniform = glGetUniformLocation(shaderProgram, "view");
     const GLint projectionUniform = glGetUniformLocation(shaderProgram, "projection");
-    const GLint colorUniform = glGetUniformLocation(shaderProgram, "objectColor");
 
-    const float currentFrame = static_cast<float>(glfwGetTime());
-    const float deltaTime = currentFrame - lastFrame;
-    lastFrame = currentFrame;
+    const glm::mat4 projection = Matrix_Perspective(M_PI / 3.0f, aspectRatio, -0.1f, -100.0f);
 
-    if (glfwGetKey(glfwWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
+    glm::mat4 view = scene->getSpaceship().getViewMatrix();
+    if (useSceneCamera) {
+        view = Matrix_cameraView(glm::vec4(0.0, 0.0, 10.0, 1.0f), glm::vec4(0.0, 0.0, -1.0, 0.0f), glm::vec4(0.0, 1.0, 0.0, 0.0f));
     }
-
-    camera->update(glfwWindow, deltaTime); // This will be removed when the camere is dependant of scene's spaceship
-
-    glClearColor(0.02f, 0.02f, 0.08f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glUseProgram(shaderProgram);
-
-    const glm::mat4 view = camera->getViewMatrix();
-    const glm::mat4 projection = camera->getProjectionMatrix();
 
     glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(projectionUniform, 1, GL_FALSE, glm::value_ptr(projection));
 
-    scene->update(modelUniform, colorUniform, currentFrame);
+    glUseProgram(shaderProgram);
+}
 
-    glfwSwapBuffers(glfwWindow);
-    glfwPollEvents();
+void Window::updateTime()
+{
+    currentFrame = static_cast<float>(glfwGetTime());
+    deltaTime = currentFrame - lastFrame;
+    lastFrame = currentFrame;
+}
+
+void Window::updateScene(GLuint shaderProgram)
+{
+    glClearColor(0.02f, 0.02f, 0.08f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    const GLint modelUniform = glGetUniformLocation(shaderProgram, "model");
+    const GLint colorUniform = glGetUniformLocation(shaderProgram, "objectColor");
+    scene->update(modelUniform, colorUniform, this);
 }
 
 void Window::close()
@@ -115,3 +142,5 @@ void Window::close()
 }
 
 GLFWwindow *Window::getGlfwWindow() const { return glfwWindow; }
+float Window::getDeltaTime() const { return deltaTime; }
+float Window::getCurrentFrame() const { return currentFrame; }

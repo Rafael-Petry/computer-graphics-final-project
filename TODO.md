@@ -27,18 +27,19 @@ This file defines a bunch of to do lists for different tasks and functionalities
 
 ## 4. Animation
 
-- [] Anchor first person camera to the spaceship
-- [] Implement C key to transition between first person camera and the "scene camera"
-- [] Implement spaceship movement (with inertia)
-    - [] W needs to go forward
-    - [] S needs to go backwards
-    - [] A needs to go to the left
-    - [] D needs to go to the right
-    - [] Shift needs to go up
-    - [] Ctrl needs to go down
-- [] Implement spaceship rotation
-    - [] Mouse controls pitch and yaw
-    - [] If player holds R, than mouse controlls roll
+- [x] Anchor first person camera to the spaceship
+- [x] Implement C key to transition between first person camera and the "scene camera"
+- [x] Fix spaceship rotate/translate to be consistant
+- [x] Implement spaceship movement (with inertia)
+    - [x] W needs to go forward
+    - [x] S needs to go backwards
+    - [x] A needs to go to the left
+    - [x] D needs to go to the right
+    - [x] Shift needs to go up
+    - [x] Ctrl needs to go down
+- [x] Implement spaceship rotation
+    - [x] Mouse controls pitch and yaw
+    - [x] If player holds R, than mouse controlls roll
 - [] Implement planets' "orbit movement" with cubic Bézier curves
 - [] Implement asteroids' "liniar movement" towards the spaceship
 
@@ -47,7 +48,7 @@ This file defines a bunch of to do lists for different tasks and functionalities
 - [-] Import better meshes for the objects
 - [] Import Disney's PBR shader code from other labs
 - [] Make textures work
-    - [] For planets, make an algorithm to generate the texture procedurally 
+    - [] For planets, make an algorithm to generate the texture procedurally
 - [] Make lighting work
 - [] ...
 

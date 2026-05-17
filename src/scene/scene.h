@@ -6,13 +6,18 @@
 #include "../objects/celestialBody/sun/sun.h"
 #include "../objects/spaceship/spaceship.h"
 
+class Window;
+
 class Scene
 {
 public:
     Scene();
-    void update(GLint modelUniform, GLint colorUniform, float currentFrame) const;
+    void update(GLint modelUniform, GLint colorUniform, Window *window);
+
+    Spaceship &getSpaceship();
 
 private:
+    float lastFrame;
     Spaceship spaceship;
     Asteroid asteroid;
     Planet planet;

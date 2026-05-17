@@ -7,13 +7,13 @@
 # ser compilados.
 set(SOURCES
   src/main.cpp
-  src/camera/camera.cpp
   src/objects/object.cpp
   src/objects/spaceship/spaceship.cpp
   src/objects/celestialBody/celestialBody.cpp
   src/objects/celestialBody/asteroid/asteroid.cpp
   src/objects/celestialBody/sun/sun.cpp
   src/objects/celestialBody/planet/planet.cpp
+  src/helpers/movement/movement.cpp
   src/helpers/render/render.cpp
   src/scene/scene.cpp
   src/shaders/loader/loader.cpp
