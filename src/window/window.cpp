@@ -29,13 +29,26 @@ void Window::framebufferSizeCallback(GLFWwindow *glfwWindow, int width, int heig
 
 void Window::keyCallback(GLFWwindow *glfwWindow, int key, int scancode, int action, int mods)
 {
+    Window &window = Window::getInstance();
+
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
     }
 
     if (key == GLFW_KEY_C && action == GLFW_PRESS) {
-        Window &window = Window::getInstance();
         window.setUseSceneCamera(!window.useSceneCamera);
+    }
+
+    if (key == GLFW_KEY_F1 && action == GLFW_PRESS) {
+        window.isFullscreen = !window.isFullscreen;
+        if (window.isFullscreen) {
+            GLFWmonitor *primaryMonitor = glfwGetPrimaryMonitor();
+            const GLFWvidmode *mode = glfwGetVideoMode(primaryMonitor);
+            glfwSetWindowMonitor(window.getGlfwWindow(), primaryMonitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+        }
+        else {
+            glfwSetWindowMonitor(window.getGlfwWindow(), NULL, 0, 0, window.width, window.height, GLFW_DONT_CARE);
+        }
     }
 }
 
@@ -48,7 +61,10 @@ bool Window::initialize(int width, int height, std::string title)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
+    this->width = width;
+    this->height = height;
     glfwWindow = glfwCreateWindow(width, height, this->title.c_str(), nullptr, nullptr);
+
     if (glfwWindow == nullptr) {
         std::cerr << "Failed to create GLFW glfwWindow." << std::endl;
         close();

@@ -47,6 +47,10 @@ private:
     float aspectRatio;
 
     bool useSceneCamera = false;
+    bool isFullscreen = false;
+
+    int width = 1280;
+    int height = 720;
 
     Window() = default;
 };
