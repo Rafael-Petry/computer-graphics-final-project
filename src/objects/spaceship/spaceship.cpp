@@ -78,21 +78,7 @@ void Spaceship::update(GLint modelUniform, GLint colorUniform, Window *window)
     float deltaPitch = pitchVelocity * deltaTime;
     float deltaRoll = rollVelocity * deltaTime;
 
-    float targetPitch = pitch + deltaPitch;
-    if (targetPitch > 89.0f) {
-        deltaPitch = 89.0f - pitch;
-        pitch = 89.0f;
-        pitchVelocity = 0.0f;
-    }
-    else if (targetPitch < -89.0f) {
-        deltaPitch = -89.0f - pitch;
-        pitch = -89.0f;
-        pitchVelocity = 0.0f;
-    }
-    else {
-        pitch = targetPitch;
-    }
-
+    pitch += deltaPitch;
     yaw += deltaYaw;
     roll += deltaRoll;
 
@@ -124,6 +110,7 @@ void Spaceship::updateView(GLFWwindow *window, double xpos, double ypos)
         yoffset *= spaceship->mouseSensitivity;
 
         if (spaceship->isRolling) {
+            xoffset = -xoffset;
             spaceship->rollVelocity += xoffset * spaceship->rotationAcceleration;
         }
         else {
@@ -195,7 +182,7 @@ glm::mat4 Spaceship::translate(Window *window)
 
 glm::mat4 Spaceship::rotate(Window *window)
 {
-    const glm::vec3 forward = -front;
+    const glm::vec3 forward = front;
     return Matrix(right.x, up.x, forward.x, 0.0f, right.y, up.y, forward.y, 0.0f, right.z, up.z, forward.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 }
 
