@@ -64,6 +64,11 @@ bool Window::initialize(int width, int height, std::string title)
     this->width = width;
     this->height = height;
     glfwWindow = glfwCreateWindow(width, height, this->title.c_str(), nullptr, nullptr);
+    if (this->isFullscreen) {
+        GLFWmonitor *primaryMonitor = glfwGetPrimaryMonitor();
+        const GLFWvidmode *mode = glfwGetVideoMode(primaryMonitor);
+        glfwSetWindowMonitor(glfwWindow, primaryMonitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+    }
 
     if (glfwWindow == nullptr) {
         std::cerr << "Failed to create GLFW glfwWindow." << std::endl;
