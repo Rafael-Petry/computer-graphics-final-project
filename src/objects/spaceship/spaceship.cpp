@@ -74,21 +74,15 @@ void Spaceship::update(GLint modelUniform, GLint colorUniform, Window *window)
         rollVelocity = -maxRotationSpeed;
     }
 
-    yaw += yawVelocity * deltaTime;
-    pitch += pitchVelocity * deltaTime;
-    roll += rollVelocity * deltaTime;
+    float deltaYaw = yawVelocity * deltaTime;
+    float deltaPitch = pitchVelocity * deltaTime;
+    float deltaRoll = rollVelocity * deltaTime;
 
-    if (pitch > 89.0f) {
-        pitch = 89.0f;
-        pitchVelocity = 0.0f;
-    }
+    pitch += deltaPitch;
+    yaw += deltaYaw;
+    roll += deltaRoll;
 
-    if (pitch < -89.0f) {
-        pitch = -89.0f;
-        pitchVelocity = 0.0f;
-    }
-
-    updateOrientation();
+    updateOrientation(deltaYaw, deltaPitch, deltaRoll);
 }
 
 glm::vec4 Spaceship::getPosition() const { return position; }
@@ -106,7 +100,7 @@ void Spaceship::updateView(GLFWwindow *window, double xpos, double ypos)
             spaceship->firstMouseUpdate = false;
         }
 
-        float xoffset = static_cast<float>(xpos) - spaceship->lastMouseX;
+        float xoffset = spaceship->lastMouseX - static_cast<float>(xpos);
         float yoffset = spaceship->lastMouseY - static_cast<float>(ypos);
 
         spaceship->lastMouseX = static_cast<float>(xpos);
@@ -116,6 +110,7 @@ void Spaceship::updateView(GLFWwindow *window, double xpos, double ypos)
         yoffset *= spaceship->mouseSensitivity;
 
         if (spaceship->isRolling) {
+            xoffset = -xoffset;
             spaceship->rollVelocity += xoffset * spaceship->rotationAcceleration;
         }
         else {
@@ -127,28 +122,34 @@ void Spaceship::updateView(GLFWwindow *window, double xpos, double ypos)
 
 void Spaceship::shoot() const { std::cout << "The spaceship is shooting..." << std::endl; }
 
-void Spaceship::updateOrientation()
+void Spaceship::updateOrientation(float deltaYaw, float deltaPitch, float deltaRoll)
 {
-    const float yawRad = yaw * (M_PI / 180.0f);
-    const float pitchRad = pitch * (M_PI / 180.0f);
-    const float rollRad = roll * (M_PI / 180.0f);
-
-    glm::vec4 newFront;
-    newFront.x = cosf(yawRad) * cosf(pitchRad);
-    newFront.y = sinf(pitchRad);
-    newFront.z = sinf(yawRad) * cosf(pitchRad);
-    newFront.w = 0.0f;
-
-    front = (newFront / norm(newFront));
-    right = (crossproduct(front, worldUp)) / norm(crossproduct(front, worldUp));
-    up = (crossproduct(right, front)) / norm(crossproduct(right, front));
-
-    if (rollRad != 0.0f) {
-        const glm::mat4 rollMatrix = Matrix_Rotate(rollRad, front);
-        const glm::vec4 rolledRight = rollMatrix * right;
-        right = rolledRight / norm(rolledRight);
-        up = crossproduct(right, front) / norm(crossproduct(right, front));
+    if (deltaYaw != 0.0f) {
+        const float yawRad = deltaYaw * (M_PI / 180.0f);
+        const glm::mat4 yawMatrix = Matrix_Rotate(yawRad, up);
+        front = yawMatrix * front;
+        right = yawMatrix * right;
     }
+
+    if (deltaPitch != 0.0f) {
+        const float pitchRad = deltaPitch * (M_PI / 180.0f);
+        const glm::mat4 pitchMatrix = Matrix_Rotate(pitchRad, right);
+        front = pitchMatrix * front;
+        up = pitchMatrix * up;
+    }
+
+    if (deltaRoll != 0.0f) {
+        const float rollRad = deltaRoll * (M_PI / 180.0f);
+        const glm::mat4 rollMatrix = Matrix_Rotate(rollRad, front);
+        right = rollMatrix * right;
+        up = rollMatrix * up;
+    }
+
+    front = front / norm(front);
+    right = crossproduct(front, up);
+    right = right / norm(right);
+    up = crossproduct(right, front);
+    up = up / norm(up);
 }
 
 glm::mat4 Spaceship::translate(Window *window)
@@ -181,7 +182,7 @@ glm::mat4 Spaceship::translate(Window *window)
 
 glm::mat4 Spaceship::rotate(Window *window)
 {
-    const glm::vec3 forward = -front;
+    const glm::vec3 forward = front;
     return Matrix(right.x, up.x, forward.x, 0.0f, right.y, up.y, forward.y, 0.0f, right.z, up.z, forward.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 }
 

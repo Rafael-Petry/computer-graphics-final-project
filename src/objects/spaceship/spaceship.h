@@ -34,7 +34,7 @@ private:
     Spaceship(const std::string &meshPath = "../../src/objects/spaceship/spaceship.obj", const glm::vec3 &color = glm::vec3(0.73f, 0.79f, 0.88f));
 
     void shoot() const;
-    void updateOrientation();
+    void updateOrientation(float deltaYaw, float deltaPitch, float deltaRoll);
 
     glm::vec4 position;
     glm::vec4 velocity;
