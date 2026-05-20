@@ -36,6 +36,11 @@ void Spaceship::update(GLint modelUniform, GLint colorUniform, Window *window)
         isRolling = true;
     }
 
+    updateRotation(window);
+}
+
+void Spaceship::updateRotation(Window *window)
+{
     const float deltaTime = window->getDeltaTime();
     const float rotationDamping = expf(-rotationDrag * deltaTime);
 
@@ -85,8 +90,6 @@ void Spaceship::update(GLint modelUniform, GLint colorUniform, Window *window)
     updateOrientation(deltaYaw, deltaPitch, deltaRoll);
 }
 
-glm::vec4 Spaceship::getPosition() const { return position; }
-
 void Spaceship::updateView(GLFWwindow *window, double xpos, double ypos)
 {
     Spaceship *spaceship = &Spaceship::getInstance();
@@ -112,15 +115,12 @@ void Spaceship::updateView(GLFWwindow *window, double xpos, double ypos)
         if (spaceship->isRolling) {
             xoffset = -xoffset;
             spaceship->rollVelocity += xoffset * spaceship->rotationAcceleration;
-        }
-        else {
+        } else {
             spaceship->yawVelocity += xoffset * spaceship->rotationAcceleration;
             spaceship->pitchVelocity += yoffset * spaceship->rotationAcceleration;
         }
     }
 }
-
-void Spaceship::shoot() const { std::cout << "The spaceship is shooting..." << std::endl; }
 
 void Spaceship::updateOrientation(float deltaYaw, float deltaPitch, float deltaRoll)
 {
@@ -152,6 +152,8 @@ void Spaceship::updateOrientation(float deltaYaw, float deltaPitch, float deltaR
     up = up / norm(up);
 }
 
+void Spaceship::shoot() const { std::cout << "The spaceship is shooting..." << std::endl; }
+
 glm::mat4 Spaceship::translate(Window *window)
 {
     const float deltaTime = window->getDeltaTime();
@@ -180,12 +182,10 @@ glm::mat4 Spaceship::translate(Window *window)
     return Matrix_Translate(position.x, position.y, position.z);
 }
 
-glm::mat4 Spaceship::rotate(Window *window)
-{
-    const glm::vec3 forward = front;
-    return Matrix(right.x, up.x, forward.x, 0.0f, right.y, up.y, forward.y, 0.0f, right.z, up.z, forward.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-}
+glm::mat4 Spaceship::rotate(Window *window) { return Matrix(right.x, up.x, front.x, 0.0f, right.y, up.y, front.y, 0.0f, right.z, up.z, front.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f); }
 
 glm::mat4 Spaceship::scale(Window *window) { return Matrix_Scale(0.3f, 0.3f, 0.3f); }
 
 glm::mat4 Spaceship::getViewMatrix() const { return Matrix_cameraView(position + front, front, up); }
+
+glm::vec4 Spaceship::getPosition() const { return position; }

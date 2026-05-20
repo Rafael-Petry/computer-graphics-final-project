@@ -20,6 +20,7 @@ public:
     static Spaceship &getInstance();
 
     void update(GLint modelUniform, GLint colorUniform, Window *window);
+    void updateRotation(Window *window);
 
     glm::vec4 getPosition() const;
     glm::mat4 getViewMatrix() const;
