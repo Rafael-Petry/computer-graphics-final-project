@@ -1,18 +1,24 @@
 #include <cmath>
 #include <iostream>
-#include <string>
 
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
 #include "spaceship.h"
+#include "../../helpers/render/render.h"
 #include "../../helpers/movement/movement.h"
 #include "../../window/window.h"
 #include "../../vendor/include/matrices.h"
 
-Spaceship::Spaceship(const std::string &meshPath, const glm::vec3 &color) : Object(meshPath, color)
+Mesh Spaceship::mesh;
+
+Spaceship::Spaceship(const glm::vec3 &color) : Object(mesh, color)
 {
+    if (mesh.vao == 0) {
+        mesh = RenderHelper::loadObjMesh("../../src/objects/spaceship/spaceship.obj");
+    }
+
     front = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
     up = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
     right = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);

@@ -6,14 +6,10 @@
 #include "render.h"
 #include "../../vendor/include/tiny_obj_loader.h"
 
-std::unordered_map<std::string, Mesh> RenderHelper::cache;
-
-void RenderHelper::renderModel(GLint modelUniform, GLint colorUniform, const glm::mat4 &modelMatrix, const std::string &modelPath, const glm::vec3 &color)
+void RenderHelper::renderModel(GLint modelUniform, GLint colorUniform, const glm::mat4 &modelMatrix, const Mesh &mesh, const glm::vec3 &color)
 {
     glUniformMatrix4fv(modelUniform, 1, GL_FALSE, glm::value_ptr(modelMatrix));
     glUniform3f(colorUniform, color.x, color.y, color.z);
-
-    const Mesh &mesh = getMesh(modelPath);
     if (mesh.vao == 0 || mesh.vertexCount <= 0) {
         return;
     }
@@ -21,18 +17,6 @@ void RenderHelper::renderModel(GLint modelUniform, GLint colorUniform, const glm
     glBindVertexArray(mesh.vao);
     glDrawArrays(GL_TRIANGLES, 0, mesh.vertexCount);
     glBindVertexArray(0);
-}
-
-const Mesh &RenderHelper::getMesh(const std::string &path)
-{
-    const auto it = cache.find(path);
-    if (it != cache.end()) {
-        return it->second;
-    }
-
-    const Mesh mesh = loadObjMesh(path);
-    const auto inserted = cache.emplace(path, mesh);
-    return inserted.first->second;
 }
 
 Mesh RenderHelper::loadObjMesh(const std::string &path)

@@ -1,10 +1,10 @@
 #include <cmath>
 #include <iostream>
-#include <string>
 
 #include <glm/mat4x4.hpp>
 
 #include "planet.h"
+#include "../../../helpers/render/render.h"
 #include "../../../window/window.h"
 #include "../sun/sun.h"
 #include "../../vendor/include/matrices.h"
@@ -22,7 +22,14 @@ namespace {
     }
 }
 
-Planet::Planet(const std::string &meshPath, const glm::vec3 &color) : CelestialBody(meshPath, color) {}
+Mesh Planet::mesh;
+
+Planet::Planet(const glm::vec3 &color) : CelestialBody(mesh, color)
+{
+    if (mesh.vao == 0) {
+        mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/planet/planet.obj");
+    }
+}
 
 glm::mat4 Planet::translate(Window *window)
 {
@@ -47,8 +54,7 @@ glm::mat4 Planet::translate(Window *window)
     glm::vec3 position(0.0f);
     if (orbitPhase < 1.0f) {
         position = cubicBezier(curve1[0], curve1[1], curve1[2], curve1[3], orbitPhase);
-    }
-    else {
+    } else {
         position = cubicBezier(curve2[0], curve2[1], curve2[2], curve2[3], orbitPhase - 1.0f);
     }
 

@@ -1,8 +1,6 @@
 #ifndef SUN_H
 #define SUN_H
 
-#include <string>
-
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 
@@ -29,6 +27,8 @@ private:
     Sun();
 
     glm::vec3 position;
+
+    static Mesh mesh;
 };
 
 #endif

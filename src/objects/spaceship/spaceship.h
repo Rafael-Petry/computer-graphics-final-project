@@ -1,8 +1,6 @@
 #ifndef SPACESHIP_H
 #define SPACESHIP_H
 
-#include <string>
-
 #include <glad/glad.h>
 #include <glm/mat4x4.hpp>
 #include <glm/vec4.hpp>
@@ -32,7 +30,7 @@ protected:
     glm::mat4 scale(Window *window) override;
 
 private:
-    Spaceship(const std::string &meshPath = "../../src/objects/spaceship/spaceship.obj", const glm::vec3 &color = glm::vec3(0.73f, 0.79f, 0.88f));
+    Spaceship(const glm::vec3 &color = glm::vec3(0.73f, 0.79f, 0.88f));
 
     void shoot() const;
     void updateOrientation(float deltaYaw, float deltaPitch, float deltaRoll);
@@ -68,6 +66,8 @@ private:
     float lastMouseY = 0.0f;
 
     bool isRolling = false;
+
+    static Mesh mesh;
 };
 
 #endif
