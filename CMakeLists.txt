@@ -16,6 +16,7 @@ set(SOURCES
   src/helpers/movement/movement.cpp
   src/helpers/collision/collision.cpp
   src/helpers/collision/colliders/boundingBox.cpp
+  src/helpers/collision/colliders/boundingSphere.cpp
   src/helpers/render/render.cpp
   src/scene/scene.cpp
   src/shaders/loader/loader.cpp

@@ -10,6 +10,10 @@ BoundingBox::BoundingBox(const glm::vec3 &min, const glm::vec3 &max) : min(min),
 
 bool BoundingBox::isInitialized() const { return initialized; }
 
+const glm::vec3 &BoundingBox::getMin() const { return min; }
+
+const glm::vec3 &BoundingBox::getMax() const { return max; }
+
 bool BoundingBox::testCollision(const BoundingBox &other, const glm::vec3 &position, const glm::vec3 &scale, const glm::vec3 &otherPosition, const glm::vec3 &otherScale) const
 {
     if (!initialized || !other.initialized) {

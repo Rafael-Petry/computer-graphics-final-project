@@ -5,7 +5,7 @@
 #include <glm/vec3.hpp>
 
 #include "../../objects/celestialBody/celestialBody.h"
-#include "../../../helpers/collision/colliders/boundingBox.h"
+#include "../../../helpers/collision/colliders/boundingSphere.h"
 
 class Window;
 
@@ -30,7 +30,7 @@ private:
     glm::vec3 position;
 
     static Mesh mesh;
-    static BoundingBox boundingBox;
+    static BoundingSphere boundingSphere;
 };
 
 #endif

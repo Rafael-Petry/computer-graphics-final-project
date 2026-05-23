@@ -24,16 +24,16 @@ namespace {
 }
 
 Mesh Planet::mesh;
-BoundingBox Planet::boundingBox;
+BoundingSphere Planet::boundingSphere;
 
-Planet::Planet(const glm::vec3 &color) : CelestialBody(mesh, boundingBox, color)
+Planet::Planet(const glm::vec3 &color) : CelestialBody(mesh, boundingSphere, color)
 {
     if (mesh.vao == 0) {
         mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/planet/planet.obj");
     }
 
-    if (!boundingBox.isInitialized() && mesh.vao != 0) {
-        boundingBox = CollisionHelper::generateBoundingBox(mesh);
+    if (!boundingSphere.isInitialized() && mesh.vao != 0) {
+        boundingSphere = CollisionHelper::generateBoundingSphere(mesh);
     }
 }
 

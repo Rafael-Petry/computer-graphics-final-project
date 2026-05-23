@@ -201,3 +201,5 @@ glm::mat4 Spaceship::scale(Window *window) { return Matrix_Scale(0.3f, 0.3f, 0.3
 glm::mat4 Spaceship::getViewMatrix() const { return Matrix_cameraView(position + front, front, up); }
 
 glm::vec4 Spaceship::getPosition() const { return position; }
+
+const BoundingBox &Spaceship::getBoundingBox() const { return boundingBox; }

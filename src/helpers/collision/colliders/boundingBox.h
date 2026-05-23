@@ -3,13 +3,17 @@
 
 #include <glm/vec3.hpp>
 
-class BoundingBox
+#include "collider.h"
+
+class BoundingBox : public Collider
 {
 public:
     BoundingBox();
     BoundingBox(const glm::vec3 &min, const glm::vec3 &max);
 
-    bool isInitialized() const;
+    bool isInitialized() const override;
+    const glm::vec3 &getMin() const;
+    const glm::vec3 &getMax() const;
     bool testCollision(const BoundingBox &other, const glm::vec3 &position, const glm::vec3 &scale, const glm::vec3 &otherPosition, const glm::vec3 &otherScale) const;
 
 private:

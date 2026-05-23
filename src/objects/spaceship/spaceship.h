@@ -23,6 +23,7 @@ public:
 
     glm::vec4 getPosition() const;
     glm::mat4 getViewMatrix() const;
+    const BoundingBox &getBoundingBox() const;
     static void updateView(GLFWwindow *window, double xpos, double ypos);
 
 protected:

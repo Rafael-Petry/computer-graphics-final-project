@@ -9,16 +9,16 @@
 #include "../../vendor/include/matrices.h"
 
 Mesh Sun::mesh;
-BoundingBox Sun::boundingBox;
+BoundingSphere Sun::boundingSphere;
 
-Sun::Sun() : CelestialBody(mesh, boundingBox, glm::vec3(1.0f, 1.0f, 0.0f)), position(0.0f, 0.0f, 0.0f)
+Sun::Sun() : CelestialBody(mesh, boundingSphere, glm::vec3(1.0f, 1.0f, 0.0f)), position(0.0f, 0.0f, 0.0f)
 {
     if (mesh.vao == 0) {
         mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/sun/sun.obj");
     }
 
-    if (!boundingBox.isInitialized() && mesh.vao != 0) {
-        boundingBox = CollisionHelper::generateBoundingBox(mesh);
+    if (!boundingSphere.isInitialized() && mesh.vao != 0) {
+        boundingSphere = CollisionHelper::generateBoundingSphere(mesh);
     }
 }
 

@@ -4,7 +4,7 @@
 #include <glm/mat4x4.hpp>
 
 #include "../../objects/celestialBody/celestialBody.h"
-#include "../../../helpers/collision/colliders/boundingBox.h"
+#include "../../../helpers/collision/colliders/boundingSphere.h"
 
 class Window;
 
@@ -24,7 +24,7 @@ private:
     float orbitRadius = 2.0f;
 
     static Mesh mesh;
-    static BoundingBox boundingBox;
+    static BoundingSphere boundingSphere;
 };
 
 #endif
