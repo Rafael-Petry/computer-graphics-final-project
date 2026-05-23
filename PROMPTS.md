@@ -105,3 +105,7 @@ Read _prompts/0-limitations_. Change the asteroid's translation method to trace 
 ## 19-fix-first-person-rotation
 
 Read _prompts/0-limitations_. Change the spaceship's rotation to be consistant with the first person camera. Looking up or down should always feel like looking up or down and looking left or right should always feel like looking left or right in relation to the screen, even if roll is applied.
+
+## 20-refactor-mesh-generation
+
+Change the mesh generation logic to make it so all objects have a reference to its Mesh instead of saving it on a cache of RenderHelper. This reference to the mesh needs to be static so it only needs to load once per class and should be set by the return value of RenderHelper::loadObjMesh. You can remove the getMesh method of RenderHelper because it won't be used anymore and adjust the renderModel method to have the mesh as its parameter instead of the meshPath.

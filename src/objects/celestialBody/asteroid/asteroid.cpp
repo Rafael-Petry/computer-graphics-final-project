@@ -1,12 +1,18 @@
 #include <iostream>
-#include <string>
-
 #include "asteroid.h"
+#include "../../../helpers/render/render.h"
 #include "../../spaceship/spaceship.h"
 #include "../../../window/window.h"
 #include "../../vendor/include/matrices.h"
 
-Asteroid::Asteroid(const std::string &meshPath, const glm::vec3 &color) : CelestialBody(meshPath, color), position(2.7f, 0.4f, 0.0f, 1.0f) {}
+Mesh Asteroid::mesh;
+
+Asteroid::Asteroid(const glm::vec3 &color) : CelestialBody(mesh, color), position(2.7f, 0.4f, 0.0f, 1.0f)
+{
+    if (mesh.vao == 0) {
+        mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/asteroid/asteroid.obj");
+    }
+}
 
 glm::mat4 Asteroid::translate(Window *window)
 {

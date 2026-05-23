@@ -1,14 +1,20 @@
 #include <iostream>
-#include <string>
-
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
 #include "sun.h"
+#include "../../../helpers/render/render.h"
 #include "../../../window/window.h"
 #include "../../vendor/include/matrices.h"
 
-Sun::Sun() : CelestialBody("../../src/objects/celestialBody/sun/sun.obj", glm::vec3(1.0f, 1.0f, 0.0f)), position(0.0f, 0.0f, 0.0f) {}
+Mesh Sun::mesh;
+
+Sun::Sun() : CelestialBody(mesh, glm::vec3(1.0f, 1.0f, 0.0f)), position(0.0f, 0.0f, 0.0f)
+{
+    if (mesh.vao == 0) {
+        mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/sun/sun.obj");
+    }
+}
 
 Sun &Sun::getInstance()
 {

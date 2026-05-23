@@ -1,9 +1,17 @@
-#include <string>
-
 #include <glad/glad.h>
 #include <glm/vec3.hpp>
 
+#include "../../helpers/render/render.h"
 #include "celestialBody.h"
 #include "../../vendor/include/matrices.h"
 
-CelestialBody::CelestialBody(const std::string &meshPath, const glm::vec3 &color) : Object(meshPath, color) {}
+Mesh CelestialBody::mesh;
+
+CelestialBody::CelestialBody(const glm::vec3 &color) : Object(mesh, color)
+{
+    if (mesh.vao == 0) {
+        mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/celestialBody.obj");
+    }
+}
+
+CelestialBody::CelestialBody(const Mesh &mesh, const glm::vec3 &color) : Object(mesh, color) {}
