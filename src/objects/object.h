@@ -9,19 +9,23 @@
 
 #include "../helpers/render/mesh.h"
 
+class BoundingBox;
+
 class Window;
 
 class Object
 {
 public:
-    Object(const Mesh &mesh, const glm::vec3 &color = glm::vec3(0.5f, 0.5f, 0.5f));
+    Object(const Mesh &mesh, const BoundingBox &boundingBox, const glm::vec3 &color = glm::vec3(0.5f, 0.5f, 0.5f));
     virtual ~Object() {}
 
     void update(GLint modelUniform, GLint colorUniform, Window *window);
     const Mesh &getMesh() const;
+    const BoundingBox &getBoundingBox() const;
 
 protected:
     const Mesh &mesh;
+    const BoundingBox &boundingBox;
     const glm::vec3 color;
 
     virtual glm::mat4 translate(Window *window) = 0;

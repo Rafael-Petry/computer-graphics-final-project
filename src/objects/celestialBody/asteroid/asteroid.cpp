@@ -1,16 +1,22 @@
 #include <iostream>
 #include "asteroid.h"
+#include "../../../helpers/collision/collision.h"
 #include "../../../helpers/render/render.h"
 #include "../../spaceship/spaceship.h"
 #include "../../../window/window.h"
 #include "../../vendor/include/matrices.h"
 
 Mesh Asteroid::mesh;
+BoundingBox Asteroid::boundingBox;
 
-Asteroid::Asteroid(const glm::vec3 &color) : CelestialBody(mesh, color), position(2.7f, 0.4f, 0.0f, 1.0f)
+Asteroid::Asteroid(const glm::vec3 &color) : CelestialBody(mesh, boundingBox, color), position(2.7f, 0.4f, 0.0f, 1.0f)
 {
     if (mesh.vao == 0) {
         mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/asteroid/asteroid.obj");
+    }
+
+    if (!boundingBox.isInitialized() && mesh.vao != 0) {
+        boundingBox = CollisionHelper::generateBoundingBox(mesh);
     }
 }
 
@@ -25,6 +31,9 @@ glm::mat4 Asteroid::translate(Window *window)
         direction /= distance;
         position += direction * (chaseSpeed * window->getDeltaTime());
     }
+
+    const Spaceship &spaceship = Spaceship::getInstance();
+    boundingBox.testCollision(spaceship.getBoundingBox(), glm::vec3(position), glm::vec3(0.1f), glm::vec3(spaceship.getPosition()), glm::vec3(0.3f));
 
     return Matrix_Translate(position.x, position.y, position.z);
 }

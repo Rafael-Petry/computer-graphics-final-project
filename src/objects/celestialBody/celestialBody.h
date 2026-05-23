@@ -6,6 +6,7 @@
 #include <glm/vec3.hpp>
 
 #include "../../helpers/render/mesh.h"
+#include "../../helpers/collision/colliders/boundingBox.h"
 
 #include "../object.h"
 
@@ -16,12 +17,13 @@ public:
     virtual ~CelestialBody() {}
 
 protected:
-    CelestialBody(const Mesh &mesh, const glm::vec3 &color);
+    CelestialBody(const Mesh &mesh, const BoundingBox &boundingBox, const glm::vec3 &color);
 
 private:
     void shoot() const;
 
     static Mesh mesh;
+    static BoundingBox boundingBox;
 };
 
 #endif
