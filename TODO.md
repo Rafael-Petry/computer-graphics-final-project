@@ -54,4 +54,25 @@ This file defines a bunch of to do lists for different tasks and functionalities
 
 ## 6. Collisions
 
-- ...
+- [x] Refactor mesh generation to facilitate bounding box generation
+- [x] Create BoundingBox class
+- [x] Create Helper for bounding box generation
+- [x] Create a simple collision check of asteroid with spaceship
+- [] Optimize collision checks
+- [] Refactor if necessary
+- [] Implement the spaceship shoot mechanic
+- [] Define all necessary collision checks without functionality for now
+
+## 7. Actually Make It a Game
+
+- [] Create a health UI
+- [] Create a score UI
+- [] There should be a spawner for asteroids
+- [] Shoot collision needs to destroy asteroids and update score
+- [] Asteroid destruction needs to spawn smaller asteroids if possible
+- [] Asteroid hit on spaceship needs to damage it and despawn the asteroid
+- [] Sun hit on spaceship needs to finish the game
+- [] Planet hit on spaceship needs to bump it and damage if it is not landing
+- [] Create a look-at camera
+- [] Create a radar UI that shows the spaceship position/orientation and celestial bodies position
+
