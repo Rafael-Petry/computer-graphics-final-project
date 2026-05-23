@@ -3,16 +3,22 @@
 #include <glm/mat4x4.hpp>
 
 #include "sun.h"
+#include "../../../helpers/collision/collision.h"
 #include "../../../helpers/render/render.h"
 #include "../../../window/window.h"
 #include "../../vendor/include/matrices.h"
 
 Mesh Sun::mesh;
+BoundingBox Sun::boundingBox;
 
-Sun::Sun() : CelestialBody(mesh, glm::vec3(1.0f, 1.0f, 0.0f)), position(0.0f, 0.0f, 0.0f)
+Sun::Sun() : CelestialBody(mesh, boundingBox, glm::vec3(1.0f, 1.0f, 0.0f)), position(0.0f, 0.0f, 0.0f)
 {
     if (mesh.vao == 0) {
         mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/sun/sun.obj");
+    }
+
+    if (!boundingBox.isInitialized() && mesh.vao != 0) {
+        boundingBox = CollisionHelper::generateBoundingBox(mesh);
     }
 }
 

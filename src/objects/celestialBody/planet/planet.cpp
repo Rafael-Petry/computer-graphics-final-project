@@ -4,6 +4,7 @@
 #include <glm/mat4x4.hpp>
 
 #include "planet.h"
+#include "../../../helpers/collision/collision.h"
 #include "../../../helpers/render/render.h"
 #include "../../../window/window.h"
 #include "../sun/sun.h"
@@ -23,11 +24,16 @@ namespace {
 }
 
 Mesh Planet::mesh;
+BoundingBox Planet::boundingBox;
 
-Planet::Planet(const glm::vec3 &color) : CelestialBody(mesh, color)
+Planet::Planet(const glm::vec3 &color) : CelestialBody(mesh, boundingBox, color)
 {
     if (mesh.vao == 0) {
         mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/planet/planet.obj");
+    }
+
+    if (!boundingBox.isInitialized() && mesh.vao != 0) {
+        boundingBox = CollisionHelper::generateBoundingBox(mesh);
     }
 }
 

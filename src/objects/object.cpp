@@ -5,10 +5,11 @@
 
 #include "../helpers/render/render.h"
 #include "object.h"
+#include "../helpers/collision/colliders/boundingBox.h"
 #include "../window/window.h"
 #include "../../vendor/include/matrices.h"
 
-Object::Object(const Mesh &mesh, const glm::vec3 &color) : mesh(mesh), color(color) {}
+Object::Object(const Mesh &mesh, const BoundingBox &boundingBox, const glm::vec3 &color) : mesh(mesh), boundingBox(boundingBox), color(color) {}
 
 void Object::update(GLint modelUniform, GLint colorUniform, Window *window)
 {
@@ -17,3 +18,5 @@ void Object::update(GLint modelUniform, GLint colorUniform, Window *window)
 }
 
 const Mesh &Object::getMesh() const { return mesh; }
+
+const BoundingBox &Object::getBoundingBox() const { return boundingBox; }

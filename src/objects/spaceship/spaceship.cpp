@@ -6,17 +6,23 @@
 #include <glm/vec4.hpp>
 
 #include "spaceship.h"
+#include "../../helpers/collision/collision.h"
 #include "../../helpers/render/render.h"
 #include "../../helpers/movement/movement.h"
 #include "../../window/window.h"
 #include "../../vendor/include/matrices.h"
 
 Mesh Spaceship::mesh;
+BoundingBox Spaceship::boundingBox;
 
-Spaceship::Spaceship(const glm::vec3 &color) : Object(mesh, color)
+Spaceship::Spaceship(const glm::vec3 &color) : Object(mesh, boundingBox, color)
 {
     if (mesh.vao == 0) {
         mesh = RenderHelper::loadObjMesh("../../src/objects/spaceship/spaceship.obj");
+    }
+
+    if (!boundingBox.isInitialized() && mesh.vao != 0) {
+        boundingBox = CollisionHelper::generateBoundingBox(mesh);
     }
 
     front = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);

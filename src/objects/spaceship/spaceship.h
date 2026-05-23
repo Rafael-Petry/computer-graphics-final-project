@@ -5,6 +5,7 @@
 #include <glm/mat4x4.hpp>
 #include <glm/vec4.hpp>
 
+#include "../../helpers/collision/colliders/boundingBox.h"
 #include "../object.h"
 
 class Window;
@@ -68,6 +69,7 @@ private:
     bool isRolling = false;
 
     static Mesh mesh;
+    static BoundingBox boundingBox;
 };
 
 #endif
