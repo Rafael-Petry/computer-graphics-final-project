@@ -18,6 +18,7 @@ public:
     virtual ~Object() {}
 
     void update(GLint modelUniform, GLint colorUniform, Window *window);
+    const Mesh &getMesh() const;
 
 protected:
     const Mesh &mesh;

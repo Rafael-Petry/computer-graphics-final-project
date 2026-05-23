@@ -4,7 +4,6 @@
 
 #include "mesh.h"
 #include "render.h"
-#include "../../vendor/include/tiny_obj_loader.h"
 
 void RenderHelper::renderModel(GLint modelUniform, GLint colorUniform, const glm::mat4 &modelMatrix, const Mesh &mesh, const glm::vec3 &color)
 {
@@ -81,5 +80,7 @@ Mesh RenderHelper::loadObjMesh(const std::string &path)
     glBindVertexArray(0);
 
     mesh.vertexCount = static_cast<GLsizei>(trianglePositions.size() / 3);
+    mesh.attrib = attrib;
+    mesh.shapes = shapes;
     return mesh;
 }

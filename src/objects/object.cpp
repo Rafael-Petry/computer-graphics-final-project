@@ -15,3 +15,5 @@ void Object::update(GLint modelUniform, GLint colorUniform, Window *window)
     const glm::mat4 model = translate(window) * rotate(window) * scale(window) * Matrix_Translate(0.0f, 0.0f, 0.0f);
     RenderHelper::renderModel(modelUniform, colorUniform, model, mesh, color);
 }
+
+const Mesh &Object::getMesh() const { return mesh; }
