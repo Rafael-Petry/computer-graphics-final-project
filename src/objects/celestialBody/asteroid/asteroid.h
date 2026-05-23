@@ -5,6 +5,7 @@
 #include <glm/vec4.hpp>
 
 #include "../../objects/celestialBody/celestialBody.h"
+#include "../../../helpers/collision/colliders/boundingBox.h"
 
 class Window;
 
@@ -23,6 +24,7 @@ private:
     float chaseSpeed = 1.4f;
 
     static Mesh mesh;
+    static BoundingBox boundingBox;
 };
 
 #endif
