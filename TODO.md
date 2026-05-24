@@ -59,7 +59,7 @@ This file defines a bunch of to do lists for different tasks and functionalities
 - [x] Create Helper for bounding box generation
 - [x] Create a simple collision check of asteroid with spaceship
 - [x] Create BoundingSphere class
-- [] Refactor if necessary
+- [x] Refactor if necessary
 - [] Implement the spaceship shoot mechanic
 - [] Define all necessary collision checks without functionality for now
 
