@@ -41,7 +41,9 @@ glm::mat4 Asteroid::rotate(Window *window) { return Matrix_Rotate_Y(window->getC
 
 void Asteroid::collide(Window *window)
 {
-    (void)window;
     const Spaceship &spaceship = Spaceship::getInstance();
-    boundingSphere.testCollisionBoundingBox(*this, spaceship);
+
+    if (boundingSphere.testCollisionBoundingBox(*this, spaceship)) {
+        std::cout << "An asteroid collided with the spaceship!" << std::endl;
+    }
 }

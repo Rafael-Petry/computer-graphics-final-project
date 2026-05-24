@@ -15,7 +15,7 @@ public:
     BoundingSphere(const glm::vec3 &center, float radius);
 
     bool isInitialized() const override;
-    bool testCollisionSpheres(const Object &objectA, const Object &objectB) const;
+    bool testCollisionBoundingSphere(const Object &objectA, const Object &objectB) const;
     bool testCollisionBoundingBox(const Object &sphereObject, const Object &boxObject) const;
 
 private:

@@ -9,10 +9,7 @@
 #include "../window/window.h"
 #include "../../vendor/include/matrices.h"
 
-Object::Object(const Mesh &mesh, const Collider &collider, const glm::vec3 &color)
-    : mesh(mesh), collider(collider), color(color), scaleValue(1.0f), position(0.0f)
-{
-}
+Object::Object(const Mesh &mesh, const Collider &collider, const glm::vec3 &color) : mesh(mesh), collider(collider), color(color), scaleValue(1.0f), position(0.0f) {}
 
 void Object::update(GLint modelUniform, GLint colorUniform, Window *window)
 {

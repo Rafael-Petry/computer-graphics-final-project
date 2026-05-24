@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <cmath>
-#include <iostream>
 
 #include <glm/common.hpp>
 #include <glm/geometric.hpp>
@@ -19,7 +18,7 @@ BoundingSphere::BoundingSphere(const glm::vec3 &center, float radius) : center(c
 
 bool BoundingSphere::isInitialized() const { return initialized; }
 
-bool BoundingSphere::testCollisionSpheres(const Object &objectA, const Object &objectB) const
+bool BoundingSphere::testCollisionBoundingSphere(const Object &objectA, const Object &objectB) const
 {
     const auto *otherSphere = dynamic_cast<const BoundingSphere *>(&objectB.getCollider());
     if (!initialized || otherSphere == nullptr || !otherSphere->isInitialized()) {
@@ -42,7 +41,6 @@ bool BoundingSphere::testCollisionSpheres(const Object &objectA, const Object &o
     const float combinedRadius = radiusA + radiusB;
 
     if (distanceSquared <= combinedRadius * combinedRadius) {
-        std::cout << "The Objects Collided!" << std::endl;
         return true;
     }
 
@@ -74,7 +72,6 @@ bool BoundingSphere::testCollisionBoundingBox(const Object &sphereObject, const 
     const float distanceSquared = glm::dot(delta, delta);
 
     if (distanceSquared <= scaledRadius * scaledRadius) {
-        std::cout << "The Objects Collided!" << std::endl;
         return true;
     }
 

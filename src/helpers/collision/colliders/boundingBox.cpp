@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <glm/common.hpp>
 
 #include "boundingBox.h"
@@ -42,7 +40,6 @@ bool BoundingBox::testCollisionBoundingBox(const Object &objectA, const Object &
     const bool overlapZ = minA.z <= maxB.z && maxA.z >= minB.z;
 
     if (overlapX && overlapY && overlapZ) {
-        std::cout << "The Objects Collided!" << std::endl;
         return true;
     }
 
