@@ -14,6 +14,7 @@ class Asteroid : public CelestialBody
 {
 public:
     Asteroid(const glm::vec3 &color = glm::vec3(0.5f, 0.5f, 0.5f));
+    void onShotHit();
 
 protected:
     glm::mat4 translate(Window *window) override;

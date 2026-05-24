@@ -14,6 +14,7 @@ class RenderHelper
 public:
     static void renderModel(GLint modelUniform, GLint colorUniform, const glm::mat4 &modelMatrix, const Mesh &mesh, const glm::vec3 &color);
     static Mesh loadObjMesh(const std::string &path);
+    static Mesh createCylinderMesh(int segments);
 };
 
 #endif

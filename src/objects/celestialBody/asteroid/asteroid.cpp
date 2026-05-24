@@ -47,3 +47,9 @@ void Asteroid::collide(Window *window)
         std::cout << "An asteroid collided with the spaceship!" << std::endl;
     }
 }
+
+void Asteroid::onShotHit()
+{
+    std::cout << "Asteroid hit by a shot." << std::endl;
+    position = glm::vec3(-2.8f, 0.6f, -1.5f);
+}
