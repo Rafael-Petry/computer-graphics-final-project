@@ -18,6 +18,7 @@ public:
     static Sun &getInstance();
 
 protected:
+    void collide(Window *window) override;
     glm::mat4 translate(Window *window) override;
     glm::mat4 rotate(Window *window) override;
 

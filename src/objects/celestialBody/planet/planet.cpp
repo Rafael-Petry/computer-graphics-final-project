@@ -4,6 +4,7 @@
 #include <glm/mat4x4.hpp>
 
 #include "planet.h"
+#include "../../spaceship/spaceship.h"
 #include "../../../helpers/collision/collision.h"
 #include "../../../helpers/render/render.h"
 #include "../../../window/window.h"
@@ -40,6 +41,15 @@ Planet::Planet(const glm::vec3 &color) : CelestialBody(mesh, boundingSphere, col
     position = glm::vec3(0.0f);
 }
 
+void Planet::collide(Window *window)
+{
+    const Spaceship &spaceship = Spaceship::getInstance();
+
+    if (boundingSphere.testCollisionBoundingBox(*this, spaceship)) {
+        std::cout << "A planet collided with the spaceship!" << std::endl;
+    }
+}
+
 glm::mat4 Planet::translate(Window *window)
 {
     orbitPhase += window->getDeltaTime() * orbitSpeed;
@@ -68,4 +78,5 @@ glm::mat4 Planet::translate(Window *window)
 
     return Matrix_Translate(position.x, position.y, position.z);
 }
+
 glm::mat4 Planet::rotate(Window *window) { return Matrix_Rotate_Y(window->getCurrentFrame() * 1.7f); }
