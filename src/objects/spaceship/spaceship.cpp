@@ -65,9 +65,9 @@ void Spaceship::update(GLint modelUniform, GLint colorUniform, Window *window)
     updateRotation(window);
 }
 
-void Spaceship::updateShooting(GLint modelUniform, GLint colorUniform, Window *window, Asteroid &asteroid)
+void Spaceship::updateShooting(GLint modelUniform, GLint colorUniform, Window *window, std::vector<Asteroid> &asteroids)
 {
-    shoot(window, asteroid);
+    shoot(window, asteroids);
 
     if (window->getCurrentFrame() <= rayVisibleUntil) {
         renderRay(modelUniform, colorUniform);
@@ -189,7 +189,7 @@ void Spaceship::updateOrientation(float deltaYaw, float deltaPitch, float deltaR
     up = up / norm(up);
 }
 
-void Spaceship::shoot(Window *window, Asteroid &asteroid)
+void Spaceship::shoot(Window *window, std::vector<Asteroid> &asteroids)
 {
     const float currentTime = window->getCurrentFrame();
     if (glfwGetMouseButton(window->getGlfwWindow(), GLFW_MOUSE_BUTTON_LEFT) != GLFW_PRESS) {
@@ -206,14 +206,22 @@ void Spaceship::shoot(Window *window, Asteroid &asteroid)
     rayOrigin = getCameraPosition();
     rayDirection = glm::normalize(glm::vec3(front));
 
-    const BoundingSphere *sphere = dynamic_cast<const BoundingSphere *>(&asteroid.getCollider());
-    if (sphere == nullptr) {
-        return;
+    std::vector<Asteroid *> hitAsteroids;
+
+    for (Asteroid &asteroid : asteroids) {
+        const BoundingSphere *sphere = dynamic_cast<const BoundingSphere *>(&asteroid.getCollider());
+        if (sphere == nullptr) {
+            continue;
+        }
+
+        float hitDistance = 0.0f;
+        if (sphere->testRay(asteroid, rayOrigin, rayDirection, rayMaxRange, &hitDistance)) {
+            hitAsteroids.push_back(&asteroid);
+        }
     }
 
-    float hitDistance = 0.0f;
-    if (sphere->testRay(asteroid, rayOrigin, rayDirection, rayMaxRange, &hitDistance)) {
-        asteroid.onShotHit();
+    for (Asteroid *asteroid : hitAsteroids) {
+        asteroid->onShotHit();
     }
 }
 

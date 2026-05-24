@@ -127,3 +127,11 @@ Add the position property to the Object class so all objects just extend it. Cha
 ## 24-spaceship-shooting
 
 Add a functionality for the spaceship be able to shoot an instant speed ray that collides with any asteroid that it finds in its way. Add a crosshair to the camera to indicate where the ray will be shot. The ray needs to have a max range, so anything further from this range doesn't get hit. There needs to be a 1 second cooldown between each shot. Make the ray visible as a red cilindrical line that extends from the camera.
+
+## 25-multiple-asteroids
+
+Change the scene to instead have multiple asteroids (add a property that controls the amount, by default 10). Each asteroid has to spawn on a random position. Shooting has to test collision with each asteroid.
+
+Make it so the shot can do collateral damage to asteroids behind the one being hit.
+
+When hit, the asteroid need to be respawned on a different random position too.
