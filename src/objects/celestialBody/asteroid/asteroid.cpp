@@ -21,21 +21,21 @@ Asteroid::Asteroid(const glm::vec3 &color) : CelestialBody(mesh, boundingSphere,
     }
 
     scaleValue = glm::vec3(0.1f);
-    positionValue = glm::vec3(2.7f, 0.4f, 0.0f);
+    position = glm::vec3(2.7f, 0.4f, 0.0f);
 }
 
 glm::mat4 Asteroid::translate(Window *window)
 {
     const glm::vec3 target = Spaceship::getInstance().getPosition();
-    glm::vec3 direction = target - positionValue;
+    glm::vec3 direction = target - position;
 
     const float distance = glm::length(direction);
     if (distance > 0.001f) {
         direction /= distance;
-        positionValue += direction * (chaseSpeed * window->getDeltaTime());
+        position += direction * (chaseSpeed * window->getDeltaTime());
     }
 
-    return Matrix_Translate(positionValue.x, positionValue.y, positionValue.z);
+    return Matrix_Translate(position.x, position.y, position.z);
 }
 glm::mat4 Asteroid::rotate(Window *window) { return Matrix_Rotate_Y(window->getCurrentFrame() * 1.7f); }
 

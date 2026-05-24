@@ -30,7 +30,7 @@ protected:
     const Collider &collider;
     const glm::vec3 color;
     glm::vec3 scaleValue;
-    glm::vec3 positionValue;
+    glm::vec3 position;
 
     virtual glm::mat4 translate(Window *window) = 0;
     virtual glm::mat4 rotate(Window *window) = 0;

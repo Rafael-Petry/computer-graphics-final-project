@@ -22,7 +22,7 @@ Sun::Sun() : CelestialBody(mesh, boundingSphere, glm::vec3(1.0f, 1.0f, 0.0f))
     }
 
     scaleValue = glm::vec3(1.1f);
-    positionValue = glm::vec3(0.0f, 0.0f, 0.0f);
+    position = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
 Sun &Sun::getInstance()
@@ -31,5 +31,5 @@ Sun &Sun::getInstance()
     return instance;
 }
 
-glm::mat4 Sun::translate(Window *window) { return Matrix_Translate(positionValue.x, positionValue.y, positionValue.z); }
+glm::mat4 Sun::translate(Window *window) { return Matrix_Translate(position.x, position.y, position.z); }
 glm::mat4 Sun::rotate(Window *window) { return Matrix_Rotate_Y(window->getCurrentFrame() * 0.1f); }

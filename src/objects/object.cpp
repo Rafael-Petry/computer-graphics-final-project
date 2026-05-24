@@ -10,7 +10,7 @@
 #include "../../vendor/include/matrices.h"
 
 Object::Object(const Mesh &mesh, const Collider &collider, const glm::vec3 &color)
-    : mesh(mesh), collider(collider), color(color), scaleValue(1.0f), positionValue(0.0f)
+    : mesh(mesh), collider(collider), color(color), scaleValue(1.0f), position(0.0f)
 {
 }
 
@@ -27,7 +27,7 @@ const Collider &Object::getCollider() const { return collider; }
 
 const glm::vec3 &Object::getScale() const { return scaleValue; }
 
-const glm::vec3 &Object::getPosition() const { return positionValue; }
+const glm::vec3 &Object::getPosition() const { return position; }
 
 glm::mat4 Object::scale(Window *window)
 {
