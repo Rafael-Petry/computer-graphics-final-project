@@ -20,6 +20,11 @@ void Scene::update(GLint modelUniform, GLint colorUniform, Window *window)
 
 void Scene::checkCollisions()
 {
+    // I was afraid that when we add trees to each planet, the amount of colliders added to the grid would increase drastically
+    // But, an easy workaround that could be tested is, since the trees always have the same position relative to the planet,
+    // we can check the distance from spaceship to the planet, and only add the planet's trees to the grid if the spaceship is
+    // close enough to the planet.
+
     collisionGrid.clear();
 
     const glm::vec3 spaceshipPosition(spaceship.getPosition());
@@ -30,6 +35,8 @@ void Scene::checkCollisions()
     const glm::vec3 asteroidScale(0.1f);
     collisionGrid.addBoundingSphere(asteroid.getBoundingSphere(), asteroidPosition, asteroidScale);
 
+    // I think in order to run different functionalities when colliding with different objects I could
+    // add a pointer to the object in the CollisionProxy struct, and then run a specific collide function
     collisionGrid.forEachPotentialPair([&](const CollisionProxy &a, const CollisionProxy &b) {
         if (a.shape == ColliderShape::Sphere && b.shape == ColliderShape::Box) {
             a.sphere->testCollision(*b.box, a.position, a.scale, b.position, b.scale);
