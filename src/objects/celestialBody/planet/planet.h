@@ -15,6 +15,7 @@ public:
     Planet(const glm::vec3 &color = glm::vec3(0.0f, 1.0f, 0.0f));
 
 protected:
+    void collide(Window *window) override;
     glm::mat4 translate(Window *window) override;
     glm::mat4 rotate(Window *window) override;
 

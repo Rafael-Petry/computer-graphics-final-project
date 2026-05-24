@@ -3,6 +3,7 @@
 #include <glm/mat4x4.hpp>
 
 #include "sun.h"
+#include "../../spaceship/spaceship.h"
 #include "../../../helpers/collision/collision.h"
 #include "../../../helpers/render/render.h"
 #include "../../../window/window.h"
@@ -29,6 +30,15 @@ Sun &Sun::getInstance()
 {
     static Sun instance;
     return instance;
+}
+
+void Sun::collide(Window *window)
+{
+    const Spaceship &spaceship = Spaceship::getInstance();
+
+    if (boundingSphere.testCollisionBoundingBox(*this, spaceship)) {
+        std::cout << "The sun collided with the spaceship!" << std::endl;
+    }
 }
 
 glm::mat4 Sun::translate(Window *window) { return Matrix_Translate(position.x, position.y, position.z); }
