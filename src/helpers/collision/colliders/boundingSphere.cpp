@@ -18,6 +18,10 @@ BoundingSphere::BoundingSphere(const glm::vec3 &center, float radius) : center(c
 
 bool BoundingSphere::isInitialized() const { return initialized; }
 
+const glm::vec3 &BoundingSphere::getCenter() const { return center; }
+
+float BoundingSphere::getRadius() const { return radius; }
+
 bool BoundingSphere::testCollision(
     const BoundingSphere &other, const glm::vec3 &position, const glm::vec3 &scale, const glm::vec3 &otherPosition, const glm::vec3 &otherScale) const
 {

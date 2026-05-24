@@ -15,6 +15,7 @@ set(SOURCES
   src/objects/celestialBody/planet/planet.cpp
   src/helpers/movement/movement.cpp
   src/helpers/collision/collision.cpp
+  src/helpers/collision/uniformGrid.cpp
   src/helpers/collision/colliders/boundingBox.cpp
   src/helpers/collision/colliders/boundingSphere.cpp
   src/helpers/render/render.cpp

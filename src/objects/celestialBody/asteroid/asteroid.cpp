@@ -32,10 +32,11 @@ glm::mat4 Asteroid::translate(Window *window)
         position += direction * (chaseSpeed * window->getDeltaTime());
     }
 
-    const Spaceship &spaceship = Spaceship::getInstance();
-    boundingSphere.testCollision(spaceship.getBoundingBox(), glm::vec3(position), glm::vec3(0.1f), glm::vec3(spaceship.getPosition()), glm::vec3(0.3f));
-
     return Matrix_Translate(position.x, position.y, position.z);
 }
 glm::mat4 Asteroid::rotate(Window *window) { return Matrix_Rotate_Y(window->getCurrentFrame() * 1.7f); }
 glm::mat4 Asteroid::scale(Window *window) { return Matrix_Scale(0.1f, 0.1f, 0.1f); }
+
+glm::vec4 Asteroid::getPosition() const { return position; }
+
+const BoundingSphere &Asteroid::getBoundingSphere() const { return boundingSphere; }

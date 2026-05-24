@@ -14,6 +14,8 @@ public:
     BoundingSphere(const glm::vec3 &center, float radius);
 
     bool isInitialized() const override;
+    const glm::vec3 &getCenter() const;
+    float getRadius() const;
     bool testCollision(const BoundingSphere &other, const glm::vec3 &position, const glm::vec3 &scale, const glm::vec3 &otherPosition, const glm::vec3 &otherScale) const;
     bool testCollision(const BoundingBox &other, const glm::vec3 &position, const glm::vec3 &scale, const glm::vec3 &otherPosition, const glm::vec3 &otherScale) const;
 
