@@ -3,6 +3,7 @@
 
 #include <glad/glad.h>
 #include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
 #include "../../helpers/collision/colliders/boundingBox.h"
@@ -21,7 +22,6 @@ public:
     void update(GLint modelUniform, GLint colorUniform, Window *window);
     void updateRotation(Window *window);
 
-    glm::vec4 getPosition() const;
     glm::mat4 getViewMatrix() const;
     const BoundingBox &getBoundingBox() const;
     static void updateView(GLFWwindow *window, double xpos, double ypos);
@@ -29,7 +29,6 @@ public:
 protected:
     glm::mat4 translate(Window *window) override;
     glm::mat4 rotate(Window *window) override;
-    glm::mat4 scale(Window *window) override;
 
 private:
     Spaceship(const glm::vec3 &color = glm::vec3(0.73f, 0.79f, 0.88f));
@@ -37,7 +36,6 @@ private:
     void shoot() const;
     void updateOrientation(float deltaYaw, float deltaPitch, float deltaRoll);
 
-    glm::vec4 position;
     glm::vec4 velocity;
     glm::vec4 front;
     glm::vec4 up;

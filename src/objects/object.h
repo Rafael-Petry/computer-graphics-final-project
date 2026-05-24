@@ -22,15 +22,20 @@ public:
     void update(GLint modelUniform, GLint colorUniform, Window *window);
     const Mesh &getMesh() const;
     const Collider &getCollider() const;
+    const glm::vec3 &getScale() const;
+    const glm::vec3 &getPosition() const;
 
 protected:
     const Mesh &mesh;
     const Collider &collider;
     const glm::vec3 color;
+    glm::vec3 scaleValue;
+    glm::vec3 positionValue;
 
     virtual glm::mat4 translate(Window *window) = 0;
     virtual glm::mat4 rotate(Window *window) = 0;
-    virtual glm::mat4 scale(Window *window) = 0;
+    virtual glm::mat4 scale(Window *window);
+    virtual void collide(Window *window);
 };
 
 #endif

@@ -2,6 +2,7 @@
 #define PLANET_H
 
 #include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
 
 #include "../../objects/celestialBody/celestialBody.h"
 #include "../../../helpers/collision/colliders/boundingSphere.h"
@@ -16,7 +17,6 @@ public:
 protected:
     glm::mat4 translate(Window *window) override;
     glm::mat4 rotate(Window *window) override;
-    glm::mat4 scale(Window *window) override;
 
 private:
     float orbitPhase = 0.0f;
