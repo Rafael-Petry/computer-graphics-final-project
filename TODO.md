@@ -60,7 +60,7 @@ This file defines a bunch of to do lists for different tasks and functionalities
 - [x] Create a simple collision check of asteroid with spaceship
 - [x] Create BoundingSphere class
 - [x] Refactor if necessary
-- [] Implement the spaceship shoot mechanic
+- [x] Implement the spaceship shoot mechanic
 - [] Define all necessary collision checks without functionality for now
 
 ## 7. Actually Make It a Game
