@@ -26,6 +26,8 @@ const glm::vec3 &Object::getScale() const { return scaleValue; }
 
 const glm::vec3 &Object::getPosition() const { return position; }
 
+void Object::setPosition(const glm::vec3 &newPosition) { position = newPosition; }
+
 glm::mat4 Object::scale(Window *window)
 {
     (void)window;

@@ -4,16 +4,21 @@
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
+#include <glm/geometric.hpp>
 
 #include "spaceship.h"
 #include "../../helpers/collision/collision.h"
+#include "../../helpers/collision/colliders/boundingSphere.h"
 #include "../../helpers/render/render.h"
 #include "../../helpers/movement/movement.h"
 #include "../../window/window.h"
+#include "../../objects/celestialBody/asteroid/asteroid.h"
 #include "../../vendor/include/matrices.h"
 
 Mesh Spaceship::mesh;
 BoundingBox Spaceship::boundingBox;
+Mesh Spaceship::crosshairMesh;
+Mesh Spaceship::rayMesh;
 
 Spaceship::Spaceship(const glm::vec3 &color) : Object(mesh, boundingBox, color)
 {
@@ -23,6 +28,14 @@ Spaceship::Spaceship(const glm::vec3 &color) : Object(mesh, boundingBox, color)
 
     if (!boundingBox.isInitialized() && mesh.vao != 0) {
         boundingBox = CollisionHelper::generateBoundingBox(mesh);
+    }
+
+    if (crosshairMesh.vao == 0) {
+        crosshairMesh = RenderHelper::loadObjMesh("../../src/objects/object.obj");
+    }
+
+    if (rayMesh.vao == 0) {
+        rayMesh = RenderHelper::createCylinderMesh(24);
     }
 
     front = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
@@ -50,6 +63,17 @@ void Spaceship::update(GLint modelUniform, GLint colorUniform, Window *window)
     }
 
     updateRotation(window);
+}
+
+void Spaceship::updateShooting(GLint modelUniform, GLint colorUniform, Window *window, std::vector<Asteroid> &asteroids)
+{
+    shoot(window, asteroids);
+
+    if (window->getCurrentFrame() <= rayVisibleUntil) {
+        renderRay(modelUniform, colorUniform);
+    }
+
+    renderCrosshair(modelUniform, colorUniform);
 }
 
 void Spaceship::updateRotation(Window *window)
@@ -165,7 +189,41 @@ void Spaceship::updateOrientation(float deltaYaw, float deltaPitch, float deltaR
     up = up / norm(up);
 }
 
-void Spaceship::shoot() const { std::cout << "The spaceship is shooting..." << std::endl; }
+void Spaceship::shoot(Window *window, std::vector<Asteroid> &asteroids)
+{
+    const float currentTime = window->getCurrentFrame();
+    if (glfwGetMouseButton(window->getGlfwWindow(), GLFW_MOUSE_BUTTON_LEFT) != GLFW_PRESS) {
+        return;
+    }
+
+    if ((currentTime - lastShotTime) < shotCooldown) {
+        return;
+    }
+
+    lastShotTime = currentTime;
+    rayVisibleUntil = currentTime + rayVisibleDuration;
+
+    rayOrigin = getCameraPosition();
+    rayDirection = glm::normalize(glm::vec3(front));
+
+    std::vector<Asteroid *> hitAsteroids;
+
+    for (Asteroid &asteroid : asteroids) {
+        const BoundingSphere *sphere = dynamic_cast<const BoundingSphere *>(&asteroid.getCollider());
+        if (sphere == nullptr) {
+            continue;
+        }
+
+        float hitDistance = 0.0f;
+        if (sphere->testRay(asteroid, rayOrigin, rayDirection, rayMaxRange, &hitDistance)) {
+            hitAsteroids.push_back(&asteroid);
+        }
+    }
+
+    for (Asteroid *asteroid : hitAsteroids) {
+        asteroid->onShotHit();
+    }
+}
 
 glm::mat4 Spaceship::translate(Window *window)
 {
@@ -203,4 +261,61 @@ glm::mat4 Spaceship::getViewMatrix() const
     return Matrix_cameraView(position4 + front, front, up);
 }
 
+glm::vec3 Spaceship::getCameraPosition() const { return position + glm::vec3(front); }
+
 const BoundingBox &Spaceship::getBoundingBox() const { return boundingBox; }
+
+glm::mat4 Spaceship::getOrientationMatrix() const
+{
+    return Matrix(right.x, up.x, front.x, 0.0f, right.y, up.y, front.y, 0.0f, right.z, up.z, front.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+}
+
+void Spaceship::renderCrosshair(GLint modelUniform, GLint colorUniform) const
+{
+    if (crosshairMesh.vao == 0) {
+        return;
+    }
+
+    const glm::vec3 center = getCameraPosition() + glm::vec3(front) * crosshairDistance;
+    const glm::mat4 orientation = getOrientationMatrix();
+
+    glDisable(GL_DEPTH_TEST);
+
+    const glm::vec3 crosshairColor(0.95f, 0.95f, 0.95f);
+    const glm::mat4 base = Matrix_Translate(center.x, center.y, center.z) * orientation;
+
+    const glm::mat4 horizontal = base * Matrix_Scale(crosshairLength, crosshairThickness, crosshairThickness);
+    RenderHelper::renderModel(modelUniform, colorUniform, horizontal, crosshairMesh, crosshairColor);
+
+    const glm::mat4 vertical = base * Matrix_Scale(crosshairThickness, crosshairLength, crosshairThickness);
+    RenderHelper::renderModel(modelUniform, colorUniform, vertical, crosshairMesh, crosshairColor);
+
+    glEnable(GL_DEPTH_TEST);
+}
+
+void Spaceship::renderRay(GLint modelUniform, GLint colorUniform) const
+{
+    if (rayMesh.vao == 0) {
+        return;
+    }
+
+    const glm::vec3 direction = glm::normalize(rayDirection);
+    glm::vec3 upDir = glm::vec3(worldUp);
+    if (std::fabs(glm::dot(direction, upDir)) > 0.98f) {
+        upDir = glm::vec3(0.0f, 0.0f, 1.0f);
+    }
+
+    const glm::vec3 rightDir = glm::normalize(glm::cross(upDir, direction));
+    const glm::vec3 fixedUp = glm::normalize(glm::cross(direction, rightDir));
+
+    const glm::mat4 orientation = Matrix(rightDir.x, fixedUp.x, direction.x, 0.0f,
+                                         rightDir.y, fixedUp.y, direction.y, 0.0f,
+                                         rightDir.z, fixedUp.z, direction.z, 0.0f,
+                                         0.0f, 0.0f, 0.0f, 1.0f);
+
+    const glm::vec3 center = rayOrigin + (direction * (rayMaxRange * 0.5f));
+    const float radiusScale = rayRadius * 2.0f;
+
+    const glm::mat4 model = Matrix_Translate(center.x, center.y, center.z) * orientation * Matrix_Scale(radiusScale, radiusScale, rayMaxRange);
+    RenderHelper::renderModel(modelUniform, colorUniform, model, rayMesh, glm::vec3(1.0f, 0.1f, 0.1f));
+}

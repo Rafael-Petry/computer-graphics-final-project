@@ -6,6 +6,8 @@
 #include "../objects/celestialBody/sun/sun.h"
 #include "../objects/spaceship/spaceship.h"
 
+#include <vector>
+
 class Window;
 
 class Scene
@@ -17,7 +19,8 @@ public:
 private:
     float lastFrame;
     Spaceship &spaceship;
-    Asteroid asteroid;
+    int asteroidCount = 10;
+    std::vector<Asteroid> asteroids;
     Planet planet;
     Sun &sun;
 };

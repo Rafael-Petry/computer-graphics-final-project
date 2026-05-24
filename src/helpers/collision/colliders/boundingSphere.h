@@ -17,6 +17,7 @@ public:
     bool isInitialized() const override;
     bool testCollisionBoundingSphere(const Object &objectA, const Object &objectB) const;
     bool testCollisionBoundingBox(const Object &sphereObject, const Object &boxObject) const;
+    bool testRay(const Object &sphereObject, const glm::vec3 &rayOrigin, const glm::vec3 &rayDirection, float maxDistance, float *hitDistance) const;
 
 private:
     glm::vec3 center;

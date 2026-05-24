@@ -123,3 +123,15 @@ Create a Collider class and make BoundingBox extend it. Create a BoundingSphere 
 Change the Object class to have a property scale and a getScale method that returns it. Use the scale property on the scale() method of transform. Then, change the testCollision methods on the colliders classes to instead only take two objects as parameters and use their getters to implement the test. Undo the testCollision overloading where it exists, by specifying different tests, such as testCollisionBoundingBox and testCollisionSpheres. Create a separate collide() method for the Object class and call it after all the transform operations, so you can also isolate the testCollision call on Asteroid's translate into this method.
 
 Add the position property to the Object class so all objects just extend it. Change the Object class getPosition to always return that and remove getPosition from child classes.
+
+## 24-spaceship-shooting
+
+Add a functionality for the spaceship be able to shoot an instant speed ray that collides with any asteroid that it finds in its way. Add a crosshair to the camera to indicate where the ray will be shot. The ray needs to have a max range, so anything further from this range doesn't get hit. There needs to be a 1 second cooldown between each shot. Make the ray visible as a red cilindrical line that extends from the camera.
+
+## 25-multiple-asteroids
+
+Change the scene to instead have multiple asteroids (add a property that controls the amount, by default 10). Each asteroid has to spawn on a random position. Shooting has to test collision with each asteroid.
+
+Make it so the shot can do collateral damage to asteroids behind the one being hit.
+
+When hit, the asteroid need to be respawned on a different random position too.

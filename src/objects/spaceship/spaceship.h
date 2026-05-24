@@ -2,11 +2,13 @@
 #define SPACESHIP_H
 
 #include <glad/glad.h>
+#include <vector>
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
 #include "../../helpers/collision/colliders/boundingBox.h"
+#include "../celestialBody/asteroid/asteroid.h"
 #include "../object.h"
 
 class Window;
@@ -20,9 +22,11 @@ public:
     static Spaceship &getInstance();
 
     void update(GLint modelUniform, GLint colorUniform, Window *window);
+    void updateShooting(GLint modelUniform, GLint colorUniform, Window *window, std::vector<Asteroid> &asteroids);
     void updateRotation(Window *window);
 
     glm::mat4 getViewMatrix() const;
+    glm::vec3 getCameraPosition() const;
     const BoundingBox &getBoundingBox() const;
     static void updateView(GLFWwindow *window, double xpos, double ypos);
 
@@ -33,7 +37,10 @@ protected:
 private:
     Spaceship(const glm::vec3 &color = glm::vec3(0.73f, 0.79f, 0.88f));
 
-    void shoot() const;
+    void shoot(Window *window, std::vector<Asteroid> &asteroids);
+    void renderCrosshair(GLint modelUniform, GLint colorUniform) const;
+    void renderRay(GLint modelUniform, GLint colorUniform) const;
+    glm::mat4 getOrientationMatrix() const;
     void updateOrientation(float deltaYaw, float deltaPitch, float deltaRoll);
 
     glm::vec4 velocity;
@@ -67,8 +74,23 @@ private:
 
     bool isRolling = false;
 
+    float lastShotTime = -1000.0f;
+    float shotCooldown = 1.0f;
+    float rayVisibleUntil = -1000.0f;
+    float rayVisibleDuration = 0.12f;
+    float rayMaxRange = 50.0f;
+    float rayRadius = 0.02f;
+    float crosshairDistance = 2.0f;
+    float crosshairLength = 0.08f;
+    float crosshairThickness = 0.008f;
+
+    glm::vec3 rayOrigin = glm::vec3(0.0f);
+    glm::vec3 rayDirection = glm::vec3(0.0f, 0.0f, -1.0f);
+
     static Mesh mesh;
     static BoundingBox boundingBox;
+    static Mesh crosshairMesh;
+    static Mesh rayMesh;
 };
 
 #endif

@@ -77,3 +77,41 @@ bool BoundingSphere::testCollisionBoundingBox(const Object &sphereObject, const 
 
     return false;
 }
+
+bool BoundingSphere::testRay(const Object &sphereObject, const glm::vec3 &rayOrigin, const glm::vec3 &rayDirection, float maxDistance, float *hitDistance) const
+{
+    if (!initialized) {
+        return false;
+    }
+
+    const glm::vec3 sphereScale = sphereObject.getScale();
+    const glm::vec3 spherePosition = sphereObject.getPosition();
+
+    const float scaledRadius = radius * maxAbsComponent(sphereScale);
+    const glm::vec3 worldCenter = (center * sphereScale) + spherePosition;
+
+    const glm::vec3 originToCenter = rayOrigin - worldCenter;
+    const float b = glm::dot(originToCenter, rayDirection);
+    const float c = glm::dot(originToCenter, originToCenter) - (scaledRadius * scaledRadius);
+
+    const float discriminant = (b * b) - c;
+    if (discriminant < 0.0f) {
+        return false;
+    }
+
+    const float sqrtDisc = std::sqrt(discriminant);
+    float t = -b - sqrtDisc;
+    if (t < 0.0f) {
+        t = -b + sqrtDisc;
+    }
+
+    if (t < 0.0f || t > maxDistance) {
+        return false;
+    }
+
+    if (hitDistance != nullptr) {
+        *hitDistance = t;
+    }
+
+    return true;
+}
