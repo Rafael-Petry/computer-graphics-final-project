@@ -5,6 +5,8 @@
 
 #include "collider.h"
 
+class Object;
+
 class BoundingBox : public Collider
 {
 public:
@@ -14,7 +16,7 @@ public:
     bool isInitialized() const override;
     const glm::vec3 &getMin() const;
     const glm::vec3 &getMax() const;
-    bool testCollision(const BoundingBox &other, const glm::vec3 &position, const glm::vec3 &scale, const glm::vec3 &otherPosition, const glm::vec3 &otherScale) const;
+    bool testCollisionBoundingBox(const Object &objectA, const Object &objectB) const;
 
 private:
     glm::vec3 min;

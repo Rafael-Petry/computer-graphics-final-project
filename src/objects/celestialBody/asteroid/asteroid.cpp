@@ -1,4 +1,5 @@
 #include <iostream>
+#include <glm/geometric.hpp>
 #include "asteroid.h"
 #include "../../../helpers/collision/collision.h"
 #include "../../../helpers/render/render.h"
@@ -9,7 +10,7 @@
 Mesh Asteroid::mesh;
 BoundingSphere Asteroid::boundingSphere;
 
-Asteroid::Asteroid(const glm::vec3 &color) : CelestialBody(mesh, boundingSphere, color), position(2.7f, 0.4f, 0.0f, 1.0f)
+Asteroid::Asteroid(const glm::vec3 &color) : CelestialBody(mesh, boundingSphere, color)
 {
     if (mesh.vao == 0) {
         mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/asteroid/asteroid.obj");
@@ -18,24 +19,31 @@ Asteroid::Asteroid(const glm::vec3 &color) : CelestialBody(mesh, boundingSphere,
     if (!boundingSphere.isInitialized() && mesh.vao != 0) {
         boundingSphere = CollisionHelper::generateBoundingSphere(mesh);
     }
+
+    scaleValue = glm::vec3(0.1f);
+    position = glm::vec3(2.7f, 0.4f, 0.0f);
 }
 
 glm::mat4 Asteroid::translate(Window *window)
 {
-    const glm::vec4 target = Spaceship::getInstance().getPosition();
-    glm::vec4 direction = target - position;
-    direction.w = 0.0f;
+    const glm::vec3 target = Spaceship::getInstance().getPosition();
+    glm::vec3 direction = target - position;
 
-    const float distance = norm(direction);
+    const float distance = glm::length(direction);
     if (distance > 0.001f) {
         direction /= distance;
         position += direction * (chaseSpeed * window->getDeltaTime());
     }
 
-    const Spaceship &spaceship = Spaceship::getInstance();
-    boundingSphere.testCollision(spaceship.getBoundingBox(), glm::vec3(position), glm::vec3(0.1f), glm::vec3(spaceship.getPosition()), glm::vec3(0.3f));
-
     return Matrix_Translate(position.x, position.y, position.z);
 }
 glm::mat4 Asteroid::rotate(Window *window) { return Matrix_Rotate_Y(window->getCurrentFrame() * 1.7f); }
-glm::mat4 Asteroid::scale(Window *window) { return Matrix_Scale(0.1f, 0.1f, 0.1f); }
+
+void Asteroid::collide(Window *window)
+{
+    const Spaceship &spaceship = Spaceship::getInstance();
+
+    if (boundingSphere.testCollisionBoundingBox(*this, spaceship)) {
+        std::cout << "An asteroid collided with the spaceship!" << std::endl;
+    }
+}

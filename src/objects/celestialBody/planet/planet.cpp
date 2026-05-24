@@ -35,6 +35,9 @@ Planet::Planet(const glm::vec3 &color) : CelestialBody(mesh, boundingSphere, col
     if (!boundingSphere.isInitialized() && mesh.vao != 0) {
         boundingSphere = CollisionHelper::generateBoundingSphere(mesh);
     }
+
+    scaleValue = glm::vec3(0.6f);
+    position = glm::vec3(0.0f);
 }
 
 glm::mat4 Planet::translate(Window *window)
@@ -57,7 +60,6 @@ glm::mat4 Planet::translate(Window *window)
                                  center + glm::vec3(orbitRadius, 0.0f, -orbitRadius),
                                  center + glm::vec3(orbitRadius, 0.0f, 0.0f)};
 
-    glm::vec3 position(0.0f);
     if (orbitPhase < 1.0f) {
         position = cubicBezier(curve1[0], curve1[1], curve1[2], curve1[3], orbitPhase);
     } else {
@@ -67,4 +69,3 @@ glm::mat4 Planet::translate(Window *window)
     return Matrix_Translate(position.x, position.y, position.z);
 }
 glm::mat4 Planet::rotate(Window *window) { return Matrix_Rotate_Y(window->getCurrentFrame() * 1.7f); }
-glm::mat4 Planet::scale(Window *window) { return Matrix_Scale(0.6f, 0.6f, 0.6f); }

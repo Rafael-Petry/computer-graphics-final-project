@@ -6,6 +6,7 @@
 #include "collider.h"
 
 class BoundingBox;
+class Object;
 
 class BoundingSphere : public Collider
 {
@@ -14,8 +15,8 @@ public:
     BoundingSphere(const glm::vec3 &center, float radius);
 
     bool isInitialized() const override;
-    bool testCollision(const BoundingSphere &other, const glm::vec3 &position, const glm::vec3 &scale, const glm::vec3 &otherPosition, const glm::vec3 &otherScale) const;
-    bool testCollision(const BoundingBox &other, const glm::vec3 &position, const glm::vec3 &scale, const glm::vec3 &otherPosition, const glm::vec3 &otherScale) const;
+    bool testCollisionBoundingSphere(const Object &objectA, const Object &objectB) const;
+    bool testCollisionBoundingBox(const Object &sphereObject, const Object &boxObject) const;
 
 private:
     glm::vec3 center;

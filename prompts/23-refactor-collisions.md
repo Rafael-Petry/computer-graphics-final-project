@@ -1,0 +1,5 @@
+# 23-refactor-collisions
+
+Change the Object class to have a property scale and a getScale method that returns it. Use the scale property on the scale() method of transform. Then, change the testCollision methods on the colliders classes to instead only take two objects as parameters and use their getters to implement the test. Undo the testCollision overloading where it exists, by specifying different tests, such as testCollisionBoundingBox and testCollisionSpheres. Create a separate collide() method for the Object class and call it after all the transform operations, so you can also isolate the testCollision call on Asteroid's translate into this method.
+
+Add the position property to the Object class so all objects just extend it. Change the Object class getPosition to always return that and remove getPosition from child classes.

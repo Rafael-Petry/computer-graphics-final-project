@@ -11,7 +11,7 @@
 Mesh Sun::mesh;
 BoundingSphere Sun::boundingSphere;
 
-Sun::Sun() : CelestialBody(mesh, boundingSphere, glm::vec3(1.0f, 1.0f, 0.0f)), position(0.0f, 0.0f, 0.0f)
+Sun::Sun() : CelestialBody(mesh, boundingSphere, glm::vec3(1.0f, 1.0f, 0.0f))
 {
     if (mesh.vao == 0) {
         mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/sun/sun.obj");
@@ -20,6 +20,9 @@ Sun::Sun() : CelestialBody(mesh, boundingSphere, glm::vec3(1.0f, 1.0f, 0.0f)), p
     if (!boundingSphere.isInitialized() && mesh.vao != 0) {
         boundingSphere = CollisionHelper::generateBoundingSphere(mesh);
     }
+
+    scaleValue = glm::vec3(1.1f);
+    position = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
 Sun &Sun::getInstance()
@@ -28,8 +31,5 @@ Sun &Sun::getInstance()
     return instance;
 }
 
-glm::vec3 Sun::getPosition() const { return position; }
-
 glm::mat4 Sun::translate(Window *window) { return Matrix_Translate(position.x, position.y, position.z); }
 glm::mat4 Sun::rotate(Window *window) { return Matrix_Rotate_Y(window->getCurrentFrame() * 0.1f); }
-glm::mat4 Sun::scale(Window *window) { return Matrix_Scale(1.1f, 1.1f, 1.1f); }
