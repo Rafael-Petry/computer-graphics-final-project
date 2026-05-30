@@ -55,7 +55,6 @@ void Asteroid::collide(Window *window)
     const Spaceship &spaceship = Spaceship::getInstance();
 
     if (boundingSphere.testCollisionBoundingBox(*this, spaceship)) {
-        std::cout << "An asteroid collided with the spaceship!" << std::endl;
         Spaceship::getInstance().applyDamage(1);
         onShotHit();
     }
@@ -63,7 +62,6 @@ void Asteroid::collide(Window *window)
 
 void Asteroid::onShotHit()
 {
-    std::cout << "Asteroid hit by a shot." << std::endl;
     std::mt19937 rng(std::random_device{}());
     glm::vec3 newPosition = position;
     for (int attempt = 0; attempt < 6 && glm::length(newPosition - position) < 0.01f; ++attempt) {
