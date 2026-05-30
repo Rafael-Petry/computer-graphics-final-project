@@ -6,29 +6,15 @@
 #include <vector>
 
 #include "../objects/celestialBody/sun/sun.h"
+#include "../helpers/asteroidSpawner/asteroidSpawner.h"
 #include "../window/window.h"
 #include "scene.h"
 #include "../../vendor/include/matrices.h"
 #include <imgui.h>
 
-namespace {
-    glm::vec3 randomAsteroidPosition(std::mt19937 &rng)
-    {
-        std::uniform_real_distribution<float> distX(-6.0f, 6.0f);
-        std::uniform_real_distribution<float> distY(-1.0f, 1.0f);
-        std::uniform_real_distribution<float> distZ(-6.0f, 6.0f);
-        return glm::vec3(distX(rng), distY(rng), distZ(rng));
-    }
-}
-
-Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spaceship::getInstance()), asteroidCount(10), planet(), sun(Sun::getInstance())
+Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spaceship::getInstance()), planet(), sun(Sun::getInstance())
 {
-    std::mt19937 rng(std::random_device{}());
-    for (int i = 0; i < asteroidCount; ++i) {
-        asteroids.emplace_back();
-        Asteroid &asteroid = asteroids.back();
-        asteroid.setPosition(randomAsteroidPosition(rng));
-    }
+    AsteroidSpawnerHelper::initialize(asteroids, spaceship);
 }
 
 void Scene::update(GLint modelUniform, GLint colorUniform, Window *window)
@@ -37,7 +23,9 @@ void Scene::update(GLint modelUniform, GLint colorUniform, Window *window)
     sun.update(modelUniform, colorUniform, window);
     planet.update(modelUniform, colorUniform, window);
     for (Asteroid &asteroid : asteroids) {
-        asteroid.update(modelUniform, colorUniform, window);
+        if (!asteroid.isDestroyed()) {
+            asteroid.update(modelUniform, colorUniform, window);
+        }
     }
     spaceship.updateShooting(modelUniform, colorUniform, window, asteroids);
 
@@ -67,6 +55,9 @@ void Scene::update(GLint modelUniform, GLint colorUniform, Window *window)
             fragment.setPosition(spawn.origin + offset);
         }
     }
+
+    asteroids.remove_if([](const Asteroid &asteroid) { return asteroid.isDestroyed(); });
+    AsteroidSpawnerHelper::update(asteroids, spaceship, window->getCurrentFrame());
 
     ImGuiIO &io = ImGui::GetIO();
     const float padding = 12.0f;

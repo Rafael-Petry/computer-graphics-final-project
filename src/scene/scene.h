@@ -19,7 +19,6 @@ public:
 private:
     float lastFrame;
     Spaceship &spaceship;
-    int asteroidCount = 10;
     std::list<Asteroid> asteroids;
     Planet planet;
     Sun &sun;

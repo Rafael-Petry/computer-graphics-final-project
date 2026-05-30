@@ -14,6 +14,7 @@ set(SOURCES
   src/objects/celestialBody/sun/sun.cpp
   src/objects/celestialBody/planet/planet.cpp
   src/helpers/movement/movement.cpp
+  src/helpers/asteroidSpawner/asteroidSpawner.cpp
   src/helpers/collision/collision.cpp
   src/helpers/collision/colliders/boundingBox.cpp
   src/helpers/collision/colliders/boundingSphere.cpp
