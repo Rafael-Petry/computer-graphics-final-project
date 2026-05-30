@@ -67,7 +67,7 @@ This file defines a bunch of to do lists for different tasks and functionalities
 
 - [x] Create a health UI
 - [x] Create a score UI
-- [-] There should be a spawner for asteroids (needs refactoring)
+- [x] There should be a spawner for asteroids (needs refactoring)
 - [x] Shoot collision needs to destroy asteroids and update score
 - [x] Asteroids should have different sizes (small, medium and large)
 - [x] Asteroid destruction needs to spawn smaller asteroids if possible
