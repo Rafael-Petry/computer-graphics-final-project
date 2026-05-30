@@ -35,8 +35,8 @@ protected:
     void collide(Window *window) override;
 
 private:
-    float chaseSpeed = 1.4f;
-    float baseChaseSpeed = 1.4f;
+    float chaseSpeed;
+    float baseChaseSpeed = 2.8f;
     Size size = Size::Medium;
     float baseScale = 0.1f;
     bool enableRespawn = false;
