@@ -12,14 +12,6 @@ Mesh Asteroid::mesh;
 BoundingSphere Asteroid::boundingSphere;
 
 namespace {
-    glm::vec3 randomAsteroidPosition(std::mt19937 &rng)
-    {
-        std::uniform_real_distribution<float> distX(-6.0f, 6.0f);
-        std::uniform_real_distribution<float> distY(-1.0f, 1.0f);
-        std::uniform_real_distribution<float> distZ(-6.0f, 6.0f);
-        return glm::vec3(distX(rng), distY(rng), distZ(rng));
-    }
-
     float sizeScale(Asteroid::Size size)
     {
         switch (size) {
@@ -85,10 +77,6 @@ void Asteroid::setSize(Size newSize)
 
 Asteroid::Size Asteroid::getSize() const { return size; }
 
-void Asteroid::setEnableRespawn(bool enabled) { enableRespawn = enabled; }
-
-bool Asteroid::isRespawnEnabled() const { return enableRespawn; }
-
 bool Asteroid::isDestroyed() const { return destroyed; }
 
 bool Asteroid::consumeFragmentSpawn(Size &outSize, glm::vec3 &outOrigin)
@@ -136,18 +124,7 @@ void Asteroid::onShotHit()
         fragmentOrigin = position;
     }
 
-    if (!enableRespawn) {
-        destroyed = true;
-        scaleValue = glm::vec3(0.0f);
-        chaseSpeed = 0.0f;
-        return;
-    }
-
-    std::mt19937 rng(std::random_device{}());
-    glm::vec3 newPosition = position;
-    for (int attempt = 0; attempt < 6 && glm::length(newPosition - position) < 0.01f; ++attempt) {
-        newPosition = randomAsteroidPosition(rng);
-    }
-    setSize(randomAsteroidSize(rng));
-    setPosition(newPosition);
+    destroyed = true;
+    scaleValue = glm::vec3(0.0f);
+    chaseSpeed = 0.0f;
 }

@@ -24,8 +24,6 @@ public:
     void onShotHit();
     void setSize(Size newSize);
     Size getSize() const;
-    void setEnableRespawn(bool enabled);
-    bool isRespawnEnabled() const;
     bool isDestroyed() const;
     bool consumeFragmentSpawn(Size &outSize, glm::vec3 &outOrigin);
 
@@ -39,7 +37,6 @@ private:
     float baseChaseSpeed = 2.8f;
     Size size = Size::Medium;
     float baseScale = 0.1f;
-    bool enableRespawn = false;
     bool destroyed = false;
     bool pendingFragmentSpawn = false;
     Size fragmentSize = Size::Small;

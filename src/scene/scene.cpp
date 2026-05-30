@@ -27,7 +27,6 @@ Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spacesh
     for (int i = 0; i < asteroidCount; ++i) {
         asteroids.emplace_back();
         Asteroid &asteroid = asteroids.back();
-        asteroid.setEnableRespawn(true);
         asteroid.setPosition(randomAsteroidPosition(rng));
     }
 }
@@ -63,7 +62,6 @@ void Scene::update(GLint modelUniform, GLint colorUniform, Window *window)
         for (int i = 0; i < 3; ++i) {
             asteroids.emplace_back();
             Asteroid &fragment = asteroids.back();
-            fragment.setEnableRespawn(false);
             fragment.setSize(spawn.size);
             glm::vec3 offset(offsetDist(rng), offsetDist(rng), offsetDist(rng));
             fragment.setPosition(spawn.origin + offset);
