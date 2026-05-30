@@ -6,6 +6,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <imgui.h>
+#include <backends/imgui_impl_glfw.h>
+#include <backends/imgui_impl_opengl3.h>
+
 #include "../scene/scene.h"
 #include "window.h"
 #include "../../vendor/include/matrices.h"
@@ -45,8 +49,7 @@ void Window::keyCallback(GLFWwindow *glfwWindow, int key, int scancode, int acti
             GLFWmonitor *primaryMonitor = glfwGetPrimaryMonitor();
             const GLFWvidmode *mode = glfwGetVideoMode(primaryMonitor);
             glfwSetWindowMonitor(window.getGlfwWindow(), primaryMonitor, 0, 0, mode->width, mode->height, mode->refreshRate);
-        }
-        else {
+        } else {
             glfwSetWindowMonitor(window.getGlfwWindow(), NULL, 0, 0, window.width, window.height, GLFW_DONT_CARE);
         }
     }
@@ -101,6 +104,13 @@ bool Window::initialize(int width, int height, std::string title)
 
     glEnable(GL_DEPTH_TEST);
 
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(glfwWindow, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+    imguiInitialized = true;
+
     return true;
 }
 
@@ -113,7 +123,19 @@ void Window::update(GLuint shaderProgram)
 
     updateShaderProgram(shaderProgram);
     updateTime();
+
+    if (imguiInitialized) {
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+    }
+
     updateScene(shaderProgram);
+
+    if (imguiInitialized) {
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    }
 
     glfwSetKeyCallback(glfwWindow, keyCallback);
     glfwSwapBuffers(glfwWindow);
@@ -157,6 +179,13 @@ void Window::updateScene(GLuint shaderProgram)
 
 void Window::close()
 {
+    if (imguiInitialized) {
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
+        imguiInitialized = false;
+    }
+
     glfwDestroyWindow(glfwWindow);
     glfwWindow = nullptr;
 }

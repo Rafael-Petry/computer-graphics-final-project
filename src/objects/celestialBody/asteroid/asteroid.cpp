@@ -11,15 +11,14 @@
 Mesh Asteroid::mesh;
 BoundingSphere Asteroid::boundingSphere;
 
-namespace
-{
-glm::vec3 randomAsteroidPosition(std::mt19937 &rng)
-{
-    std::uniform_real_distribution<float> distX(-6.0f, 6.0f);
-    std::uniform_real_distribution<float> distY(-1.0f, 1.0f);
-    std::uniform_real_distribution<float> distZ(-6.0f, 6.0f);
-    return glm::vec3(distX(rng), distY(rng), distZ(rng));
-}
+namespace {
+    glm::vec3 randomAsteroidPosition(std::mt19937 &rng)
+    {
+        std::uniform_real_distribution<float> distX(-6.0f, 6.0f);
+        std::uniform_real_distribution<float> distY(-1.0f, 1.0f);
+        std::uniform_real_distribution<float> distZ(-6.0f, 6.0f);
+        return glm::vec3(distX(rng), distY(rng), distZ(rng));
+    }
 }
 
 Asteroid::Asteroid(const glm::vec3 &color) : CelestialBody(mesh, boundingSphere, color)
@@ -57,6 +56,8 @@ void Asteroid::collide(Window *window)
 
     if (boundingSphere.testCollisionBoundingBox(*this, spaceship)) {
         std::cout << "An asteroid collided with the spaceship!" << std::endl;
+        Spaceship::getInstance().applyDamage(1);
+        onShotHit();
     }
 }
 

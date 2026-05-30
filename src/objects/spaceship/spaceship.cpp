@@ -222,6 +222,7 @@ void Spaceship::shoot(Window *window, std::vector<Asteroid> &asteroids)
 
     for (Asteroid *asteroid : hitAsteroids) {
         asteroid->onShotHit();
+        addScore(100);
     }
 }
 
@@ -264,6 +265,31 @@ glm::mat4 Spaceship::getViewMatrix() const
 glm::vec3 Spaceship::getCameraPosition() const { return position + glm::vec3(front); }
 
 const BoundingBox &Spaceship::getBoundingBox() const { return boundingBox; }
+
+int Spaceship::getScore() const { return score; }
+
+int Spaceship::getHealth() const { return health; }
+
+void Spaceship::addScore(int amount)
+{
+    if (amount <= 0) {
+        return;
+    }
+
+    score += amount;
+}
+
+void Spaceship::applyDamage(int amount)
+{
+    if (amount <= 0) {
+        return;
+    }
+
+    health -= amount;
+    if (health < 0) {
+        health = 0;
+    }
+}
 
 glm::mat4 Spaceship::getOrientationMatrix() const
 {
@@ -308,10 +334,8 @@ void Spaceship::renderRay(GLint modelUniform, GLint colorUniform) const
     const glm::vec3 rightDir = glm::normalize(glm::cross(upDir, direction));
     const glm::vec3 fixedUp = glm::normalize(glm::cross(direction, rightDir));
 
-    const glm::mat4 orientation = Matrix(rightDir.x, fixedUp.x, direction.x, 0.0f,
-                                         rightDir.y, fixedUp.y, direction.y, 0.0f,
-                                         rightDir.z, fixedUp.z, direction.z, 0.0f,
-                                         0.0f, 0.0f, 0.0f, 1.0f);
+    const glm::mat4 orientation =
+        Matrix(rightDir.x, fixedUp.x, direction.x, 0.0f, rightDir.y, fixedUp.y, direction.y, 0.0f, rightDir.z, fixedUp.z, direction.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 
     const glm::vec3 center = rayOrigin + (direction * (rayMaxRange * 0.5f));
     const float radiusScale = rayRadius * 2.0f;

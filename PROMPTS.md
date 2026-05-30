@@ -112,7 +112,7 @@ Change the mesh generation logic to make it so all objects have a reference to i
 
 ## 21-collision
 
-Create a BoundingBox class for collision detection. Implement a CollisionHelper class with a generateBoundingBox method that takes a Mesh struct and uses its shapes and attrib properties to get the min and max of bounding box. On object, create a new boundingBox property that is initialized with generateBoundingBox after the mesh is loaded. The boundingBox property needs to be static for each class that extends Object so it can be reused for multiple instances. On BoundingBox class, implement a testCollision method that takes the boundingBox and position of a object and tests it against the boundingBox and position of another object, printing "The Objects Collided!" if it is true. Call testCollision on Asteroid class, testing it against the Spaceship instance. 
+Create a BoundingBox class for collision detection. Implement a CollisionHelper class with a generateBoundingBox method that takes a Mesh struct and uses its shapes and attrib properties to get the min and max of bounding box. On object, create a new boundingBox property that is initialized with generateBoundingBox after the mesh is loaded. The boundingBox property needs to be static for each class that extends Object so it can be reused for multiple instances. On BoundingBox class, implement a testCollision method that takes the boundingBox and position of a object and tests it against the boundingBox and position of another object, printing "The Objects Collided!" if it is true. Call testCollision on Asteroid class, testing it against the Spaceship instance.
 
 ## 22-bounding-sphere
 
@@ -135,3 +135,9 @@ Change the scene to instead have multiple asteroids (add a property that control
 Make it so the shot can do collateral damage to asteroids behind the one being hit.
 
 When hit, the asteroid need to be respawned on a different random position too.
+
+## 26-Health and Score
+
+On the Spaceship class, create two integer properties called score (starting as 0) and health (starting as 3). Whenever the spaceship shoots an asteroid, you need to increase the score by 100. When an asteroid hits the Spaceship, the asteroid needs to be destroyed and it should decrease the health by 1.
+
+Import the imgui library to this project as a vendor. On the Scene class, create a text on the upper left corner displaying the spaceship's health. On the upper right corner, create a text that displays the spaceship's score.

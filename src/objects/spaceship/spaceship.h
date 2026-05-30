@@ -28,6 +28,10 @@ public:
     glm::mat4 getViewMatrix() const;
     glm::vec3 getCameraPosition() const;
     const BoundingBox &getBoundingBox() const;
+    int getScore() const;
+    int getHealth() const;
+    void addScore(int amount);
+    void applyDamage(int amount);
     static void updateView(GLFWwindow *window, double xpos, double ypos);
 
 protected:
@@ -86,6 +90,9 @@ private:
 
     glm::vec3 rayOrigin = glm::vec3(0.0f);
     glm::vec3 rayDirection = glm::vec3(0.0f, 0.0f, -1.0f);
+
+    int score = 0;
+    int health = 3;
 
     static Mesh mesh;
     static BoundingBox boundingBox;
