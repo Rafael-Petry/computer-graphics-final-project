@@ -69,8 +69,8 @@ This file defines a bunch of to do lists for different tasks and functionalities
 - [x] Create a score UI
 - [-] There should be a spawner for asteroids (needs refactoring)
 - [x] Shoot collision needs to destroy asteroids and update score
-- [] Asteroids should have different sizes (small, medium and large)
-- [] Asteroid destruction needs to spawn smaller asteroids if possible
+- [x] Asteroids should have different sizes (small, medium and large)
+- [x] Asteroid destruction needs to spawn smaller asteroids if possible
 - [x] Asteroid hit on spaceship needs to damage it and despawn the asteroid
 - [] Sun hit on spaceship needs to finish the game
 - [] Planet hit on spaceship needs to bump it and damage if it is not landing
