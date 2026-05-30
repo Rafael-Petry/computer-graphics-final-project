@@ -3,6 +3,7 @@
 
 #include <random>
 #include <string>
+#include <vector>
 
 #include "../objects/celestialBody/sun/sun.h"
 #include "../window/window.h"
@@ -20,12 +21,13 @@ namespace {
     }
 }
 
-Scene::Scene()
-    : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spaceship::getInstance()), asteroidCount(10), asteroids(static_cast<size_t>(asteroidCount)), planet(),
-      sun(Sun::getInstance())
+Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spaceship::getInstance()), asteroidCount(10), planet(), sun(Sun::getInstance())
 {
     std::mt19937 rng(std::random_device{}());
-    for (Asteroid &asteroid : asteroids) {
+    for (int i = 0; i < asteroidCount; ++i) {
+        asteroids.emplace_back();
+        Asteroid &asteroid = asteroids.back();
+        asteroid.setEnableRespawn(true);
         asteroid.setPosition(randomAsteroidPosition(rng));
     }
 }
@@ -39,6 +41,34 @@ void Scene::update(GLint modelUniform, GLint colorUniform, Window *window)
         asteroid.update(modelUniform, colorUniform, window);
     }
     spaceship.updateShooting(modelUniform, colorUniform, window, asteroids);
+
+    struct FragmentSpawn
+    {
+        Asteroid::Size size;
+        glm::vec3 origin;
+    };
+
+    std::vector<FragmentSpawn> spawns;
+    std::mt19937 rng(std::random_device{}());
+    std::uniform_real_distribution<float> offsetDist(-0.6f, 0.6f);
+    for (Asteroid &asteroid : asteroids) {
+        FragmentSpawn spawn;
+        if (!asteroid.consumeFragmentSpawn(spawn.size, spawn.origin)) {
+            continue;
+        }
+        spawns.push_back(spawn);
+    }
+
+    for (const FragmentSpawn &spawn : spawns) {
+        for (int i = 0; i < 3; ++i) {
+            asteroids.emplace_back();
+            Asteroid &fragment = asteroids.back();
+            fragment.setEnableRespawn(false);
+            fragment.setSize(spawn.size);
+            glm::vec3 offset(offsetDist(rng), offsetDist(rng), offsetDist(rng));
+            fragment.setPosition(spawn.origin + offset);
+        }
+    }
 
     ImGuiIO &io = ImGui::GetIO();
     const float padding = 12.0f;

@@ -6,7 +6,7 @@
 #include "../objects/celestialBody/sun/sun.h"
 #include "../objects/spaceship/spaceship.h"
 
-#include <vector>
+#include <list>
 
 class Window;
 
@@ -20,7 +20,7 @@ private:
     float lastFrame;
     Spaceship &spaceship;
     int asteroidCount = 10;
-    std::vector<Asteroid> asteroids;
+    std::list<Asteroid> asteroids;
     Planet planet;
     Sun &sun;
 };

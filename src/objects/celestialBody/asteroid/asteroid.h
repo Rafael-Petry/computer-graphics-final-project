@@ -13,8 +13,21 @@ class Window;
 class Asteroid : public CelestialBody
 {
 public:
+    enum class Size
+    {
+        Small,
+        Medium,
+        Large
+    };
+
     Asteroid(const glm::vec3 &color = glm::vec3(0.5f, 0.5f, 0.5f));
     void onShotHit();
+    void setSize(Size newSize);
+    Size getSize() const;
+    void setEnableRespawn(bool enabled);
+    bool isRespawnEnabled() const;
+    bool isDestroyed() const;
+    bool consumeFragmentSpawn(Size &outSize, glm::vec3 &outOrigin);
 
 protected:
     glm::mat4 translate(Window *window) override;
@@ -23,6 +36,14 @@ protected:
 
 private:
     float chaseSpeed = 1.4f;
+    float baseChaseSpeed = 1.4f;
+    Size size = Size::Medium;
+    float baseScale = 0.1f;
+    bool enableRespawn = false;
+    bool destroyed = false;
+    bool pendingFragmentSpawn = false;
+    Size fragmentSize = Size::Small;
+    glm::vec3 fragmentOrigin = glm::vec3(0.0f);
 
     static Mesh mesh;
     static BoundingSphere boundingSphere;

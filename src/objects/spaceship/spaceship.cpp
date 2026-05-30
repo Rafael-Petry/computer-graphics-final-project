@@ -65,7 +65,7 @@ void Spaceship::update(GLint modelUniform, GLint colorUniform, Window *window)
     updateRotation(window);
 }
 
-void Spaceship::updateShooting(GLint modelUniform, GLint colorUniform, Window *window, std::vector<Asteroid> &asteroids)
+void Spaceship::updateShooting(GLint modelUniform, GLint colorUniform, Window *window, std::list<Asteroid> &asteroids)
 {
     shoot(window, asteroids);
 
@@ -189,7 +189,7 @@ void Spaceship::updateOrientation(float deltaYaw, float deltaPitch, float deltaR
     up = up / norm(up);
 }
 
-void Spaceship::shoot(Window *window, std::vector<Asteroid> &asteroids)
+void Spaceship::shoot(Window *window, std::list<Asteroid> &asteroids)
 {
     const float currentTime = window->getCurrentFrame();
     if (glfwGetMouseButton(window->getGlfwWindow(), GLFW_MOUSE_BUTTON_LEFT) != GLFW_PRESS) {

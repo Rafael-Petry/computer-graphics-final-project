@@ -19,6 +19,46 @@ namespace {
         std::uniform_real_distribution<float> distZ(-6.0f, 6.0f);
         return glm::vec3(distX(rng), distY(rng), distZ(rng));
     }
+
+    float sizeScale(Asteroid::Size size)
+    {
+        switch (size) {
+        case Asteroid::Size::Small:
+            return 0.7f;
+        case Asteroid::Size::Large:
+            return 1.4f;
+        case Asteroid::Size::Medium:
+        default:
+            return 1.0f;
+        }
+    }
+
+    float sizeSpeedScale(Asteroid::Size size)
+    {
+        switch (size) {
+        case Asteroid::Size::Small:
+            return 1.3f;
+        case Asteroid::Size::Large:
+            return 0.8f;
+        case Asteroid::Size::Medium:
+        default:
+            return 1.0f;
+        }
+    }
+
+    Asteroid::Size randomAsteroidSize(std::mt19937 &rng)
+    {
+        std::uniform_int_distribution<int> dist(0, 2);
+        switch (dist(rng)) {
+        case 0:
+            return Asteroid::Size::Small;
+        case 2:
+            return Asteroid::Size::Large;
+        case 1:
+        default:
+            return Asteroid::Size::Medium;
+        }
+    }
 }
 
 Asteroid::Asteroid(const glm::vec3 &color) : CelestialBody(mesh, boundingSphere, color)
@@ -31,8 +71,36 @@ Asteroid::Asteroid(const glm::vec3 &color) : CelestialBody(mesh, boundingSphere,
         boundingSphere = CollisionHelper::generateBoundingSphere(mesh);
     }
 
-    scaleValue = glm::vec3(0.1f);
+    std::mt19937 rng(std::random_device{}());
+    setSize(randomAsteroidSize(rng));
     position = glm::vec3(2.7f, 0.4f, 0.0f);
+}
+
+void Asteroid::setSize(Size newSize)
+{
+    size = newSize;
+    scaleValue = glm::vec3(baseScale * sizeScale(size));
+    chaseSpeed = baseChaseSpeed * sizeSpeedScale(size);
+}
+
+Asteroid::Size Asteroid::getSize() const { return size; }
+
+void Asteroid::setEnableRespawn(bool enabled) { enableRespawn = enabled; }
+
+bool Asteroid::isRespawnEnabled() const { return enableRespawn; }
+
+bool Asteroid::isDestroyed() const { return destroyed; }
+
+bool Asteroid::consumeFragmentSpawn(Size &outSize, glm::vec3 &outOrigin)
+{
+    if (!pendingFragmentSpawn) {
+        return false;
+    }
+
+    pendingFragmentSpawn = false;
+    outSize = fragmentSize;
+    outOrigin = fragmentOrigin;
+    return true;
 }
 
 glm::mat4 Asteroid::translate(Window *window)
@@ -62,10 +130,24 @@ void Asteroid::collide(Window *window)
 
 void Asteroid::onShotHit()
 {
+    if (size != Size::Small) {
+        pendingFragmentSpawn = true;
+        fragmentSize = (size == Size::Large) ? Size::Medium : Size::Small;
+        fragmentOrigin = position;
+    }
+
+    if (!enableRespawn) {
+        destroyed = true;
+        scaleValue = glm::vec3(0.0f);
+        chaseSpeed = 0.0f;
+        return;
+    }
+
     std::mt19937 rng(std::random_device{}());
     glm::vec3 newPosition = position;
     for (int attempt = 0; attempt < 6 && glm::length(newPosition - position) < 0.01f; ++attempt) {
         newPosition = randomAsteroidPosition(rng);
     }
+    setSize(randomAsteroidSize(rng));
     setPosition(newPosition);
 }

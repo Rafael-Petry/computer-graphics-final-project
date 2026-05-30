@@ -2,7 +2,7 @@
 #define SPACESHIP_H
 
 #include <glad/glad.h>
-#include <vector>
+#include <list>
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
@@ -22,7 +22,7 @@ public:
     static Spaceship &getInstance();
 
     void update(GLint modelUniform, GLint colorUniform, Window *window);
-    void updateShooting(GLint modelUniform, GLint colorUniform, Window *window, std::vector<Asteroid> &asteroids);
+    void updateShooting(GLint modelUniform, GLint colorUniform, Window *window, std::list<Asteroid> &asteroids);
     void updateRotation(Window *window);
 
     glm::mat4 getViewMatrix() const;
@@ -41,7 +41,7 @@ protected:
 private:
     Spaceship(const glm::vec3 &color = glm::vec3(0.73f, 0.79f, 0.88f));
 
-    void shoot(Window *window, std::vector<Asteroid> &asteroids);
+    void shoot(Window *window, std::list<Asteroid> &asteroids);
     void renderCrosshair(GLint modelUniform, GLint colorUniform) const;
     void renderRay(GLint modelUniform, GLint colorUniform) const;
     glm::mat4 getOrientationMatrix() const;

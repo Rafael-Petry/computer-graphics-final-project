@@ -136,8 +136,18 @@ Make it so the shot can do collateral damage to asteroids behind the one being h
 
 When hit, the asteroid need to be respawned on a different random position too.
 
-## 26-Health and Score
+## 26-health-and-score
 
 On the Spaceship class, create two integer properties called score (starting as 0) and health (starting as 3). Whenever the spaceship shoots an asteroid, you need to increase the score by 100. When an asteroid hits the Spaceship, the asteroid needs to be destroyed and it should decrease the health by 1.
 
 Import the imgui library to this project as a vendor. On the Scene class, create a text on the upper left corner displaying the spaceship's health. On the upper right corner, create a text that displays the spaceship's score.
+
+## 27-asteroid-size
+
+Make it so the asteroids are able to have different sizes (small, medium and large) and multiply its scaleValue by a factor of this size.
+
+Smaller asteroids need to be faster than larger ones. Add a property enableRespawn to the asteroid. All initial asteroids need to have this property set to true.
+
+Asteroids that have enableRespawn = false are still destructible.
+
+Destroying an asteroid needs to also spawn 3 asteroids of a smaller size if it is not a small asteroid. The new asteroids have enableRespawn set to false and are generated around the destroyed asteroid.
