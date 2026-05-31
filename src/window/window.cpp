@@ -147,7 +147,7 @@ void Window::updateShaderProgram(GLuint shaderProgram)
     const GLint viewUniform = glGetUniformLocation(shaderProgram, "view");
     const GLint projectionUniform = glGetUniformLocation(shaderProgram, "projection");
 
-    const glm::mat4 projection = Matrix_Perspective(M_PI / 3.0f, aspectRatio, -0.1f, -100.0f);
+    const glm::mat4 projection = Matrix_Perspective(M_PI / 3.0f, aspectRatio, -0.1f, -500.0f);
 
     glm::mat4 view = Spaceship::getInstance().getViewMatrix();
     if (useSceneCamera) {
