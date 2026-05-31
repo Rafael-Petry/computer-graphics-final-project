@@ -42,7 +42,7 @@ Spaceship::Spaceship(const glm::vec3 &color) : Object(mesh, boundingBox, color)
     up = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
     right = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
     worldUp = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
-    position = glm::vec3(0.0f, 0.2f, 5.0f);
+    position = glm::vec3(0.0f, 0.2f, 100.0f);
     velocity = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
     scaleValue = glm::vec3(0.3f);
 }

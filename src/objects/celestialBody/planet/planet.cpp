@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 
@@ -37,7 +38,7 @@ Planet::Planet(const glm::vec3 &color) : CelestialBody(mesh, boundingSphere, col
         boundingSphere = CollisionHelper::generateBoundingSphere(mesh);
     }
 
-    scaleValue = glm::vec3(0.6f);
+    scaleValue = glm::vec3(10.0f);
     position = glm::vec3(0.0f);
 }
 
@@ -59,16 +60,17 @@ glm::mat4 Planet::translate(Window *window)
 
     const Sun &sun = Sun::getInstance();
     const glm::vec3 center = sun.getPosition();
+    const float safeOrbitRadius = std::max(orbitRadius, sun.getScale().x + scaleValue.x + 5.0f);
 
-    const glm::vec3 curve1[4] = {center + glm::vec3(orbitRadius, 0.0f, 0.0f),
-                                 center + glm::vec3(orbitRadius, 0.0f, orbitRadius),
-                                 center + glm::vec3(-orbitRadius, 0.0f, orbitRadius),
-                                 center + glm::vec3(-orbitRadius, 0.0f, 0.0f)};
+    const glm::vec3 curve1[4] = {center + glm::vec3(safeOrbitRadius, 0.0f, 0.0f),
+                                 center + glm::vec3(safeOrbitRadius, 0.0f, safeOrbitRadius),
+                                 center + glm::vec3(-safeOrbitRadius, 0.0f, safeOrbitRadius),
+                                 center + glm::vec3(-safeOrbitRadius, 0.0f, 0.0f)};
 
-    const glm::vec3 curve2[4] = {center + glm::vec3(-orbitRadius, 0.0f, 0.0f),
-                                 center + glm::vec3(-orbitRadius, 0.0f, -orbitRadius),
-                                 center + glm::vec3(orbitRadius, 0.0f, -orbitRadius),
-                                 center + glm::vec3(orbitRadius, 0.0f, 0.0f)};
+    const glm::vec3 curve2[4] = {center + glm::vec3(-safeOrbitRadius, 0.0f, 0.0f),
+                                 center + glm::vec3(-safeOrbitRadius, 0.0f, -safeOrbitRadius),
+                                 center + glm::vec3(safeOrbitRadius, 0.0f, -safeOrbitRadius),
+                                 center + glm::vec3(safeOrbitRadius, 0.0f, 0.0f)};
 
     if (orbitPhase < 1.0f) {
         position = cubicBezier(curve1[0], curve1[1], curve1[2], curve1[3], orbitPhase);
