@@ -7,8 +7,8 @@ int AsteroidSpawnerHelper::currentWaveSize = 10;
 bool AsteroidSpawnerHelper::waitingForNextWave = false;
 float AsteroidSpawnerHelper::nextWaveStartTime = 0.0f;
 
-float AsteroidSpawnerHelper::minSpawnRadius = 18.0f;
-float AsteroidSpawnerHelper::maxSpawnRadius = 26.0f;
+float AsteroidSpawnerHelper::minSpawnRadius = 60.0f;
+float AsteroidSpawnerHelper::maxSpawnRadius = 80.0f;
 float AsteroidSpawnerHelper::downtimeSeconds = 30.0f;
 
 void AsteroidSpawnerHelper::initialize(std::list<Asteroid> &asteroids, const Spaceship &spaceship)

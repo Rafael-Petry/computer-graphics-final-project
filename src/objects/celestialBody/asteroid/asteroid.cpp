@@ -111,12 +111,12 @@ void Asteroid::collide(Window *window)
     const Spaceship &spaceship = Spaceship::getInstance();
 
     if (boundingSphere.testCollisionBoundingBox(*this, spaceship)) {
-        Spaceship::getInstance().applyDamage(1);
-        onShotHit();
+        Spaceship::getInstance().applyDamage((int)size + 1);
+        destroy();
     }
 }
 
-void Asteroid::onShotHit()
+void Asteroid::destroy()
 {
     if (size != Size::Small) {
         pendingFragmentSpawn = true;

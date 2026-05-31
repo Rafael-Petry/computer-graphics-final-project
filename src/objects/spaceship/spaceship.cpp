@@ -221,7 +221,7 @@ void Spaceship::shoot(Window *window, std::list<Asteroid> &asteroids)
     }
 
     for (Asteroid *asteroid : hitAsteroids) {
-        asteroid->onShotHit();
+        asteroid->destroy();
         addScore(100);
     }
 }
