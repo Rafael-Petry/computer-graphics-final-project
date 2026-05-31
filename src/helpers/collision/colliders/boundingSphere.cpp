@@ -18,6 +18,10 @@ BoundingSphere::BoundingSphere(const glm::vec3 &center, float radius) : center(c
 
 bool BoundingSphere::isInitialized() const { return initialized; }
 
+const glm::vec3 &BoundingSphere::getCenter() const { return center; }
+
+float BoundingSphere::getRadius() const { return radius; }
+
 bool BoundingSphere::testCollisionBoundingSphere(const Object &objectA, const Object &objectB) const
 {
     const auto *otherSphere = dynamic_cast<const BoundingSphere *>(&objectB.getCollider());

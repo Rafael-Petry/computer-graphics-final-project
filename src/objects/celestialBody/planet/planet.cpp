@@ -1,8 +1,8 @@
 #include <algorithm>
 #include <cmath>
-#include <iostream>
 
 #include <glm/mat4x4.hpp>
+#include <glm/geometric.hpp>
 
 #include "planet.h"
 #include "../../spaceship/spaceship.h"
@@ -13,6 +13,8 @@
 #include "../../vendor/include/matrices.h"
 
 namespace {
+    float maxAbsComponent(const glm::vec3 &value) { return std::max(std::max(std::fabs(value.x), std::fabs(value.y)), std::fabs(value.z)); }
+
     glm::vec3 cubicBezier(const glm::vec3 &p0, const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3, float t)
     {
         const float u = 1.0f - t;
@@ -50,7 +52,29 @@ void Planet::collide(Window *window)
     const Spaceship &spaceship = Spaceship::getInstance();
 
     if (boundingSphere.testCollisionBoundingBox(*this, spaceship)) {
-        std::cout << "A planet collided with the spaceship!" << std::endl;
+        const glm::vec3 planetScale = getScale();
+        const glm::vec3 planetCenter = (boundingSphere.getCenter() * planetScale) + position;
+        const float planetRadius = boundingSphere.getRadius() * maxAbsComponent(planetScale);
+
+        const BoundingBox &shipBox = spaceship.getBoundingBox();
+        const glm::vec3 shipScale = spaceship.getScale();
+        const glm::vec3 shipBoxCenter = (shipBox.getMin() + shipBox.getMax()) * 0.5f;
+        const glm::vec3 shipBoxExtents = (shipBox.getMax() - shipBox.getMin()) * 0.5f;
+        const glm::vec3 shipCenterOffset = shipBoxCenter * shipScale;
+        const float shipRadius = glm::length(shipBoxExtents * shipScale);
+
+        glm::vec3 shipCenter = spaceship.getPosition() + shipCenterOffset;
+        glm::vec3 normal = shipCenter - planetCenter;
+        const float normalLength = glm::length(normal);
+        if (normalLength < 0.0001f) {
+            normal = glm::vec3(0.0f, 1.0f, 0.0f);
+        } else {
+            normal /= normalLength;
+        }
+
+        const float landingPadding = 0.05f;
+        const float distanceFromCenter = planetRadius + shipRadius + landingPadding;
+        Spaceship::getInstance().landOn(this, normal, distanceFromCenter, shipCenterOffset);
     }
 }
 

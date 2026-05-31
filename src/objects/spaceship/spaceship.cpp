@@ -1,5 +1,4 @@
 #include <cmath>
-#include <iostream>
 
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
@@ -13,6 +12,7 @@
 #include "../../helpers/movement/movement.h"
 #include "../../window/window.h"
 #include "../../objects/celestialBody/asteroid/asteroid.h"
+#include "../../objects/celestialBody/planet/planet.h"
 #include "../../vendor/include/matrices.h"
 
 Mesh Spaceship::mesh;
@@ -78,6 +78,10 @@ void Spaceship::updateShooting(GLint modelUniform, GLint colorUniform, Window *w
 
 void Spaceship::updateRotation(Window *window)
 {
+    if (isLanded) {
+        return;
+    }
+
     const float deltaTime = window->getDeltaTime();
     const float rotationDamping = expf(-rotationDrag * deltaTime);
 
@@ -132,6 +136,10 @@ void Spaceship::updateView(GLFWwindow *window, double xpos, double ypos)
     Spaceship *spaceship = &Spaceship::getInstance();
 
     if (spaceship != nullptr) {
+        if (spaceship->isLanded) {
+            return;
+        }
+
         spaceship->isRolling = glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS;
 
         if (spaceship->firstMouseUpdate) {
@@ -228,6 +236,21 @@ void Spaceship::shoot(Window *window, std::list<Asteroid> &asteroids)
 
 glm::mat4 Spaceship::translate(Window *window)
 {
+    if (isLanded && landedPlanet != nullptr) {
+        if (glfwGetKey(window->getGlfwWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+            isLanded = false;
+            landedPlanet = nullptr;
+        } else {
+            front = landedFront;
+            up = landedUp;
+            right = landedRight;
+            const glm::vec3 planetCenter = landedPlanet->getPosition();
+            const glm::vec3 shipCenter = planetCenter + (landedNormal * landedDistance);
+            position = shipCenter - landedShipCenterOffset;
+            return Matrix_Translate(position.x, position.y, position.z);
+        }
+    }
+
     const float deltaTime = window->getDeltaTime();
     const glm::vec3 movement = MovementHelper::getMovementInputs(window->getGlfwWindow());
 
@@ -252,6 +275,43 @@ glm::mat4 Spaceship::translate(Window *window)
     position += glm::vec3(velocity) * deltaTime;
 
     return Matrix_Translate(position.x, position.y, position.z);
+}
+
+void Spaceship::landOn(const Planet *planet, const glm::vec3 &surfaceNormal, float distanceFromCenter, const glm::vec3 &shipCenterOffset)
+{
+    if (planet == nullptr) {
+        return;
+    }
+
+    landedPlanet = planet;
+    landedNormal = glm::normalize(surfaceNormal);
+    landedDistance = distanceFromCenter;
+    landedShipCenterOffset = shipCenterOffset;
+    isLanded = true;
+
+    glm::vec3 forward = glm::vec3(front);
+    forward -= landedNormal * glm::dot(forward, landedNormal);
+    if (glm::dot(forward, forward) < 0.0001f) {
+        forward = glm::vec3(0.0f, 0.0f, -1.0f);
+        forward -= landedNormal * glm::dot(forward, landedNormal);
+    }
+
+    forward = glm::normalize(forward);
+    const glm::vec3 rightAxis = glm::normalize(glm::cross(forward, landedNormal));
+    const glm::vec3 upAxis = glm::normalize(glm::cross(rightAxis, forward));
+
+    landedFront = glm::vec4(forward, 0.0f);
+    landedUp = glm::vec4(upAxis, 0.0f);
+    landedRight = glm::vec4(rightAxis, 0.0f);
+
+    front = landedFront;
+    up = landedUp;
+    right = landedRight;
+
+    stopMovement();
+    yawVelocity = 0.0f;
+    pitchVelocity = 0.0f;
+    rollVelocity = 0.0f;
 }
 
 glm::mat4 Spaceship::rotate(Window *window) { return Matrix(right.x, up.x, front.x, 0.0f, right.y, up.y, front.y, 0.0f, right.z, up.z, front.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f); }
@@ -290,6 +350,8 @@ void Spaceship::applyDamage(int amount)
         health = 0;
     }
 }
+
+void Spaceship::stopMovement() { velocity = glm::vec4(0.0f); }
 
 glm::mat4 Spaceship::getOrientationMatrix() const
 {

@@ -12,6 +12,7 @@
 #include "../object.h"
 
 class Window;
+class Planet;
 
 class Spaceship : public Object
 {
@@ -32,6 +33,8 @@ public:
     int getHealth() const;
     void addScore(int amount);
     void applyDamage(int amount);
+    void landOn(const Planet *planet, const glm::vec3 &surfaceNormal, float distanceFromCenter, const glm::vec3 &shipCenterOffset);
+    void stopMovement();
     static void updateView(GLFWwindow *window, double xpos, double ypos);
 
 protected:
@@ -93,6 +96,15 @@ private:
 
     int score = 0;
     int health = 5;
+
+    bool isLanded = false;
+    const Planet *landedPlanet = nullptr;
+    glm::vec3 landedNormal = glm::vec3(0.0f, 1.0f, 0.0f);
+    float landedDistance = 0.0f;
+    glm::vec3 landedShipCenterOffset = glm::vec3(0.0f);
+    glm::vec4 landedFront = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
+    glm::vec4 landedUp = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
+    glm::vec4 landedRight = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
 
     static Mesh mesh;
     static BoundingBox boundingBox;
