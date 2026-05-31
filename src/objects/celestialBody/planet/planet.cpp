@@ -38,7 +38,7 @@ Planet::Planet(const glm::vec3 &color) : CelestialBody(mesh, boundingSphere, col
         boundingSphere = CollisionHelper::generateBoundingSphere(mesh);
     }
 
-    scaleValue = glm::vec3(10.0f);
+    scaleValue = glm::vec3(30.0f);
     position = glm::vec3(0.0f);
 }
 

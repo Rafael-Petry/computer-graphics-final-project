@@ -22,7 +22,7 @@ Sun::Sun() : CelestialBody(mesh, boundingSphere, glm::vec3(1.0f, 1.0f, 0.0f))
         boundingSphere = CollisionHelper::generateBoundingSphere(mesh);
     }
 
-    scaleValue = glm::vec3(30.0f);
+    scaleValue = glm::vec3(50.0f);
     position = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
@@ -34,10 +34,10 @@ Sun &Sun::getInstance()
 
 void Sun::collide(Window *window)
 {
-    const Spaceship &spaceship = Spaceship::getInstance();
+    Spaceship &spaceship = Spaceship::getInstance();
 
     if (boundingSphere.testCollisionBoundingBox(*this, spaceship)) {
-        std::cout << "The sun collided with the spaceship!" << std::endl;
+        spaceship.applyDamage(100);
     }
 }
 
