@@ -92,7 +92,7 @@ private:
     glm::vec3 rayDirection = glm::vec3(0.0f, 0.0f, -1.0f);
 
     int score = 0;
-    int health = 3;
+    int health = 5;
 
     static Mesh mesh;
     static BoundingBox boundingBox;
