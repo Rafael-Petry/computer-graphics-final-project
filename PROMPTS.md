@@ -155,3 +155,7 @@ Destroying an asteroid needs to also spawn 3 asteroids of a smaller size if it i
 ## 28-asteroid-spawner
 
 Create an AsteroidSpawnerHelper class that is responsible for spawning asteroids at "waves", in increments of 5 per round. Each round needs to have 30 seconds of downtime. The initial amount of asteroids should be 10. The asteroids have to be spawned in a large radius around the spaceship to avoid instant collisions. The AsteroidSpawnerHelper should have static functions to be called on the Scene class.
+
+## 29-multiple-planets
+
+Change the Scene to have 5 planets in orbit of the sun. Each orbit needs to be progressively further from the sun. You can change the Planet class to have the distance from the sun as a property for the bézier curve. Also, make the speed of the orbit slower. Start each planet on a random orbit phase.

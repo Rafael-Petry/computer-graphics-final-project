@@ -28,7 +28,7 @@ namespace {
 Mesh Planet::mesh;
 BoundingSphere Planet::boundingSphere;
 
-Planet::Planet(const glm::vec3 &color) : CelestialBody(mesh, boundingSphere, color)
+Planet::Planet(const glm::vec3 &color, float orbitRadius, float orbitSpeed, float orbitPhase) : CelestialBody(mesh, boundingSphere, color)
 {
     if (mesh.vao == 0) {
         mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/planet/planet.obj");
@@ -38,8 +38,11 @@ Planet::Planet(const glm::vec3 &color) : CelestialBody(mesh, boundingSphere, col
         boundingSphere = CollisionHelper::generateBoundingSphere(mesh);
     }
 
-    scaleValue = glm::vec3(30.0f);
+    scaleValue = glm::vec3(10.0f);
     position = glm::vec3(0.0f);
+    this->orbitRadius = orbitRadius;
+    this->orbitSpeed = orbitSpeed;
+    this->orbitPhase = orbitPhase;
 }
 
 void Planet::collide(Window *window)
@@ -81,4 +84,4 @@ glm::mat4 Planet::translate(Window *window)
     return Matrix_Translate(position.x, position.y, position.z);
 }
 
-glm::mat4 Planet::rotate(Window *window) { return Matrix_Rotate_Y(window->getCurrentFrame() * 1.7f); }
+glm::mat4 Planet::rotate(Window *window) { return Matrix_Rotate_Y(window->getCurrentFrame() * 0.01f); }

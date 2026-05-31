@@ -12,7 +12,7 @@ class Window;
 class Planet : public CelestialBody
 {
 public:
-    Planet(const glm::vec3 &color = glm::vec3(0.0f, 1.0f, 0.0f));
+    Planet(const glm::vec3 &color = glm::vec3(0.0f, 1.0f, 0.0f), float orbitRadius = 2.0f, float orbitSpeed = 0.25f, float orbitPhase = 0.0f);
 
 protected:
     void collide(Window *window) override;

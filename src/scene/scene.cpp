@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <algorithm>
 #include <random>
 #include <string>
 #include <vector>
@@ -12,16 +13,36 @@
 #include "../../vendor/include/matrices.h"
 #include <imgui.h>
 
-Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spaceship::getInstance()), planet(), sun(Sun::getInstance())
+Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spaceship::getInstance()), sun(Sun::getInstance())
 {
     AsteroidSpawnerHelper::initialize(asteroids, spaceship);
+
+    const std::vector<glm::vec3> colors = {
+        glm::vec3(0.2f, 0.6f, 1.0f), glm::vec3(0.9f, 0.4f, 0.2f), glm::vec3(0.4f, 0.9f, 0.5f), glm::vec3(0.8f, 0.8f, 0.3f), glm::vec3(0.7f, 0.5f, 1.0f)};
+
+    const float baseRadius = 50.0f;
+    const float radiusStep = 50.0f;
+    const int planetCount = 5;
+
+    std::mt19937 rng(std::random_device{}());
+    std::uniform_real_distribution<float> phaseDist(0.0f, 2.0f);
+
+    planets.reserve(planetCount);
+    for (int i = 0; i < planetCount; ++i) {
+        const float orbitRadius = baseRadius + (radiusStep * static_cast<float>(i));
+        const float orbitSpeed = 0.01f;
+        const float orbitPhase = phaseDist(rng);
+        planets.emplace_back(colors[i % colors.size()], orbitRadius, orbitSpeed, orbitPhase);
+    }
 }
 
 void Scene::update(GLint modelUniform, GLint colorUniform, Window *window)
 {
     spaceship.update(modelUniform, colorUniform, window);
     sun.update(modelUniform, colorUniform, window);
-    planet.update(modelUniform, colorUniform, window);
+    for (Planet &planet : planets) {
+        planet.update(modelUniform, colorUniform, window);
+    }
     for (Asteroid &asteroid : asteroids) {
         if (!asteroid.isDestroyed()) {
             asteroid.update(modelUniform, colorUniform, window);
