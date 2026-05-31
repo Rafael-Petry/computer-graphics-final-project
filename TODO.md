@@ -74,6 +74,6 @@ This file defines a bunch of to do lists for different tasks and functionalities
 - [x] Asteroid hit on spaceship needs to damage it and despawn the asteroid
 - [x] Sun hit on spaceship needs to finish the game
 - [x] Make it so the scene has five planets
-- [] Planet hit on spaceship needs to bump it and damage if it is not landing
+- [-] Planet hit on spaceship needs to bump it and damage if it is not landing
 - [] Create a look-at camera
 - [] Create a radar UI that shows the spaceship position/orientation and celestial bodies position
