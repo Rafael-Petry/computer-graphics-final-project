@@ -223,7 +223,7 @@ void Spaceship::shoot(Window *window, std::list<Asteroid> &asteroids)
         }
 
         float hitDistance = 0.0f;
-        if (sphere->testRay(asteroid, rayOrigin, rayDirection, rayMaxRange, &hitDistance)) {
+        if (sphere->testRay(asteroid, rayOrigin, rayDirection, &hitDistance)) {
             hitAsteroids.push_back(&asteroid);
         }
     }

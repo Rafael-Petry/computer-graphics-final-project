@@ -82,7 +82,7 @@ bool BoundingSphere::testCollisionBoundingBox(const Object &sphereObject, const 
     return false;
 }
 
-bool BoundingSphere::testRay(const Object &sphereObject, const glm::vec3 &rayOrigin, const glm::vec3 &rayDirection, float maxDistance, float *hitDistance) const
+bool BoundingSphere::testRay(const Object &sphereObject, const glm::vec3 &rayOrigin, const glm::vec3 &rayDirection, float *hitDistance) const
 {
     if (!initialized) {
         return false;
@@ -109,7 +109,7 @@ bool BoundingSphere::testRay(const Object &sphereObject, const glm::vec3 &rayOri
         t = -b + sqrtDisc;
     }
 
-    if (t < 0.0f || t > maxDistance) {
+    if (t < 0.0f) {
         return false;
     }
 
