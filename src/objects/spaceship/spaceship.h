@@ -28,6 +28,8 @@ public:
 
     glm::mat4 getViewMatrix() const;
     glm::vec3 getCameraPosition() const;
+    glm::vec3 getFrontVector() const;
+    glm::vec3 getUpVector() const;
     const BoundingBox &getBoundingBox() const;
     int getScore() const;
     int getHealth() const;

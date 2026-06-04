@@ -169,3 +169,7 @@ The spaceship needs to be able to takeoff from the planet when holding shift. Th
 ## 31-conditional-landing
 
 Make it so the spaceship can only land on the planet if it is approaching with its base facing the planet's surface. If it is not, then the spaceship will be bumped away and suffer 1 damage to its health.
+
+## 32-look-at-camera
+
+Replace the scene camera by a look-at camera that appears behind of the spaceship. Whenever the player changes cameras using the C key, the look-at camera teleports right behind of the ship.

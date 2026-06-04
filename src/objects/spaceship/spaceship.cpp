@@ -348,6 +348,10 @@ glm::mat4 Spaceship::getViewMatrix() const
 
 glm::vec3 Spaceship::getCameraPosition() const { return position + glm::vec3(front); }
 
+glm::vec3 Spaceship::getFrontVector() const { return glm::vec3(front); }
+
+glm::vec3 Spaceship::getUpVector() const { return glm::vec3(up); }
+
 const BoundingBox &Spaceship::getBoundingBox() const { return boundingBox; }
 
 int Spaceship::getScore() const { return score; }

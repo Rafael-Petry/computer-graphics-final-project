@@ -6,6 +6,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <glm/geometric.hpp>
+
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
@@ -149,9 +151,19 @@ void Window::updateShaderProgram(GLuint shaderProgram)
 
     const glm::mat4 projection = Matrix_Perspective(M_PI / 3.0f, aspectRatio, -0.1f, -500.0f);
 
-    glm::mat4 view = Spaceship::getInstance().getViewMatrix();
+    const Spaceship &spaceship = Spaceship::getInstance();
+    glm::mat4 view = spaceship.getViewMatrix();
     if (useSceneCamera) {
-        view = Matrix_cameraView(glm::vec4(0.0, 0.0, 10.0, 1.0f), glm::vec4(0.0, 0.0, -1.0, 0.0f), glm::vec4(0.0, 1.0, 0.0, 0.0f));
+        const glm::vec3 shipPosition = spaceship.getPosition();
+        const glm::vec3 shipFront = glm::normalize(spaceship.getFrontVector());
+        const glm::vec3 shipUp = glm::normalize(spaceship.getUpVector());
+
+        const float cameraDistance = 6.0f;
+        const float cameraHeight = 2.0f;
+        const glm::vec3 cameraPosition = shipPosition - shipFront * cameraDistance + shipUp * cameraHeight;
+        const glm::vec3 viewDirection = glm::normalize(shipPosition - cameraPosition);
+
+        view = Matrix_cameraView(glm::vec4(cameraPosition, 1.0f), glm::vec4(viewDirection, 0.0f), glm::vec4(shipUp, 0.0f));
     }
 
     glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(view));
