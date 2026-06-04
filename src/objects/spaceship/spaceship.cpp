@@ -283,8 +283,32 @@ void Spaceship::landOn(const Planet *planet, const glm::vec3 &surfaceNormal, flo
         return;
     }
 
+    if (isLanded && landedPlanet == planet) {
+        return;
+    }
+
+    const glm::vec3 normalizedNormal = glm::normalize(surfaceNormal);
+    const float approachDot = glm::dot(glm::vec3(velocity), normalizedNormal);
+    const float upAlignment = glm::dot(glm::vec3(up), normalizedNormal);
+    const float minApproachSpeed = 0.2f;
+    const float minUpAlignment = 0.75f;
+
+    if (approachDot > -minApproachSpeed || upAlignment < minUpAlignment) {
+        applyDamage(1);
+        landedPlanet = nullptr;
+        isLanded = false;
+
+        const float bumpDistance = 0.6f;
+        const float bumpSpeed = 3.0f;
+        const glm::vec3 planetCenter = planet->getPosition();
+        const glm::vec3 shipCenter = planetCenter + (normalizedNormal * (distanceFromCenter + bumpDistance));
+        position = shipCenter - shipCenterOffset;
+        velocity = glm::vec4(normalizedNormal * bumpSpeed, 0.0f);
+        return;
+    }
+
     landedPlanet = planet;
-    landedNormal = glm::normalize(surfaceNormal);
+    landedNormal = normalizedNormal;
     landedDistance = distanceFromCenter;
     landedShipCenterOffset = shipCenterOffset;
     isLanded = true;
