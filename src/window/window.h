@@ -44,10 +44,12 @@ private:
     float lastFrame = 0.0f;
     float deltaTime = 0.0f;
 
+    bool imguiInitialized = false;
+
     float aspectRatio;
 
     bool useSceneCamera = false;
-    bool isFullscreen = true;
+    bool isFullscreen = false;
 
     int width = 1280;
     int height = 720;

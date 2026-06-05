@@ -1,15 +1,18 @@
 #ifndef SPACESHIP_H
 #define SPACESHIP_H
 
-#include <string>
-
 #include <glad/glad.h>
+#include <list>
 #include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
+#include "../../helpers/collision/colliders/boundingBox.h"
+#include "../celestialBody/asteroid/asteroid.h"
 #include "../object.h"
 
 class Window;
+class Planet;
 
 class Spaceship : public Object
 {
@@ -20,23 +23,37 @@ public:
     static Spaceship &getInstance();
 
     void update(GLint modelUniform, GLint colorUniform, Window *window);
+    void updateShooting(GLint modelUniform, GLint colorUniform, Window *window, std::list<Asteroid> &asteroids);
+    void updateRotation(Window *window);
 
-    glm::vec4 getPosition() const;
     glm::mat4 getViewMatrix() const;
+    glm::vec3 getCameraPosition() const;
+    glm::vec3 getFrontVector() const;
+    glm::vec3 getUpVector() const;
+    const BoundingBox &getBoundingBox() const;
+    int getScore() const;
+    int getHealth() const;
+    void addScore(int amount);
+    void applyDamage(int amount);
+    void landOn(const Planet *planet, const glm::vec3 &surfaceNormal, float distanceFromCenter, const glm::vec3 &shipCenterOffset);
+    void stopMovement();
     static void updateView(GLFWwindow *window, double xpos, double ypos);
 
 protected:
     glm::mat4 translate(Window *window) override;
     glm::mat4 rotate(Window *window) override;
-    glm::mat4 scale(Window *window) override;
 
 private:
-    Spaceship(const std::string &meshPath = "../../src/objects/spaceship/spaceship.obj", const glm::vec3 &color = glm::vec3(0.73f, 0.79f, 0.88f));
+    Spaceship(const glm::vec3 &color = glm::vec3(0.73f, 0.79f, 0.88f));
 
-    void shoot() const;
-    void updateOrientation();
+    static constexpr int maxHealth = 5;
 
-    glm::vec4 position;
+    void shoot(Window *window, std::list<Asteroid> &asteroids);
+    void renderCrosshair(GLint modelUniform, GLint colorUniform) const;
+    void renderRay(GLint modelUniform, GLint colorUniform) const;
+    glm::mat4 getOrientationMatrix() const;
+    void updateOrientation(float deltaYaw, float deltaPitch, float deltaRoll);
+
     glm::vec4 velocity;
     glm::vec4 front;
     glm::vec4 up;
@@ -67,6 +84,36 @@ private:
     float lastMouseY = 0.0f;
 
     bool isRolling = false;
+
+    float lastShotTime = -1000.0f;
+    float shotCooldown = 1.0f;
+    float rayVisibleUntil = -1000.0f;
+    float rayVisibleDuration = 0.12f;
+    float rayMaxRange = 50.0f;
+    float rayRadius = 0.02f;
+    float crosshairDistance = 2.0f;
+    float crosshairLength = 0.08f;
+    float crosshairThickness = 0.008f;
+
+    glm::vec3 rayOrigin = glm::vec3(0.0f);
+    glm::vec3 rayDirection = glm::vec3(0.0f, 0.0f, -1.0f);
+
+    int score = 0;
+    int health = maxHealth;
+
+    bool isLanded = false;
+    const Planet *landedPlanet = nullptr;
+    glm::vec3 landedNormal = glm::vec3(0.0f, 1.0f, 0.0f);
+    float landedDistance = 0.0f;
+    glm::vec3 landedShipCenterOffset = glm::vec3(0.0f);
+    glm::vec4 landedFront = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
+    glm::vec4 landedUp = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
+    glm::vec4 landedRight = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
+
+    static Mesh mesh;
+    static BoundingBox boundingBox;
+    static Mesh crosshairMesh;
+    static Mesh rayMesh;
 };
 
 #endif

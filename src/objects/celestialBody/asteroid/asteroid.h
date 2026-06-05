@@ -1,28 +1,50 @@
 #ifndef ASTEROID_H
 #define ASTEROID_H
 
-#include <string>
-
 #include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
 #include "../../objects/celestialBody/celestialBody.h"
+#include "../../../helpers/collision/colliders/boundingSphere.h"
 
 class Window;
 
 class Asteroid : public CelestialBody
 {
 public:
-    Asteroid(const std::string &meshPath = "../../src/objects/celestialBody/asteroid/asteroid.obj", const glm::vec3 &color = glm::vec3(0.5f, 0.5f, 0.5f));
+    enum class Size
+    {
+        Small,
+        Medium,
+        Large
+    };
+
+    Asteroid(const glm::vec3 &color = glm::vec3(0.5f, 0.5f, 0.5f));
+    void destroy();
+    void destroyWithoutFragments();
+    void setSize(Size newSize);
+    Size getSize() const;
+    bool isDestroyed() const;
+    bool consumeFragmentSpawn(Size &outSize, glm::vec3 &outOrigin);
 
 protected:
     glm::mat4 translate(Window *window) override;
     glm::mat4 rotate(Window *window) override;
-    glm::mat4 scale(Window *window) override;
+    void collide(Window *window) override;
 
 private:
-    glm::vec4 position;
-    float chaseSpeed = 1.4f;
+    float chaseSpeed;
+    float baseChaseSpeed = 2.8f;
+    Size size = Size::Medium;
+    float baseScale = 0.1f;
+    bool destroyed = false;
+    bool pendingFragmentSpawn = false;
+    Size fragmentSize = Size::Small;
+    glm::vec3 fragmentOrigin = glm::vec3(0.0f);
+
+    static Mesh mesh;
+    static BoundingSphere boundingSphere;
 };
 
 #endif

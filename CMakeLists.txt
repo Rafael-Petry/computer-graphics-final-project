@@ -14,10 +14,20 @@ set(SOURCES
   src/objects/celestialBody/sun/sun.cpp
   src/objects/celestialBody/planet/planet.cpp
   src/helpers/movement/movement.cpp
+  src/helpers/asteroidSpawner/asteroidSpawner.cpp
+  src/helpers/collision/collision.cpp
+  src/helpers/collision/colliders/boundingBox.cpp
+  src/helpers/collision/colliders/boundingSphere.cpp
   src/helpers/render/render.cpp
   src/scene/scene.cpp
   src/shaders/loader/loader.cpp
   src/window/window.cpp
+  src/vendor/imgui/imgui.cpp
+  src/vendor/imgui/imgui_draw.cpp
+  src/vendor/imgui/imgui_tables.cpp
+  src/vendor/imgui/imgui_widgets.cpp
+  src/vendor/imgui/backends/imgui_impl_glfw.cpp
+  src/vendor/imgui/backends/imgui_impl_opengl3.cpp
   src/vendor/glad.c
 )
 
@@ -70,6 +80,8 @@ add_executable(${EXECUTABLE_NAME} ${SOURCES})
 target_include_directories(${EXECUTABLE_NAME} BEFORE PRIVATE
   ${PROJECT_SOURCE_DIR}/src
   ${PROJECT_SOURCE_DIR}/src/vendor/include
+  ${PROJECT_SOURCE_DIR}/src/vendor/imgui
+  ${PROJECT_SOURCE_DIR}/src/vendor/imgui/backends
 )
 
 if(WIN32)
