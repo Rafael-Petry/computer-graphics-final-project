@@ -112,7 +112,7 @@ void Asteroid::collide(Window *window)
 
     if (boundingSphere.testCollisionBoundingBox(*this, spaceship)) {
         Spaceship::getInstance().applyDamage((int)size + 1);
-        destroy();
+        destroyWithoutFragments();
     }
 }
 
