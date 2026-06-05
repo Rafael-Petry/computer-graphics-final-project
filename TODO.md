@@ -75,5 +75,5 @@ This file defines a bunch of to do lists for different tasks and functionalities
 - [x] Sun hit on spaceship needs to finish the game
 - [x] Make it so the scene has five planets
 - [x] Planet hit on spaceship needs to bump it and damage if it is not landing
-- [] Create a look-at camera
-- [] Create a radar UI that shows the spaceship position/orientation and celestial bodies position
+- [x] Create a look-at camera
+- [x] Create a radar UI that shows the spaceship position/orientation and celestial bodies position
