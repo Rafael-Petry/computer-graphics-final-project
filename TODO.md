@@ -65,14 +65,15 @@ This file defines a bunch of to do lists for different tasks and functionalities
 
 ## 7. Actually Make It a Game
 
-- [-] Create a health UI
-- [] Create a score UI
-- [] There should be a spawner for asteroids
-- [] Shoot collision needs to destroy asteroids and update score
-- [] Asteroid destruction needs to spawn smaller asteroids if possible
-- [] Asteroid hit on spaceship needs to damage it and despawn the asteroid
-- [] Sun hit on spaceship needs to finish the game
-- [] Planet hit on spaceship needs to bump it and damage if it is not landing
+- [x] Create a health UI
+- [x] Create a score UI
+- [x] There should be a spawner for asteroids (needs refactoring)
+- [x] Shoot collision needs to destroy asteroids and update score
+- [x] Asteroids should have different sizes (small, medium and large)
+- [x] Asteroid destruction needs to spawn smaller asteroids if possible
+- [x] Asteroid hit on spaceship needs to damage it and despawn the asteroid
+- [x] Sun hit on spaceship needs to finish the game
+- [x] Make it so the scene has five planets
+- [x] Planet hit on spaceship needs to bump it and damage if it is not landing
 - [] Create a look-at camera
 - [] Create a radar UI that shows the spaceship position/orientation and celestial bodies position
-

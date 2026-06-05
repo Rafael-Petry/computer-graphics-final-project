@@ -44,6 +44,8 @@ private:
     float lastFrame = 0.0f;
     float deltaTime = 0.0f;
 
+    bool imguiInitialized = false;
+
     float aspectRatio;
 
     bool useSceneCamera = false;

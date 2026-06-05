@@ -112,7 +112,7 @@ Change the mesh generation logic to make it so all objects have a reference to i
 
 ## 21-collision
 
-Create a BoundingBox class for collision detection. Implement a CollisionHelper class with a generateBoundingBox method that takes a Mesh struct and uses its shapes and attrib properties to get the min and max of bounding box. On object, create a new boundingBox property that is initialized with generateBoundingBox after the mesh is loaded. The boundingBox property needs to be static for each class that extends Object so it can be reused for multiple instances. On BoundingBox class, implement a testCollision method that takes the boundingBox and position of a object and tests it against the boundingBox and position of another object, printing "The Objects Collided!" if it is true. Call testCollision on Asteroid class, testing it against the Spaceship instance. 
+Create a BoundingBox class for collision detection. Implement a CollisionHelper class with a generateBoundingBox method that takes a Mesh struct and uses its shapes and attrib properties to get the min and max of bounding box. On object, create a new boundingBox property that is initialized with generateBoundingBox after the mesh is loaded. The boundingBox property needs to be static for each class that extends Object so it can be reused for multiple instances. On BoundingBox class, implement a testCollision method that takes the boundingBox and position of a object and tests it against the boundingBox and position of another object, printing "The Objects Collided!" if it is true. Call testCollision on Asteroid class, testing it against the Spaceship instance.
 
 ## 22-bounding-sphere
 
@@ -135,3 +135,55 @@ Change the scene to instead have multiple asteroids (add a property that control
 Make it so the shot can do collateral damage to asteroids behind the one being hit.
 
 When hit, the asteroid need to be respawned on a different random position too.
+
+## 26-health-and-score
+
+On the Spaceship class, create two integer properties called score (starting as 0) and health (starting as 3). Whenever the spaceship shoots an asteroid, you need to increase the score by 100. When an asteroid hits the Spaceship, the asteroid needs to be destroyed and it should decrease the health by 1.
+
+Import the imgui library to this project as a vendor. On the Scene class, create a text on the upper left corner displaying the spaceship's health. On the upper right corner, create a text that displays the spaceship's score.
+
+## 27-asteroid-size
+
+Make it so the asteroids are able to have different sizes (small, medium and large) and multiply its scaleValue by a factor of this size.
+
+Smaller asteroids need to be faster than larger ones. Add a property enableRespawn to the asteroid. All initial asteroids need to have this property set to true.
+
+Asteroids that have enableRespawn = false are still destructible.
+
+Destroying an asteroid needs to also spawn 3 asteroids of a smaller size if it is not a small asteroid. The new asteroids have enableRespawn set to false and are generated around the destroyed asteroid.
+
+## 28-asteroid-spawner
+
+Create an AsteroidSpawnerHelper class that is responsible for spawning asteroids at "waves", in increments of 5 per round. Each round needs to have 30 seconds of downtime. The initial amount of asteroids should be 10. The asteroids have to be spawned in a large radius around the spaceship to avoid instant collisions. The AsteroidSpawnerHelper should have static functions to be called on the Scene class.
+
+## 29-multiple-planets
+
+Change the Scene to have 5 planets in orbit of the sun. Each orbit needs to be progressively further from the sun. You can change the Planet class to have the distance from the sun as a property for the bézier curve. Also, make the speed of the orbit slower. Start each planet on a random orbit phase.
+
+## 30-spaceship-landing-and-takeoff
+
+Make it so the spaceship is able to land on a planet using collisions. The landing needs to stop all momentum for the spaceship and fix it to the planet. It also needs to lock the spaceship rotation while landed so it looks straight.
+
+The spaceship needs to be able to takeoff from the planet when holding shift. This unlocks the position and rotation of the spaceship.
+
+## 31-conditional-landing
+
+Make it so the spaceship can only land on the planet if it is approaching with its base facing the planet's surface. If it is not, then the spaceship will be bumped away and suffer 1 damage to its health.
+
+## 32-look-at-camera
+
+Replace the scene camera by a look-at camera that appears behind of the spaceship. Whenever the player changes cameras using the C key, the look-at camera teleports right behind of the ship.
+
+## 33-radar-interface
+
+On the Scene class, create a new user interface that works as a radar/map. It shows the spaceship's location at the very center as a white dot, the asteroids' position as a red dot, the planets as a green dot and the sun as a yellow dot. If any of the objects are below the spaceship, instead it shows the position as an arrow pointing down. Similarly, if it is on top of the ship, it shows as an arrow pointing up. The radar should show as a square on the bottom right corner. If any object is out of the square's bounds, than it shows on top of the edge.
+
+Change the spaceship's representation from being a dot to instead being an arrow that points towards where it is looking.
+
+## 34-final-tweaks
+
+Make it so the asteroids can collide with planets and the sun. When colliding with these objects, it should destroy the asteroid and not grant points or spawn smaller asteroids.
+
+When the spaceship lands on a planet, it should restore its health up to 5. Also when health reaches 0, the game should close.
+
+Create an interface that is enabled when a wave of asteroids has been cleared. This interface is a text that counts down the time for the next wave to be spawned. Once the wave has been spawned, disable this interface again.

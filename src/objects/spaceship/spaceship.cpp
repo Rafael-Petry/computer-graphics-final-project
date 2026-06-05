@@ -1,5 +1,4 @@
 #include <cmath>
-#include <iostream>
 
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
@@ -13,6 +12,7 @@
 #include "../../helpers/movement/movement.h"
 #include "../../window/window.h"
 #include "../../objects/celestialBody/asteroid/asteroid.h"
+#include "../../objects/celestialBody/planet/planet.h"
 #include "../../vendor/include/matrices.h"
 
 Mesh Spaceship::mesh;
@@ -42,7 +42,7 @@ Spaceship::Spaceship(const glm::vec3 &color) : Object(mesh, boundingBox, color)
     up = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
     right = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
     worldUp = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
-    position = glm::vec3(0.0f, 0.2f, 5.0f);
+    position = glm::vec3(0.0f, 0.2f, 100.0f);
     velocity = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
     scaleValue = glm::vec3(0.3f);
 }
@@ -65,7 +65,7 @@ void Spaceship::update(GLint modelUniform, GLint colorUniform, Window *window)
     updateRotation(window);
 }
 
-void Spaceship::updateShooting(GLint modelUniform, GLint colorUniform, Window *window, std::vector<Asteroid> &asteroids)
+void Spaceship::updateShooting(GLint modelUniform, GLint colorUniform, Window *window, std::list<Asteroid> &asteroids)
 {
     shoot(window, asteroids);
 
@@ -78,6 +78,10 @@ void Spaceship::updateShooting(GLint modelUniform, GLint colorUniform, Window *w
 
 void Spaceship::updateRotation(Window *window)
 {
+    if (isLanded) {
+        return;
+    }
+
     const float deltaTime = window->getDeltaTime();
     const float rotationDamping = expf(-rotationDrag * deltaTime);
 
@@ -132,6 +136,10 @@ void Spaceship::updateView(GLFWwindow *window, double xpos, double ypos)
     Spaceship *spaceship = &Spaceship::getInstance();
 
     if (spaceship != nullptr) {
+        if (spaceship->isLanded) {
+            return;
+        }
+
         spaceship->isRolling = glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS;
 
         if (spaceship->firstMouseUpdate) {
@@ -189,7 +197,7 @@ void Spaceship::updateOrientation(float deltaYaw, float deltaPitch, float deltaR
     up = up / norm(up);
 }
 
-void Spaceship::shoot(Window *window, std::vector<Asteroid> &asteroids)
+void Spaceship::shoot(Window *window, std::list<Asteroid> &asteroids)
 {
     const float currentTime = window->getCurrentFrame();
     if (glfwGetMouseButton(window->getGlfwWindow(), GLFW_MOUSE_BUTTON_LEFT) != GLFW_PRESS) {
@@ -215,18 +223,34 @@ void Spaceship::shoot(Window *window, std::vector<Asteroid> &asteroids)
         }
 
         float hitDistance = 0.0f;
-        if (sphere->testRay(asteroid, rayOrigin, rayDirection, rayMaxRange, &hitDistance)) {
+        if (sphere->testRay(asteroid, rayOrigin, rayDirection, &hitDistance)) {
             hitAsteroids.push_back(&asteroid);
         }
     }
 
     for (Asteroid *asteroid : hitAsteroids) {
-        asteroid->onShotHit();
+        asteroid->destroy();
+        addScore(100);
     }
 }
 
 glm::mat4 Spaceship::translate(Window *window)
 {
+    if (isLanded && landedPlanet != nullptr) {
+        if (glfwGetKey(window->getGlfwWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+            isLanded = false;
+            landedPlanet = nullptr;
+        } else {
+            front = landedFront;
+            up = landedUp;
+            right = landedRight;
+            const glm::vec3 planetCenter = landedPlanet->getPosition();
+            const glm::vec3 shipCenter = planetCenter + (landedNormal * landedDistance);
+            position = shipCenter - landedShipCenterOffset;
+            return Matrix_Translate(position.x, position.y, position.z);
+        }
+    }
+
     const float deltaTime = window->getDeltaTime();
     const glm::vec3 movement = MovementHelper::getMovementInputs(window->getGlfwWindow());
 
@@ -253,6 +277,68 @@ glm::mat4 Spaceship::translate(Window *window)
     return Matrix_Translate(position.x, position.y, position.z);
 }
 
+void Spaceship::landOn(const Planet *planet, const glm::vec3 &surfaceNormal, float distanceFromCenter, const glm::vec3 &shipCenterOffset)
+{
+    if (planet == nullptr) {
+        return;
+    }
+
+    if (isLanded && landedPlanet == planet) {
+        return;
+    }
+
+    const glm::vec3 normalizedNormal = glm::normalize(surfaceNormal);
+    const float approachDot = glm::dot(glm::vec3(velocity), normalizedNormal);
+    const float upAlignment = glm::dot(glm::vec3(up), normalizedNormal);
+    const float minApproachSpeed = 0.2f;
+    const float minUpAlignment = 0.75f;
+
+    if (approachDot > -minApproachSpeed || upAlignment < minUpAlignment) {
+        applyDamage(1);
+        landedPlanet = nullptr;
+        isLanded = false;
+
+        const float bumpDistance = 0.6f;
+        const float bumpSpeed = 3.0f;
+        const glm::vec3 planetCenter = planet->getPosition();
+        const glm::vec3 shipCenter = planetCenter + (normalizedNormal * (distanceFromCenter + bumpDistance));
+        position = shipCenter - shipCenterOffset;
+        velocity = glm::vec4(normalizedNormal * bumpSpeed, 0.0f);
+        return;
+    }
+
+    landedPlanet = planet;
+    landedNormal = normalizedNormal;
+    landedDistance = distanceFromCenter;
+    landedShipCenterOffset = shipCenterOffset;
+    isLanded = true;
+    health = maxHealth;
+
+    glm::vec3 forward = glm::vec3(front);
+    forward -= landedNormal * glm::dot(forward, landedNormal);
+    if (glm::dot(forward, forward) < 0.0001f) {
+        forward = glm::vec3(0.0f, 0.0f, -1.0f);
+        forward -= landedNormal * glm::dot(forward, landedNormal);
+    }
+
+    forward = glm::normalize(forward);
+    const glm::vec3 rightAxis = glm::normalize(glm::cross(forward, landedNormal));
+    const glm::vec3 upAxis = glm::normalize(glm::cross(rightAxis, forward));
+
+    landedFront = glm::vec4(forward, 0.0f);
+    landedUp = glm::vec4(upAxis, 0.0f);
+    landedRight = glm::vec4(rightAxis, 0.0f);
+
+    front = landedFront;
+    up = landedUp;
+    right = landedRight;
+
+    stopMovement();
+    yawVelocity = 0.0f;
+    pitchVelocity = 0.0f;
+    rollVelocity = 0.0f;
+}
+
 glm::mat4 Spaceship::rotate(Window *window) { return Matrix(right.x, up.x, front.x, 0.0f, right.y, up.y, front.y, 0.0f, right.z, up.z, front.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f); }
 
 glm::mat4 Spaceship::getViewMatrix() const
@@ -263,7 +349,45 @@ glm::mat4 Spaceship::getViewMatrix() const
 
 glm::vec3 Spaceship::getCameraPosition() const { return position + glm::vec3(front); }
 
+glm::vec3 Spaceship::getFrontVector() const { return glm::vec3(front); }
+
+glm::vec3 Spaceship::getUpVector() const { return glm::vec3(up); }
+
 const BoundingBox &Spaceship::getBoundingBox() const { return boundingBox; }
+
+int Spaceship::getScore() const { return score; }
+
+int Spaceship::getHealth() const { return health; }
+
+void Spaceship::addScore(int amount)
+{
+    if (amount <= 0) {
+        return;
+    }
+
+    score += amount;
+}
+
+void Spaceship::applyDamage(int amount)
+{
+    if (amount <= 0) {
+        return;
+    }
+
+    health -= amount;
+    if (health < 0) {
+        health = 0;
+    }
+
+    if (health == 0) {
+        GLFWwindow *glfwWindow = Window::getInstance().getGlfwWindow();
+        if (glfwWindow != nullptr) {
+            glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
+        }
+    }
+}
+
+void Spaceship::stopMovement() { velocity = glm::vec4(0.0f); }
 
 glm::mat4 Spaceship::getOrientationMatrix() const
 {
@@ -308,10 +432,8 @@ void Spaceship::renderRay(GLint modelUniform, GLint colorUniform) const
     const glm::vec3 rightDir = glm::normalize(glm::cross(upDir, direction));
     const glm::vec3 fixedUp = glm::normalize(glm::cross(direction, rightDir));
 
-    const glm::mat4 orientation = Matrix(rightDir.x, fixedUp.x, direction.x, 0.0f,
-                                         rightDir.y, fixedUp.y, direction.y, 0.0f,
-                                         rightDir.z, fixedUp.z, direction.z, 0.0f,
-                                         0.0f, 0.0f, 0.0f, 1.0f);
+    const glm::mat4 orientation =
+        Matrix(rightDir.x, fixedUp.x, direction.x, 0.0f, rightDir.y, fixedUp.y, direction.y, 0.0f, rightDir.z, fixedUp.z, direction.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 
     const glm::vec3 center = rayOrigin + (direction * (rayMaxRange * 0.5f));
     const float radiusScale = rayRadius * 2.0f;
