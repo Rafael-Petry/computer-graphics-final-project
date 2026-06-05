@@ -14,6 +14,8 @@ class AsteroidSpawnerHelper
 public:
     static void initialize(std::list<Asteroid> &asteroids, const Spaceship &spaceship);
     static void update(std::list<Asteroid> &asteroids, const Spaceship &spaceship, float currentTime);
+    static bool isWaitingForNextWave();
+    static float getNextWaveStartTime();
 
 private:
     static void spawnWave(std::list<Asteroid> &asteroids, const Spaceship &spaceship, int count);

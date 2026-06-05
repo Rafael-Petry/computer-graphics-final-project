@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "../objects/celestialBody/sun/sun.h"
+#include "../helpers/collision/colliders/boundingSphere.h"
 #include "../helpers/asteroidSpawner/asteroidSpawner.h"
 #include "../window/window.h"
 #include "scene.h"
@@ -87,6 +88,29 @@ void Scene::update(GLint modelUniform, GLint colorUniform, Window *window)
             asteroid.update(modelUniform, colorUniform, window);
         }
     }
+
+    for (Asteroid &asteroid : asteroids) {
+        if (asteroid.isDestroyed()) {
+            continue;
+        }
+
+        const BoundingSphere *sphere = dynamic_cast<const BoundingSphere *>(&asteroid.getCollider());
+        if (sphere == nullptr) {
+            continue;
+        }
+
+        if (sphere->testCollisionBoundingSphere(asteroid, sun)) {
+            asteroid.destroyWithoutFragments();
+            continue;
+        }
+
+        for (Planet &planet : planets) {
+            if (sphere->testCollisionBoundingSphere(asteroid, planet)) {
+                asteroid.destroyWithoutFragments();
+                break;
+            }
+        }
+    }
     spaceship.updateShooting(modelUniform, colorUniform, window, asteroids);
 
     struct FragmentSpawn
@@ -128,6 +152,14 @@ void Scene::update(GLint modelUniform, GLint colorUniform, Window *window)
     ImGui::Begin("HUDLeft", nullptr, hudFlags);
     ImGui::Text("Health: %d", spaceship.getHealth());
     ImGui::End();
+
+    if (AsteroidSpawnerHelper::isWaitingForNextWave()) {
+        const float secondsLeft = std::max(0.0f, AsteroidSpawnerHelper::getNextWaveStartTime() - window->getCurrentFrame());
+        ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, padding), ImGuiCond_Always, ImVec2(0.5f, 0.0f));
+        ImGui::Begin("WaveCountdown", nullptr, hudFlags);
+        ImGui::Text("Next wave in: %.1f", secondsLeft);
+        ImGui::End();
+    }
 
     ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x - padding, padding), ImGuiCond_Always, ImVec2(1.0f, 0.0f));
     ImGui::Begin("HUDRight", nullptr, hudFlags);

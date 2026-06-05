@@ -66,6 +66,10 @@ void AsteroidSpawnerHelper::spawnWave(std::list<Asteroid> &asteroids, const Spac
     }
 }
 
+bool AsteroidSpawnerHelper::isWaitingForNextWave() { return waitingForNextWave; }
+
+float AsteroidSpawnerHelper::getNextWaveStartTime() { return nextWaveStartTime; }
+
 glm::vec3 AsteroidSpawnerHelper::randomSpawnPosition(std::mt19937 &rng, const glm::vec3 &center)
 {
     std::uniform_real_distribution<float> directionDist(-1.0f, 1.0f);

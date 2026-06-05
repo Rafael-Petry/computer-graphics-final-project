@@ -46,6 +46,8 @@ protected:
 private:
     Spaceship(const glm::vec3 &color = glm::vec3(0.73f, 0.79f, 0.88f));
 
+    static constexpr int maxHealth = 5;
+
     void shoot(Window *window, std::list<Asteroid> &asteroids);
     void renderCrosshair(GLint modelUniform, GLint colorUniform) const;
     void renderRay(GLint modelUniform, GLint colorUniform) const;
@@ -97,7 +99,7 @@ private:
     glm::vec3 rayDirection = glm::vec3(0.0f, 0.0f, -1.0f);
 
     int score = 0;
-    int health = 5;
+    int health = maxHealth;
 
     bool isLanded = false;
     const Planet *landedPlanet = nullptr;

@@ -22,6 +22,7 @@ public:
 
     Asteroid(const glm::vec3 &color = glm::vec3(0.5f, 0.5f, 0.5f));
     void destroy();
+    void destroyWithoutFragments();
     void setSize(Size newSize);
     Size getSize() const;
     bool isDestroyed() const;

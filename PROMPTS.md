@@ -179,3 +179,11 @@ Replace the scene camera by a look-at camera that appears behind of the spaceshi
 On the Scene class, create a new user interface that works as a radar/map. It shows the spaceship's location at the very center as a white dot, the asteroids' position as a red dot, the planets as a green dot and the sun as a yellow dot. If any of the objects are below the spaceship, instead it shows the position as an arrow pointing down. Similarly, if it is on top of the ship, it shows as an arrow pointing up. The radar should show as a square on the bottom right corner. If any object is out of the square's bounds, than it shows on top of the edge.
 
 Change the spaceship's representation from being a dot to instead being an arrow that points towards where it is looking.
+
+## 34-final-tweaks
+
+Make it so the asteroids can collide with planets and the sun. When colliding with these objects, it should destroy the asteroid and not grant points or spawn smaller asteroids.
+
+When the spaceship lands on a planet, it should restore its health up to 5. Also when health reaches 0, the game should close.
+
+Create an interface that is enabled when a wave of asteroids has been cleared. This interface is a text that counts down the time for the next wave to be spawned. Once the wave has been spawned, disable this interface again.

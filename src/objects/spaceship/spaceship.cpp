@@ -312,6 +312,7 @@ void Spaceship::landOn(const Planet *planet, const glm::vec3 &surfaceNormal, flo
     landedDistance = distanceFromCenter;
     landedShipCenterOffset = shipCenterOffset;
     isLanded = true;
+    health = maxHealth;
 
     glm::vec3 forward = glm::vec3(front);
     forward -= landedNormal * glm::dot(forward, landedNormal);
@@ -376,6 +377,13 @@ void Spaceship::applyDamage(int amount)
     health -= amount;
     if (health < 0) {
         health = 0;
+    }
+
+    if (health == 0) {
+        GLFWwindow *glfwWindow = Window::getInstance().getGlfwWindow();
+        if (glfwWindow != nullptr) {
+            glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
+        }
     }
 }
 

@@ -128,3 +128,11 @@ void Asteroid::destroy()
     scaleValue = glm::vec3(0.0f);
     chaseSpeed = 0.0f;
 }
+
+void Asteroid::destroyWithoutFragments()
+{
+    pendingFragmentSpawn = false;
+    destroyed = true;
+    scaleValue = glm::vec3(0.0f);
+    chaseSpeed = 0.0f;
+}
