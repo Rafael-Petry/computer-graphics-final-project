@@ -40,7 +40,7 @@ Planet::Planet(const glm::vec3 &color, float orbitRadius, float orbitSpeed, floa
         boundingSphere = CollisionHelper::generateBoundingSphere(mesh);
     }
 
-    scaleValue = glm::vec3(10.0f);
+    scaleValue = glm::vec3(5.0f);
     position = glm::vec3(0.0f);
     this->orbitRadius = orbitRadius;
     this->orbitSpeed = orbitSpeed;
