@@ -106,15 +106,19 @@ void Scene::update(GLint modelUniform, GLint colorUniform, Window *window)
 {
     spaceship.update(modelUniform, colorUniform, window);
     sun.update(modelUniform, colorUniform, window);
+
     for (Planet &planet : planets) {
         planet.update(modelUniform, colorUniform, window);
     }
+
     for (Tree &tree : trees) {
         tree.update(modelUniform, colorUniform, window);
     }
+
     for (Bush &bush : bushes) {
         bush.update(modelUniform, colorUniform, window);
     }
+
     for (Asteroid &asteroid : asteroids) {
         if (!asteroid.isDestroyed()) {
             asteroid.update(modelUniform, colorUniform, window);
@@ -175,6 +179,11 @@ void Scene::update(GLint modelUniform, GLint colorUniform, Window *window)
     asteroids.remove_if([](const Asteroid &asteroid) { return asteroid.isDestroyed(); });
     AsteroidSpawnerHelper::update(asteroids, spaceship, window->getCurrentFrame());
 
+    this->updateUI(window);
+}
+
+void Scene::updateUI(Window *window)
+{
     ImGuiIO &io = ImGui::GetIO();
     const float padding = 12.0f;
     const ImGuiWindowFlags hudFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
@@ -197,6 +206,14 @@ void Scene::update(GLint modelUniform, GLint colorUniform, Window *window)
     ImGui::Begin("HUDRight", nullptr, hudFlags);
     ImGui::Text("Score: %d", spaceship.getScore());
     ImGui::End();
+
+    this->updateRadar(window);
+}
+
+void Scene::updateRadar(Window *window)
+{
+    ImGuiIO &io = ImGui::GetIO();
+    const float padding = 12.0f;
 
     const float radarSize = 320.0f;
     const float radarRange = 120.0f;
