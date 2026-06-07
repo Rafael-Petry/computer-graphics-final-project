@@ -27,8 +27,6 @@ public:
     float getDeltaTime() const;
     float getCurrentFrame() const;
 
-    void setUseSceneCamera(bool useSceneCamera) { this->useSceneCamera = useSceneCamera; }
-
 private:
     static void framebufferSizeCallback(GLFWwindow *glfwWindow, int width, int height);
     static void keyCallback(GLFWwindow *glfwWindow, int key, int scancode, int action, int mods);
@@ -48,7 +46,6 @@ private:
 
     float aspectRatio;
 
-    bool useSceneCamera = false;
     bool isFullscreen = true;
 
     int width = 1280;

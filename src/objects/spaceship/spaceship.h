@@ -25,19 +25,22 @@ public:
     void update(GLint modelUniform, GLint colorUniform, Window *window);
     void updateShooting(GLint modelUniform, GLint colorUniform, Window *window, std::list<Asteroid> &asteroids);
     void updateRotation(Window *window);
+    static void updateView(GLFWwindow *window, double xpos, double ypos);
 
+    void addScore(int amount);
+    void applyDamage(int amount);
+    void landOn(const Planet *planet, const glm::vec3 &surfaceNormal, float distanceFromCenter, const glm::vec3 &shipCenterOffset);
+    void stopMovement();
+
+    int getScore() const;
+    int getHealth() const;
     glm::mat4 getViewMatrix() const;
     glm::vec3 getCameraPosition() const;
     glm::vec3 getFrontVector() const;
     glm::vec3 getUpVector() const;
     const BoundingBox &getBoundingBox() const;
-    int getScore() const;
-    int getHealth() const;
-    void addScore(int amount);
-    void applyDamage(int amount);
-    void landOn(const Planet *planet, const glm::vec3 &surfaceNormal, float distanceFromCenter, const glm::vec3 &shipCenterOffset);
-    void stopMovement();
-    static void updateView(GLFWwindow *window, double xpos, double ypos);
+
+    void toggleCameraMode() { cameraIsFirstPerson = !cameraIsFirstPerson; }
 
 protected:
     glm::mat4 translate(Window *window) override;
@@ -109,6 +112,8 @@ private:
     glm::vec4 landedFront = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
     glm::vec4 landedUp = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
     glm::vec4 landedRight = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
+
+    bool cameraIsFirstPerson = true;
 
     static Mesh mesh;
     static BoundingBox boundingBox;
