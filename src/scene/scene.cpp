@@ -9,7 +9,7 @@
 
 #include "../objects/celestialBody/sun/sun.h"
 #include "../helpers/collision/colliders/boundingSphere.h"
-#include "../helpers/asteroidSpawner/asteroidSpawner.h"
+#include "../helpers/spawners/asteroid/asteroidSpawner.h"
 #include "../window/window.h"
 #include "scene.h"
 #include "../../vendor/include/matrices.h"

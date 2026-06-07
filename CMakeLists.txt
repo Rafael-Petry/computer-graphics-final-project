@@ -16,7 +16,7 @@ set(SOURCES
   src/objects/tree/tree.cpp
   src/objects/bush/bush.cpp
   src/helpers/movement/movement.cpp
-  src/helpers/asteroidSpawner/asteroidSpawner.cpp
+  src/helpers/spawners/asteroid/asteroidSpawner.cpp
   src/helpers/collision/collision.cpp
   src/helpers/collision/colliders/boundingBox.cpp
   src/helpers/collision/colliders/boundingSphere.cpp
