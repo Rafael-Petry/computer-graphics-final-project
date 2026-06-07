@@ -13,6 +13,8 @@ set(SOURCES
   src/objects/celestialBody/asteroid/asteroid.cpp
   src/objects/celestialBody/sun/sun.cpp
   src/objects/celestialBody/planet/planet.cpp
+  src/objects/tree/tree.cpp
+  src/objects/bush/bush.cpp
   src/helpers/movement/movement.cpp
   src/helpers/asteroidSpawner/asteroidSpawner.cpp
   src/helpers/collision/collision.cpp

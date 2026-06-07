@@ -66,6 +66,7 @@ Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spacesh
 
     std::mt19937 rng(std::random_device{}());
     std::uniform_real_distribution<float> phaseDist(0.0f, 2.0f);
+    std::uniform_real_distribution<float> treeBushDist(0.0f, 1.0f);
 
     planets.reserve(planetCount);
     for (int i = 0; i < planetCount; ++i) {
@@ -73,6 +74,31 @@ Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spacesh
         const float orbitSpeed = 0.01f;
         const float orbitPhase = phaseDist(rng);
         planets.emplace_back(colors[i % colors.size()], orbitRadius, orbitSpeed, orbitPhase);
+        Planet &currentPlanet = planets[i];
+
+        // Spawn trees and bushes on the planet's surface
+        const int treesPerPlanet = 3;
+        const int bushesPerPlanet = 5;
+        const float planetRadius = 5.0f;                 // Approximate planet scale
+        const float spawnDistance = planetRadius + 1.5f; // Distance from planet center to surface spawn point
+
+        for (int t = 0; t < treesPerPlanet; ++t) {
+            float theta = (2.0f * 3.14159f * t) / treesPerPlanet;
+            float phi = (3.14159f * treeBushDist(rng));
+
+            glm::vec3 offset(spawnDistance * std::sin(phi) * std::cos(theta), spawnDistance * std::cos(phi), spawnDistance * std::sin(phi) * std::sin(theta));
+            glm::vec3 treeColor = colors[i % colors.size()] * glm::vec3(0.5f, 1.0f, 0.5f);
+            trees.emplace_back(treeColor, &currentPlanet, offset, 0.8f);
+        }
+
+        for (int b = 0; b < bushesPerPlanet; ++b) {
+            float theta = (2.0f * 3.14159f * b) / bushesPerPlanet + (3.14159f / bushesPerPlanet) * 0.5f;
+            float phi = (3.14159f * treeBushDist(rng));
+
+            glm::vec3 offset(spawnDistance * std::sin(phi) * std::cos(theta), spawnDistance * std::cos(phi), spawnDistance * std::sin(phi) * std::sin(theta));
+            glm::vec3 bushColor = colors[i % colors.size()] * glm::vec3(0.6f, 1.0f, 0.6f);
+            bushes.emplace_back(bushColor, &currentPlanet, offset, 0.6f);
+        }
     }
 }
 
@@ -82,6 +108,12 @@ void Scene::update(GLint modelUniform, GLint colorUniform, Window *window)
     sun.update(modelUniform, colorUniform, window);
     for (Planet &planet : planets) {
         planet.update(modelUniform, colorUniform, window);
+    }
+    for (Tree &tree : trees) {
+        tree.update(modelUniform, colorUniform, window);
+    }
+    for (Bush &bush : bushes) {
+        bush.update(modelUniform, colorUniform, window);
     }
     for (Asteroid &asteroid : asteroids) {
         if (!asteroid.isDestroyed()) {
