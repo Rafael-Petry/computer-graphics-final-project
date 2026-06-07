@@ -50,6 +50,7 @@ This file defines a bunch of to do lists for different tasks and functionalities
 - [] Make textures work
     - [] For planets, make an algorithm to generate the texture procedurally
 - [] Make lighting work
+    - [] The sun needs to be a light source
 - [] ...
 
 ## 6. Collisions
@@ -77,3 +78,4 @@ This file defines a bunch of to do lists for different tasks and functionalities
 - [x] Planet hit on spaceship needs to bump it and damage if it is not landing
 - [x] Create a look-at camera
 - [x] Create a radar UI that shows the spaceship position/orientation and celestial bodies position
+- [-] Add trees and bushes to planets
