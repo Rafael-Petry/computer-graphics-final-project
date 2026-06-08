@@ -42,7 +42,7 @@ void Window::keyCallback(GLFWwindow *glfwWindow, int key, int scancode, int acti
     }
 
     if (key == GLFW_KEY_C && action == GLFW_PRESS) {
-        window.setUseSceneCamera(!window.useSceneCamera);
+        Spaceship::getInstance().toggleCameraMode();
     }
 
     if (key == GLFW_KEY_F1 && action == GLFW_PRESS) {
@@ -150,21 +150,7 @@ void Window::updateShaderProgram(GLuint shaderProgram)
     const GLint projectionUniform = glGetUniformLocation(shaderProgram, "projection");
 
     const glm::mat4 projection = Matrix_Perspective(M_PI / 3.0f, aspectRatio, -0.1f, -500.0f);
-
-    const Spaceship &spaceship = Spaceship::getInstance();
-    glm::mat4 view = spaceship.getViewMatrix();
-    if (useSceneCamera) {
-        const glm::vec3 shipPosition = spaceship.getPosition();
-        const glm::vec3 shipFront = glm::normalize(spaceship.getFrontVector());
-        const glm::vec3 shipUp = glm::normalize(spaceship.getUpVector());
-
-        const float cameraDistance = 6.0f;
-        const float cameraHeight = 2.0f;
-        const glm::vec3 cameraPosition = shipPosition - shipFront * cameraDistance + shipUp * cameraHeight;
-        const glm::vec3 viewDirection = glm::normalize(shipPosition - cameraPosition);
-
-        view = Matrix_cameraView(glm::vec4(cameraPosition, 1.0f), glm::vec4(viewDirection, 0.0f), glm::vec4(shipUp, 0.0f));
-    }
+    glm::mat4 view = Spaceship::getInstance().getViewMatrix();
 
     glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(projectionUniform, 1, GL_FALSE, glm::value_ptr(projection));

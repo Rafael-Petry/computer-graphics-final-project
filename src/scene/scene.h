@@ -18,6 +18,8 @@ class Scene
 public:
     Scene();
     void update(GLint modelUniform, GLint colorUniform, Window *window);
+    void updateUI(Window *window);
+    void updateRadar(Window *window);
 
 private:
     float lastFrame;

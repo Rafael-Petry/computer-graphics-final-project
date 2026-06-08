@@ -343,8 +343,20 @@ glm::mat4 Spaceship::rotate(Window *window) { return Matrix(right.x, up.x, front
 
 glm::mat4 Spaceship::getViewMatrix() const
 {
-    const glm::vec4 position4(position, 1.0f);
-    return Matrix_cameraView(position4 + front, front, up);
+    if (cameraIsFirstPerson) {
+        const glm::vec4 position4(position, 1.0f);
+        return Matrix_cameraView(position4 + front, front, up);
+    }
+
+    const glm::vec3 shipFront = glm::normalize(getFrontVector());
+    const glm::vec3 shipUp = glm::normalize(getUpVector());
+
+    const float cameraDistance = 6.0f;
+    const float cameraHeight = 2.0f;
+    const glm::vec3 cameraPosition = position - shipFront * cameraDistance + shipUp * cameraHeight;
+    const glm::vec3 viewDirection = glm::normalize(position - cameraPosition);
+
+    return Matrix_cameraView(glm::vec4(cameraPosition, 1.0f), glm::vec4(viewDirection, 0.0f), glm::vec4(shipUp, 0.0f));
 }
 
 glm::vec3 Spaceship::getCameraPosition() const { return position + glm::vec3(front); }
