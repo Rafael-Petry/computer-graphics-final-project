@@ -204,7 +204,10 @@ void Window::updateScene(GLuint shaderProgram)
     const GLint useTextureUniform = glGetUniformLocation(shaderProgram, "useTexture");
     const GLint texSamplerUniform = glGetUniformLocation(shaderProgram, "textureColormap");
     const GLint isEmissiveUniform = glGetUniformLocation(shaderProgram, "isEmissive");
-    scene->update(modelUniform, colorUniform, useTextureUniform, texSamplerUniform, isEmissiveUniform, this);
+    const GLint metallicUniform = glGetUniformLocation(shaderProgram, "metallic");
+    const GLint roughnessUniform = glGetUniformLocation(shaderProgram, "roughness");
+    const GLint specularUniform = glGetUniformLocation(shaderProgram, "specular");
+    scene->update(modelUniform, colorUniform, useTextureUniform, texSamplerUniform, isEmissiveUniform, metallicUniform, roughnessUniform, specularUniform, this);
 }
 
 void Window::close()

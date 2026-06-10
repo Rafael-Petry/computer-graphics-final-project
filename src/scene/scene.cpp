@@ -102,26 +102,34 @@ Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spacesh
     }
 }
 
-void Scene::update(GLint modelUniform, GLint colorUniform, GLint useTextureUniform, GLint texSamplerUniform, GLint isEmissiveUniform, Window *window)
+void Scene::update(GLint modelUniform,
+                   GLint colorUniform,
+                   GLint useTextureUniform,
+                   GLint texSamplerUniform,
+                   GLint isEmissiveUniform,
+                   GLint metallicUniform,
+                   GLint roughnessUniform,
+                   GLint specularUniform,
+                   Window *window)
 {
     spaceship.update(modelUniform, colorUniform, window);
-    sun.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, true);
+    sun.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, true, metallicUniform, roughnessUniform, specularUniform);
 
     for (Planet &planet : planets) {
-        planet.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform);
+        planet.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
     }
 
     for (Tree &tree : trees) {
-        tree.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform);
+        tree.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
     }
 
     for (Bush &bush : bushes) {
-        bush.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform);
+        bush.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
     }
 
     for (Asteroid &asteroid : asteroids) {
         if (!asteroid.isDestroyed()) {
-            asteroid.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform);
+            asteroid.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
         }
     }
 

@@ -11,16 +11,27 @@
 
 Object::Object(const Mesh &mesh, const Collider &collider, const glm::vec3 &color) : mesh(mesh), collider(collider), color(color), scaleValue(1.0f), position(0.0f) {}
 
-void Object::update(GLint modelUniform, GLint colorUniform, Window *window, GLint useTextureUniform, GLint texSamplerUniform, GLint isEmissiveUniform, bool isEmissive)
+void Object::update(GLint modelUniform,
+                    GLint colorUniform,
+                    Window *window,
+                    GLint useTextureUniform,
+                    GLint texSamplerUniform,
+                    GLint isEmissiveUniform,
+                    bool isEmissive,
+                    GLint metallicUniform,
+                    GLint roughnessUniform,
+                    GLint specularUniform)
 {
     if (isEmissiveUniform >= 0)
         glUniform1i(isEmissiveUniform, isEmissive ? 1 : 0);
 
     const glm::mat4 model = translate(window) * rotate(window) * scale(window) * Matrix_Translate(0.0f, 0.0f, 0.0f);
-    RenderHelper::renderModelTextured(modelUniform, colorUniform, useTextureUniform, texSamplerUniform, model, mesh, color);
+
+    RenderHelper::renderModelMTL(
+        modelUniform, colorUniform, useTextureUniform, texSamplerUniform, metallicUniform, roughnessUniform, specularUniform, isEmissiveUniform, model, mesh, color);
 
     if (isEmissiveUniform >= 0)
-        glUniform1i(isEmissiveUniform, 0); // reset après le rendu
+        glUniform1i(isEmissiveUniform, 0);
 
     collide(window);
 }
