@@ -17,7 +17,7 @@ class Scene
 {
 public:
     Scene();
-    void update(GLint modelUniform, GLint colorUniform, Window *window);
+    void update(GLint modelUniform, GLint colorUniform, GLint useTextureUniform, GLint texSamplerUniform, GLint isEmissiveUniform, Window *window);
     void updateUI(Window *window);
     void updateRadar(Window *window);
 

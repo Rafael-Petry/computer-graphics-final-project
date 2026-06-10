@@ -11,10 +11,17 @@
 
 Object::Object(const Mesh &mesh, const Collider &collider, const glm::vec3 &color) : mesh(mesh), collider(collider), color(color), scaleValue(1.0f), position(0.0f) {}
 
-void Object::update(GLint modelUniform, GLint colorUniform, Window *window)
+void Object::update(GLint modelUniform, GLint colorUniform, Window *window, GLint useTextureUniform, GLint texSamplerUniform, GLint isEmissiveUniform, bool isEmissive)
 {
+    if (isEmissiveUniform >= 0)
+        glUniform1i(isEmissiveUniform, isEmissive ? 1 : 0);
+
     const glm::mat4 model = translate(window) * rotate(window) * scale(window) * Matrix_Translate(0.0f, 0.0f, 0.0f);
-    RenderHelper::renderModel(modelUniform, colorUniform, model, mesh, color);
+    RenderHelper::renderModelTextured(modelUniform, colorUniform, useTextureUniform, texSamplerUniform, model, mesh, color);
+
+    if (isEmissiveUniform >= 0)
+        glUniform1i(isEmissiveUniform, 0); // reset après le rendu
+
     collide(window);
 }
 

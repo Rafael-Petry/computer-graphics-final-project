@@ -56,7 +56,7 @@ namespace {
 Asteroid::Asteroid(const glm::vec3 &color) : CelestialBody(mesh, boundingSphere, color)
 {
     if (mesh.vao == 0) {
-        mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/asteroid/asteroid.obj");
+        mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/asteroid/asteroid_updated.obj");
     }
 
     if (!boundingSphere.isInitialized() && mesh.vao != 0) {

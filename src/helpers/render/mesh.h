@@ -12,6 +12,7 @@ struct Mesh
     GLuint vao = 0;
     GLuint vbo = 0;
     GLsizei vertexCount = 0;
+    GLuint textureId = 0; // 0 = pas de texture
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
 };

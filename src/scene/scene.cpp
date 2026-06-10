@@ -102,26 +102,26 @@ Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spacesh
     }
 }
 
-void Scene::update(GLint modelUniform, GLint colorUniform, Window *window)
+void Scene::update(GLint modelUniform, GLint colorUniform, GLint useTextureUniform, GLint texSamplerUniform, GLint isEmissiveUniform, Window *window)
 {
     spaceship.update(modelUniform, colorUniform, window);
-    sun.update(modelUniform, colorUniform, window);
+    sun.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, true);
 
     for (Planet &planet : planets) {
-        planet.update(modelUniform, colorUniform, window);
+        planet.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform);
     }
 
     for (Tree &tree : trees) {
-        tree.update(modelUniform, colorUniform, window);
+        tree.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform);
     }
 
     for (Bush &bush : bushes) {
-        bush.update(modelUniform, colorUniform, window);
+        bush.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform);
     }
 
     for (Asteroid &asteroid : asteroids) {
         if (!asteroid.isDestroyed()) {
-            asteroid.update(modelUniform, colorUniform, window);
+            asteroid.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform);
         }
     }
 

@@ -13,6 +13,7 @@
 #include <backends/imgui_impl_opengl3.h>
 
 #include "../scene/scene.h"
+#include "../objects/celestialBody/sun/sun.h"
 #include "window.h"
 #include "../../vendor/include/matrices.h"
 
@@ -146,16 +147,44 @@ void Window::update(GLuint shaderProgram)
 
 void Window::updateShaderProgram(GLuint shaderProgram)
 {
+    glUseProgram(shaderProgram);
+
+    // ── Matrices view / projection ───────────────────────────────────────────
     const GLint viewUniform = glGetUniformLocation(shaderProgram, "view");
     const GLint projectionUniform = glGetUniformLocation(shaderProgram, "projection");
 
-    const glm::mat4 projection = Matrix_Perspective(M_PI / 3.0f, aspectRatio, -0.1f, -500.0f);
-    glm::mat4 view = Spaceship::getInstance().getViewMatrix();
+    const glm::mat4 projection = Matrix_Perspective(static_cast<float>(M_PI) / 3.0f, aspectRatio, -0.1f, -500.0f);
+    const glm::mat4 view = Spaceship::getInstance().getViewMatrix();
 
     glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(projectionUniform, 1, GL_FALSE, glm::value_ptr(projection));
 
-    glUseProgram(shaderProgram);
+    // ── Soleil : source de lumière ───────────────────────────────────────────
+    const glm::vec3 sunPos = Sun::getInstance().getPosition();
+    glUniform3f(glGetUniformLocation(shaderProgram, "sunPosition"), sunPos.x, sunPos.y, sunPos.z);
+    glUniform3f(glGetUniformLocation(shaderProgram, "sunColor"), 1.0f, 0.95f, 0.8f);
+    glUniform1f(glGetUniformLocation(shaderProgram, "sunIntensity"), 3.0f);
+
+    // ── Lumière ambiante (espace) ────────────────────────────────────────────
+    glUniform3f(glGetUniformLocation(shaderProgram, "ambientColor"), 0.02f, 0.02f, 0.05f);
+
+    // ── Paramètres PBR Disney (valeurs par défaut pour tous les objets) ──────
+    // Ces valeurs peuvent être surchargées par objet si besoin plus tard.
+    glUniform1f(glGetUniformLocation(shaderProgram, "metallic"), 0.6f);
+    glUniform1f(glGetUniformLocation(shaderProgram, "roughness"), 0.3f);
+    glUniform1f(glGetUniformLocation(shaderProgram, "subsurface"), 0.0f);
+    glUniform1f(glGetUniformLocation(shaderProgram, "specular"), 0.8f);
+    glUniform1f(glGetUniformLocation(shaderProgram, "specularTint"), 0.2f);
+    glUniform1f(glGetUniformLocation(shaderProgram, "anisotropic"), 0.0f);
+    glUniform1f(glGetUniformLocation(shaderProgram, "sheen"), 0.0f);
+    glUniform1f(glGetUniformLocation(shaderProgram, "sheenTint"), 0.5f);
+    glUniform1f(glGetUniformLocation(shaderProgram, "clearcoat"), 0.5f);
+    glUniform1f(glGetUniformLocation(shaderProgram, "clearcoatGloss"), 0.8f);
+
+    // ── Texture : désactivée par défaut (activée par renderModelTextured) ────
+    glUniform1i(glGetUniformLocation(shaderProgram, "useTexture"), 0);
+    glUniform1i(glGetUniformLocation(shaderProgram, "textureColormap"), 0);
+    glUniform1i(glGetUniformLocation(shaderProgram, "isEmissive"), 0);
 }
 
 void Window::updateTime()
@@ -172,7 +201,10 @@ void Window::updateScene(GLuint shaderProgram)
 
     const GLint modelUniform = glGetUniformLocation(shaderProgram, "model");
     const GLint colorUniform = glGetUniformLocation(shaderProgram, "objectColor");
-    scene->update(modelUniform, colorUniform, this);
+    const GLint useTextureUniform = glGetUniformLocation(shaderProgram, "useTexture");
+    const GLint texSamplerUniform = glGetUniformLocation(shaderProgram, "textureColormap");
+    const GLint isEmissiveUniform = glGetUniformLocation(shaderProgram, "isEmissive");
+    scene->update(modelUniform, colorUniform, useTextureUniform, texSamplerUniform, isEmissiveUniform, this);
 }
 
 void Window::close()

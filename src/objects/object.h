@@ -19,7 +19,8 @@ public:
     Object(const Mesh &mesh, const Collider &collider, const glm::vec3 &color = glm::vec3(0.5f, 0.5f, 0.5f));
     virtual ~Object() {}
 
-    void update(GLint modelUniform, GLint colorUniform, Window *window);
+    void update(
+        GLint modelUniform, GLint colorUniform, Window *window, GLint useTextureUniform = -1, GLint texSamplerUniform = -1, GLint isEmissiveUniform = -1, bool isEmissive = false);
     const Mesh &getMesh() const;
     const Collider &getCollider() const;
     const glm::vec3 &getScale() const;

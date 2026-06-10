@@ -27,18 +27,19 @@ namespace {
     }
 }
 
-Mesh Planet::mesh;
-BoundingSphere Planet::boundingSphere;
+unsigned int Planet::nextSeed = 0;
 
-Planet::Planet(const glm::vec3 &color, float orbitRadius, float orbitSpeed, float orbitPhase) : CelestialBody(mesh, boundingSphere, color)
+Planet::Planet(const glm::vec3 &color, float orbitRadius, float orbitSpeed, float orbitPhase) : CelestialBody(instanceMesh, instanceBoundingSphere, color)
 {
-    if (mesh.vao == 0) {
-        mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/planet/planet.obj");
+    // Chaque planète charge son propre mesh et génère une texture unique
+    instanceMesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/planet/planet_fixed.obj");
+
+    if (!instanceBoundingSphere.isInitialized() && instanceMesh.vao != 0) {
+        instanceBoundingSphere = CollisionHelper::generateBoundingSphere(instanceMesh);
     }
 
-    if (!boundingSphere.isInitialized() && mesh.vao != 0) {
-        boundingSphere = CollisionHelper::generateBoundingSphere(mesh);
-    }
+    // Texture procédurale désertique/rocheuse, seed différent par planète
+    RenderHelper::generateDesertPlanetTexture(instanceMesh, 512, 512, nextSeed++);
 
     scaleValue = glm::vec3(5.0f);
     position = glm::vec3(0.0f);
@@ -51,10 +52,10 @@ void Planet::collide(Window *window)
 {
     const Spaceship &spaceship = Spaceship::getInstance();
 
-    if (boundingSphere.testCollisionBoundingBox(*this, spaceship)) {
+    if (instanceBoundingSphere.testCollisionBoundingBox(*this, spaceship)) {
         const glm::vec3 planetScale = getScale();
-        const glm::vec3 planetCenter = (boundingSphere.getCenter() * planetScale) + position;
-        const float planetRadius = boundingSphere.getRadius() * maxAbsComponent(planetScale);
+        const glm::vec3 planetCenter = (instanceBoundingSphere.getCenter() * planetScale) + position;
+        const float planetRadius = instanceBoundingSphere.getRadius() * maxAbsComponent(planetScale);
 
         const BoundingBox &shipBox = spaceship.getBoundingBox();
         const glm::vec3 shipScale = spaceship.getScale();
