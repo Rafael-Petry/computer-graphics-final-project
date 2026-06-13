@@ -46,11 +46,11 @@ This file defines a bunch of to do lists for different tasks and functionalities
 ## 5. Visuals
 
 - [x] Import better meshes for the objects
-- [] Import Disney's PBR shader code from other labs (https://github.com/cgvis-inf-ufrgs/cgvis-2026-1-lab-2-coelinhos-da-pascoa-cgvis-lab2-coelinhos-da-pascoa/blob/main/src/shader_fragment.glsl)
+- [x] Import Disney's PBR shader code from other labs (https://github.com/cgvis-inf-ufrgs/cgvis-2026-1-lab-2-coelinhos-da-pascoa-cgvis-lab2-coelinhos-da-pascoa/blob/main/src/shader_fragment.glsl)
 - [] Make textures work
     - [] For planets, make an algorithm to generate the texture procedurally
-- [] Make lighting work
-    - [] The sun needs to be a light source
+- [x] Make lighting work
+    - [x] The sun needs to be a light source
 - [] ...
 
 ## 6. Collisions

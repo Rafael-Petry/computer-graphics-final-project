@@ -37,7 +37,7 @@ private:
     float chaseSpeed;
     float baseChaseSpeed = 2.8f;
     Size size = Size::Medium;
-    float baseScale = 0.1f;
+    float baseScale = 0.0085f;
     bool destroyed = false;
     bool pendingFragmentSpawn = false;
     Size fragmentSize = Size::Small;

@@ -24,8 +24,11 @@ private:
     float orbitSpeed = 0.25f;
     float orbitRadius = 2.0f;
 
-    static Mesh mesh;
-    static BoundingSphere boundingSphere;
+    // Mesh et collider propres à chaque instance (texture unique par planète)
+    Mesh instanceMesh;
+    BoundingSphere instanceBoundingSphere;
+
+    static unsigned int nextSeed;
 };
 
 #endif
