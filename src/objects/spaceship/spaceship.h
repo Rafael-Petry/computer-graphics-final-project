@@ -94,7 +94,7 @@ private:
     float rayVisibleDuration = 0.12f;
     float rayMaxRange = 50.0f;
     float rayRadius = 0.02f;
-    float crosshairDistance = 2.0f;
+    float crosshairDistance = 5.0f;
     float crosshairLength = 0.08f;
     float crosshairThickness = 0.008f;
 

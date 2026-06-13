@@ -41,7 +41,7 @@ Planet::Planet(const glm::vec3 &color, float orbitRadius, float orbitSpeed, floa
     // Texture procédurale désertique/rocheuse, seed différent par planète
     RenderHelper::generateDesertPlanetTexture(instanceMesh, 512, 512, nextSeed++);
 
-    scaleValue = glm::vec3(5.0f);
+    scaleValue = glm::vec3(6.0f);
     position = glm::vec3(0.0f);
     this->orbitRadius = orbitRadius;
     this->orbitSpeed = orbitSpeed;

@@ -26,9 +26,7 @@ Spaceship::Spaceship(const glm::vec3 &color) : Object(mesh, boundingBox, color)
         mesh = RenderHelper::loadObjMesh("../../src/objects/spaceship/spaceship.obj");
     }
 
-    if (!boundingBox.isInitialized() && mesh.vao != 0) {
-        boundingBox = CollisionHelper::generateBoundingBox(mesh);
-    }
+    boundingBox = BoundingBox(glm::vec3(-4.0f), glm::vec3(4.0f));
 
     if (crosshairMesh.vao == 0) {
         crosshairMesh = RenderHelper::loadObjMesh("../../src/objects/object.obj");
@@ -44,7 +42,7 @@ Spaceship::Spaceship(const glm::vec3 &color) : Object(mesh, boundingBox, color)
     worldUp = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
     position = glm::vec3(0.0f, 0.2f, 100.0f);
     velocity = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
-    scaleValue = glm::vec3(0.1f);
+    scaleValue = glm::vec3(0.5f);
 }
 
 Spaceship &Spaceship::getInstance()
@@ -345,7 +343,7 @@ glm::mat4 Spaceship::getViewMatrix() const
 {
     if (cameraIsFirstPerson) {
         const glm::vec4 position4(position, 1.0f);
-        return Matrix_cameraView(position4 + front, front, up);
+        return Matrix_cameraView(position4 + front * 3.0f, front, up);
     }
 
     const glm::vec3 shipFront = glm::normalize(getFrontVector());
