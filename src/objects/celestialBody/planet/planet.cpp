@@ -32,7 +32,7 @@ unsigned int Planet::nextSeed = 0;
 Planet::Planet(const glm::vec3 &color, float orbitRadius, float orbitSpeed, float orbitPhase) : CelestialBody(instanceMesh, instanceBoundingSphere, color)
 {
     // Chaque planète charge son propre mesh et génère une texture unique
-    instanceMesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/planet/planet_fixed.obj");
+    instanceMesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/planet/planet.obj");
 
     if (!instanceBoundingSphere.isInitialized() && instanceMesh.vao != 0) {
         instanceBoundingSphere = CollisionHelper::generateBoundingSphere(instanceMesh);
