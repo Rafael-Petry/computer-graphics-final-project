@@ -16,12 +16,12 @@ namespace {
     {
         switch (size) {
         case Asteroid::Size::Small:
-            return 1.0f;
+            return 0.2f;
         case Asteroid::Size::Large:
-            return 5.0f;
+            return 1.6f;
         case Asteroid::Size::Medium:
         default:
-            return 3.0f;
+            return 0.8f;
         }
     }
 

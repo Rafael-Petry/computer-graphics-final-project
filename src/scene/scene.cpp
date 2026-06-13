@@ -165,7 +165,7 @@ void Scene::update(GLint modelUniform,
 
     std::vector<FragmentSpawn> spawns;
     std::mt19937 rng(std::random_device{}());
-    std::uniform_real_distribution<float> offsetDist(-0.6f, 0.6f);
+    std::uniform_real_distribution<float> offsetDist(-12.0f, 12.0f);
     for (Asteroid &asteroid : asteroids) {
         FragmentSpawn spawn;
         if (!asteroid.consumeFragmentSpawn(spawn.size, spawn.origin)) {
