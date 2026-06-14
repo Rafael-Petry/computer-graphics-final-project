@@ -19,7 +19,7 @@ namespace {
 Mesh Tree::mesh;
 BoundingBox Tree::boundingBox;
 
-Tree::Tree(const glm::vec3 &color, Planet *planet, const glm::vec3 &offset, float scale) : Object(mesh, boundingBox, color), planet(planet), offset(offset)
+Tree::Tree(const glm::vec3 &color, Planet *planet, const glm::vec3 &offset) : Object(mesh, boundingBox, color), planet(planet), offset(offset)
 {
     if (mesh.vao == 0) {
         mesh = RenderHelper::loadObjMesh("../../src/objects/tree/tree.obj");
@@ -27,7 +27,7 @@ Tree::Tree(const glm::vec3 &color, Planet *planet, const glm::vec3 &offset, floa
 
     boundingBox = CollisionHelper::generateBoundingBox(mesh);
 
-    scaleValue = glm::vec3(scale);
+    scaleValue = glm::vec3(2.0f);
     position = (planet != nullptr) ? planet->getPosition() + offset : glm::vec3(0.0f);
 }
 
