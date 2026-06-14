@@ -8,6 +8,7 @@
 #include "../../../window/window.h"
 #include "../../vendor/include/matrices.h"
 #include "../../objects/celestialBody/sun/sun.h"
+#include "../../../scene/scene.h"
 
 Mesh Asteroid::mesh;
 BoundingSphere Asteroid::boundingSphere;
@@ -127,6 +128,13 @@ void Asteroid::collide(Window *window)
     if (boundingSphere.testCollisionBoundingBox(*this, spaceship)) {
         Spaceship::getInstance().applyDamage((int)size + 1);
         destroyWithoutFragments();
+    }
+
+    for (Planet &planet : Scene::getPlanets()) {
+        if (boundingSphere.testCollisionBoundingSphere(*this, planet)) {
+            destroyWithoutFragments();
+            break;
+        }
     }
 }
 

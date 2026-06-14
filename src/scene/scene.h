@@ -27,11 +27,13 @@ public:
     void updateUI(Window *window);
     void updateRadar(Window *window);
 
+    static std::vector<Planet> &getPlanets() { return planets; }
+
 private:
     float lastFrame;
     Spaceship &spaceship;
     std::list<Asteroid> asteroids;
-    std::vector<Planet> planets;
+    static std::vector<Planet> planets;
     Sun &sun;
 };
 

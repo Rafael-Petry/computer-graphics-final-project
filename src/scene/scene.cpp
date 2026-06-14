@@ -15,6 +15,8 @@
 #include "../../vendor/include/matrices.h"
 #include <imgui.h>
 
+std::vector<Planet> Scene::planets = std::vector<Planet>();
+
 namespace {
     ImVec2 projectToRadar(const glm::vec3 &delta, float radarRange, float radarHalf)
     {
@@ -63,10 +65,10 @@ Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spacesh
 
     std::mt19937 rng(std::random_device{}());
 
-    planets.reserve(planetCount);
+    Scene::planets.reserve(planetCount);
     for (int i = 0; i < planetCount; ++i) {
         const float orbitRadius = baseRadius + (radiusStep * static_cast<float>(i));
-        planets.emplace_back(orbitRadius);
+        Scene::planets.emplace_back(orbitRadius);
     }
 }
 
@@ -82,31 +84,13 @@ void Scene::update(GLint modelUniform,
 {
     sun.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, true, metallicUniform, roughnessUniform, specularUniform);
 
-    for (Planet &planet : planets) {
+    for (Planet &planet : Scene::planets) {
         planet.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
     }
 
     for (Asteroid &asteroid : asteroids) {
         if (!asteroid.isDestroyed()) {
             asteroid.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
-        }
-    }
-
-    for (Asteroid &asteroid : asteroids) {
-        if (asteroid.isDestroyed()) {
-            continue;
-        }
-
-        const BoundingSphere *sphere = dynamic_cast<const BoundingSphere *>(&asteroid.getCollider());
-        if (sphere == nullptr) {
-            continue;
-        }
-
-        for (Planet &planet : planets) {
-            if (sphere->testCollisionBoundingSphere(asteroid, planet)) {
-                asteroid.destroyWithoutFragments();
-                break;
-            }
         }
     }
 
@@ -246,7 +230,7 @@ void Scene::updateRadar(Window *window)
         }
     }
 
-    for (const Planet &planet : planets) {
+    for (const Planet &planet : Scene::planets) {
         drawRadarObject(planet.getPosition(), planetColor);
     }
 
