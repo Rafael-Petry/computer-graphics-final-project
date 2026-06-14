@@ -20,19 +20,20 @@ public:
     static Window &getInstance();
 
     bool initialize(int width, int height, std::string title);
-    void update(GLuint shaderProgram);
+    void update();
     void close();
 
     GLFWwindow *getGlfwWindow() const;
     float getDeltaTime() const;
     float getCurrentFrame() const;
+    void setShaderProgram(GLuint shaderProgram);
 
 private:
     static void framebufferSizeCallback(GLFWwindow *glfwWindow, int width, int height);
     static void keyCallback(GLFWwindow *glfwWindow, int key, int scancode, int action, int mods);
-    void updateShaderProgram(GLuint shaderProgram);
+    void updateShaderProgram();
     void updateTime();
-    void updateScene(GLuint shaderProgram);
+    void updateScene();
 
     std::string title;
     GLFWwindow *glfwWindow = nullptr;
@@ -50,6 +51,8 @@ private:
 
     int width = 1280;
     int height = 720;
+
+    GLuint shaderProgram;
 
     Window() = default;
 };
