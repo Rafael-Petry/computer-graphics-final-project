@@ -7,7 +7,6 @@
 
 #include "spaceship.h"
 #include "../../helpers/collision/collision.h"
-#include "../../helpers/collision/colliders/boundingSphere.h"
 #include "../../helpers/render/render.h"
 #include "../../helpers/movement/movement.h"
 #include "../../window/window.h"
@@ -24,9 +23,8 @@ Spaceship::Spaceship(const glm::vec3 &color) : Object(mesh, boundingBox, color)
 {
     if (mesh.vao == 0) {
         mesh = RenderHelper::loadObjMesh("../../src/objects/spaceship/spaceship.obj");
+        boundingBox = CollisionHelper::generateBoundingBox(mesh);
     }
-
-    boundingBox = BoundingBox(glm::vec3(-4.0f), glm::vec3(4.0f));
 
     if (crosshairMesh.vao == 0) {
         crosshairMesh = RenderHelper::loadObjMesh("../../src/objects/object.obj");
@@ -306,6 +304,11 @@ void Spaceship::landOn(const Planet *planet, const glm::vec3 &surfaceNormal, flo
     }
 
     if (approachDot > -minApproachSpeed) {
+        landedPlanet = nullptr;
+        isLanded = false;
+
+        const float bumpSpeed = 6.0f;
+        velocity = glm::vec4(normalizedNormal * bumpSpeed, 0.0f);
         return;
     }
 

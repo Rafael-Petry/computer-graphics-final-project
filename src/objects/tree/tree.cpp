@@ -23,9 +23,8 @@ Tree::Tree(const glm::vec3 &color, Planet *planet, const glm::vec3 &offset) : Ob
 {
     if (mesh.vao == 0) {
         mesh = RenderHelper::loadObjMesh("../../src/objects/tree/tree.obj");
+        boundingBox = BoundingBox(glm::vec3(-1.0f), glm::vec3(2.0f));
     }
-
-    boundingBox = CollisionHelper::generateBoundingBox(mesh);
 
     scaleValue = glm::vec3(2.0f);
     position = (planet != nullptr) ? planet->getPosition() + offset : glm::vec3(0.0f);
@@ -33,12 +32,12 @@ Tree::Tree(const glm::vec3 &color, Planet *planet, const glm::vec3 &offset) : Ob
 
 void Tree::collide(Window *window)
 {
-    const Spaceship &spaceship = Spaceship::getInstance();
+    Spaceship &spaceship = Spaceship::getInstance();
 
     if (boundingBox.testCollisionBoundingBox(*this, spaceship)) {
         const glm::vec3 treeScale = getScale();
-        const glm::vec3 treeCenter = (boundingBox.getMin() + boundingBox.getMax()) * 0.5f * treeScale + position;
-        const glm::vec3 treeExtents = (boundingBox.getMax() - boundingBox.getMin()) * 0.5f * treeScale;
+        const glm::vec3 treeCenter = (boundingBox.getMin() + boundingBox.getMax()) * treeScale + position;
+        const glm::vec3 treeExtents = (boundingBox.getMax() - boundingBox.getMin()) * treeScale;
         const float treeRadius = glm::length(treeExtents);
 
         const BoundingBox &shipBox = spaceship.getBoundingBox();
@@ -58,8 +57,8 @@ void Tree::collide(Window *window)
         }
 
         const float bumpDistance = treeRadius + shipRadius + 0.1f;
-        const glm::vec3 bumpPosition = treeCenter + (normal * bumpDistance);
-        Spaceship::getInstance().setPosition(bumpPosition);
+        spaceship.applyDamage(1);
+        spaceship.setVelocity(glm::vec4(glm::normalize(normal), 0.0f) * 5.0f);
     }
 }
 

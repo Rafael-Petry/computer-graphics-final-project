@@ -40,6 +40,8 @@ public:
     glm::vec3 getUpVector() const;
     const BoundingBox &getBoundingBox() const;
 
+    void setVelocity(const glm::vec4 &newVelocity) { velocity = newVelocity; }
+
     void toggleCameraMode() { cameraIsFirstPerson = !cameraIsFirstPerson; }
 
 protected:

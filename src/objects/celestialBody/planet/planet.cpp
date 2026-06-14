@@ -50,12 +50,12 @@ Planet::Planet(const glm::vec3 &color, float orbitRadius, float orbitSpeed, floa
 
 void Planet::collide(Window *window)
 {
-    const Spaceship &spaceship = Spaceship::getInstance();
+    Spaceship &spaceship = Spaceship::getInstance();
 
     if (instanceBoundingSphere.testCollisionBoundingBox(*this, spaceship)) {
         const glm::vec3 planetScale = getScale();
         const glm::vec3 planetCenter = (instanceBoundingSphere.getCenter() * planetScale) + position;
-        const float planetRadius = 12.0f;
+        const float planetRadius = 14.6f;
 
         const BoundingBox &shipBox = spaceship.getBoundingBox();
         const glm::vec3 shipScale = spaceship.getScale();
@@ -75,7 +75,7 @@ void Planet::collide(Window *window)
 
         const float landingPadding = 0.05f;
         const float distanceFromCenter = planetRadius + shipRadius + landingPadding;
-        Spaceship::getInstance().landOn(this, normal, distanceFromCenter, shipCenterOffset);
+        spaceship.landOn(this, normal, distanceFromCenter, shipCenterOffset);
     }
 }
 
