@@ -15,6 +15,60 @@
 #include "../../vendor/include/matrices.h"
 #include <imgui.h>
 
+std::vector<Planet> Scene::planets = std::vector<Planet>();
+std::list<Asteroid> Scene::asteroids = std::list<Asteroid>();
+
+Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spaceship::getInstance()), sun(Sun::getInstance())
+{
+    AsteroidSpawnerHelper::initialize(Scene::asteroids, spaceship);
+
+    const float baseRadius = 85.0f;
+    const float radiusStep = 75.0f;
+    const int planetCount = 5;
+
+    std::mt19937 rng(std::random_device{}());
+
+    Scene::planets.reserve(planetCount);
+    for (int i = 0; i < planetCount; ++i) {
+        const float orbitRadius = baseRadius + (radiusStep * static_cast<float>(i));
+        Scene::planets.emplace_back(orbitRadius);
+    }
+}
+
+void Scene::update(GLint modelUniform,
+                   GLint colorUniform,
+                   GLint useTextureUniform,
+                   GLint texSamplerUniform,
+                   GLint isEmissiveUniform,
+                   GLint metallicUniform,
+                   GLint roughnessUniform,
+                   GLint specularUniform,
+                   Window *window)
+{
+    sun.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, true, metallicUniform, roughnessUniform, specularUniform);
+
+    for (Planet &planet : Scene::planets) {
+        planet.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
+    }
+
+    for (Asteroid &asteroid : Scene::asteroids) {
+        if (!asteroid.isDestroyed()) {
+            asteroid.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
+        }
+    }
+
+    Scene::asteroids.remove_if([](const Asteroid &asteroid) { return asteroid.isDestroyed(); });
+
+    if (Scene::asteroids.empty()) {
+        AsteroidSpawnerHelper::update(Scene::asteroids, spaceship, window->getCurrentFrame());
+    }
+
+    spaceship.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
+
+    this->updateUI(window);
+}
+
+// UI
 namespace {
     ImVec2 projectToRadar(const glm::vec3 &delta, float radarRange, float radarHalf)
     {
@@ -53,146 +107,11 @@ namespace {
     }
 }
 
-Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spaceship::getInstance()), sun(Sun::getInstance())
-{
-    AsteroidSpawnerHelper::initialize(asteroids, spaceship);
-
-    const std::vector<glm::vec3> colors = {
-        glm::vec3(0.2f, 0.6f, 1.0f), glm::vec3(0.9f, 0.4f, 0.2f), glm::vec3(0.4f, 0.9f, 0.5f), glm::vec3(0.8f, 0.8f, 0.3f), glm::vec3(0.7f, 0.5f, 1.0f)};
-
-    const float baseRadius = 50.0f;
-    const float radiusStep = 50.0f;
-    const int planetCount = 5;
-
-    std::mt19937 rng(std::random_device{}());
-    std::uniform_real_distribution<float> phaseDist(0.0f, 2.0f);
-    std::uniform_real_distribution<float> treeBushDist(0.0f, 1.0f);
-
-    planets.reserve(planetCount);
-    for (int i = 0; i < planetCount; ++i) {
-        const float orbitRadius = baseRadius + (radiusStep * static_cast<float>(i));
-        const float orbitSpeed = 0.01f;
-        const float orbitPhase = phaseDist(rng);
-        planets.emplace_back(colors[i % colors.size()], orbitRadius, orbitSpeed, orbitPhase);
-        Planet &currentPlanet = planets[i];
-
-        // Spawn trees and bushes on the planet's surface
-        const int treesPerPlanet = 3;
-        const int bushesPerPlanet = 5;
-        const float planetRadius = 15.0f;                // Approximate planet scale
-        const float spawnDistance = planetRadius + 1.5f; // Distance from planet center to surface spawn point
-
-        for (int t = 0; t < treesPerPlanet; ++t) {
-            float theta = (2.0f * 3.14159f * t) / treesPerPlanet;
-            float phi = (3.14159f * treeBushDist(rng));
-
-            glm::vec3 offset(spawnDistance * std::sin(phi) * std::cos(theta), spawnDistance * std::cos(phi), spawnDistance * std::sin(phi) * std::sin(theta));
-            glm::vec3 treeColor = colors[i % colors.size()] * glm::vec3(0.5f, 1.0f, 0.5f);
-            trees.emplace_back(treeColor, &currentPlanet, offset, 0.8f);
-        }
-
-        for (int b = 0; b < bushesPerPlanet; ++b) {
-            float theta = (2.0f * 3.14159f * b) / bushesPerPlanet + (3.14159f / bushesPerPlanet) * 0.5f;
-            float phi = (3.14159f * treeBushDist(rng));
-
-            glm::vec3 offset(spawnDistance * std::sin(phi) * std::cos(theta), spawnDistance * std::cos(phi), spawnDistance * std::sin(phi) * std::sin(theta));
-            glm::vec3 bushColor = colors[i % colors.size()] * glm::vec3(0.6f, 1.0f, 0.6f);
-            bushes.emplace_back(bushColor, &currentPlanet, offset, 0.6f);
-        }
-    }
-}
-
-void Scene::update(GLint modelUniform,
-                   GLint colorUniform,
-                   GLint useTextureUniform,
-                   GLint texSamplerUniform,
-                   GLint isEmissiveUniform,
-                   GLint metallicUniform,
-                   GLint roughnessUniform,
-                   GLint specularUniform,
-                   Window *window)
-{
-    spaceship.update(modelUniform, colorUniform, window);
-    sun.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, true, metallicUniform, roughnessUniform, specularUniform);
-
-    for (Planet &planet : planets) {
-        planet.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
-    }
-
-    for (Tree &tree : trees) {
-        tree.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
-    }
-
-    for (Bush &bush : bushes) {
-        bush.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
-    }
-
-    for (Asteroid &asteroid : asteroids) {
-        if (!asteroid.isDestroyed()) {
-            asteroid.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
-        }
-    }
-
-    for (Asteroid &asteroid : asteroids) {
-        if (asteroid.isDestroyed()) {
-            continue;
-        }
-
-        const BoundingSphere *sphere = dynamic_cast<const BoundingSphere *>(&asteroid.getCollider());
-        if (sphere == nullptr) {
-            continue;
-        }
-
-        if (sphere->testCollisionBoundingSphere(asteroid, sun)) {
-            asteroid.destroyWithoutFragments();
-            continue;
-        }
-
-        for (Planet &planet : planets) {
-            if (sphere->testCollisionBoundingSphere(asteroid, planet)) {
-                asteroid.destroyWithoutFragments();
-                break;
-            }
-        }
-    }
-    spaceship.updateShooting(modelUniform, colorUniform, window, asteroids);
-
-    struct FragmentSpawn
-    {
-        Asteroid::Size size;
-        glm::vec3 origin;
-    };
-
-    std::vector<FragmentSpawn> spawns;
-    std::mt19937 rng(std::random_device{}());
-    std::uniform_real_distribution<float> offsetDist(-0.6f, 0.6f);
-    for (Asteroid &asteroid : asteroids) {
-        FragmentSpawn spawn;
-        if (!asteroid.consumeFragmentSpawn(spawn.size, spawn.origin)) {
-            continue;
-        }
-        spawns.push_back(spawn);
-    }
-
-    for (const FragmentSpawn &spawn : spawns) {
-        for (int i = 0; i < 3; ++i) {
-            asteroids.emplace_back();
-            Asteroid &fragment = asteroids.back();
-            fragment.setSize(spawn.size);
-            glm::vec3 offset(offsetDist(rng), offsetDist(rng), offsetDist(rng));
-            fragment.setPosition(spawn.origin + offset);
-        }
-    }
-
-    asteroids.remove_if([](const Asteroid &asteroid) { return asteroid.isDestroyed(); });
-    AsteroidSpawnerHelper::update(asteroids, spaceship, window->getCurrentFrame());
-
-    this->updateUI(window);
-}
-
 void Scene::updateUI(Window *window)
 {
     ImGuiIO &io = ImGui::GetIO();
+    io.FontGlobalScale = 1.8f;
+
     const float padding = 12.0f;
     const ImGuiWindowFlags hudFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
                                       ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_AlwaysAutoResize;
@@ -282,13 +201,13 @@ void Scene::updateRadar(Window *window)
         drawRadarMarker(drawList, markerPos, color, markerSize, verticalDirection);
     };
 
-    for (const Asteroid &asteroid : asteroids) {
+    for (const Asteroid &asteroid : Scene::asteroids) {
         if (!asteroid.isDestroyed()) {
             drawRadarObject(asteroid.getPosition(), asteroidColor);
         }
     }
 
-    for (const Planet &planet : planets) {
+    for (const Planet &planet : Scene::planets) {
         drawRadarObject(planet.getPosition(), planetColor);
     }
 

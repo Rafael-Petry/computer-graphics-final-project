@@ -7,6 +7,8 @@
 #include "../../spaceship/spaceship.h"
 #include "../../../window/window.h"
 #include "../../vendor/include/matrices.h"
+#include "../../objects/celestialBody/sun/sun.h"
+#include "../../../scene/scene.h"
 
 Mesh Asteroid::mesh;
 BoundingSphere Asteroid::boundingSphere;
@@ -16,12 +18,12 @@ namespace {
     {
         switch (size) {
         case Asteroid::Size::Small:
-            return 1.0f;
+            return 0.2f;
         case Asteroid::Size::Large:
-            return 5.0f;
+            return 1.2f;
         case Asteroid::Size::Medium:
         default:
-            return 3.0f;
+            return 0.8f;
         }
     }
 
@@ -29,12 +31,12 @@ namespace {
     {
         switch (size) {
         case Asteroid::Size::Small:
-            return 1.3f;
+            return 3.6f;
         case Asteroid::Size::Large:
-            return 0.8f;
+            return 2.8f;
         case Asteroid::Size::Medium:
         default:
-            return 1.0f;
+            return 3.1f;
         }
     }
 
@@ -53,10 +55,10 @@ namespace {
     }
 }
 
-Asteroid::Asteroid(const glm::vec3 &color) : CelestialBody(mesh, boundingSphere, color)
+Asteroid::Asteroid() : CelestialBody(mesh, boundingSphere, color)
 {
     if (mesh.vao == 0 && !mesh.hasSubMeshes()) {
-        mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/asteroid/asteroid_updated.obj");
+        mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/asteroid/asteroid.obj");
     }
 
     if (!boundingSphere.isInitialized() && (mesh.vao != 0 || mesh.hasSubMeshes())) {
@@ -66,6 +68,13 @@ Asteroid::Asteroid(const glm::vec3 &color) : CelestialBody(mesh, boundingSphere,
     std::mt19937 rng(std::random_device{}());
     setSize(randomAsteroidSize(rng));
     position = glm::vec3(2.7f, 0.4f, 0.0f);
+
+    static std::mt19937 genX(std::random_device{}());
+    static std::mt19937 genY(std::random_device{}());
+    std::uniform_real_distribution<float> rotateSpeed(-1.7f, 1.7f);
+
+    rotateSpeedX = rotateSpeed(genX);
+    rotateSpeedY = rotateSpeed(genY);
 }
 
 void Asteroid::setSize(Size newSize)
@@ -104,35 +113,49 @@ glm::mat4 Asteroid::translate(Window *window)
 
     return Matrix_Translate(position.x, position.y, position.z);
 }
-glm::mat4 Asteroid::rotate(Window *window) { return Matrix_Rotate_Y(window->getCurrentFrame() * 1.7f); }
+
+glm::mat4 Asteroid::rotate(Window *window) { return Matrix_Rotate_Y(window->getCurrentFrame() * rotateSpeedY) * Matrix_Rotate_X(window->getCurrentFrame() * rotateSpeedX); }
 
 void Asteroid::collide(Window *window)
 {
     const Spaceship &spaceship = Spaceship::getInstance();
 
+    if (boundingSphere.testCollisionBoundingSphere(*this, Sun::getInstance())) {
+        destroy(false);
+        return;
+    }
+
     if (boundingSphere.testCollisionBoundingBox(*this, spaceship)) {
         Spaceship::getInstance().applyDamage((int)size + 1);
-        destroyWithoutFragments();
+        destroy(false);
+    }
+
+    for (Planet &planet : Scene::getPlanets()) {
+        if (boundingSphere.testCollisionBoundingSphere(*this, planet)) {
+            destroy(false);
+            break;
+        }
     }
 }
 
-void Asteroid::destroy()
+void Asteroid::destroy(bool spawnFragments)
 {
-    if (size != Size::Small) {
-        pendingFragmentSpawn = true;
+    if (spawnFragments && size != Size::Small) {
+        std::mt19937 rng(std::random_device{}());
+        std::uniform_real_distribution<float> offsetDist(-12.0f, 12.0f);
+
+        for (int i = 0; i < 2; i++) {
+            Scene::getAsteroids().emplace_back();
+            glm::vec3 offset(offsetDist(rng), offsetDist(rng), offsetDist(rng));
+
+            Asteroid &fragment = Scene::getAsteroids().back();
+            fragment.setSize((size == Size::Large) ? Size::Medium : Size::Small);
+            fragment.setPosition(position + offset);
+        }
+
         fragmentSize = (size == Size::Large) ? Size::Medium : Size::Small;
         fragmentOrigin = position;
     }
 
     destroyed = true;
-    scaleValue = glm::vec3(0.0f);
-    chaseSpeed = 0.0f;
-}
-
-void Asteroid::destroyWithoutFragments()
-{
-    pendingFragmentSpawn = false;
-    destroyed = true;
-    scaleValue = glm::vec3(0.0f);
-    chaseSpeed = 0.0f;
 }

@@ -20,9 +20,8 @@ public:
         Large
     };
 
-    Asteroid(const glm::vec3 &color = glm::vec3(0.5f, 0.5f, 0.5f));
-    void destroy();
-    void destroyWithoutFragments();
+    Asteroid();
+    void destroy(bool spawnFragments = true);
     void setSize(Size newSize);
     Size getSize() const;
     bool isDestroyed() const;
@@ -42,6 +41,9 @@ private:
     bool pendingFragmentSpawn = false;
     Size fragmentSize = Size::Small;
     glm::vec3 fragmentOrigin = glm::vec3(0.0f);
+
+    float rotateSpeedX = 0.0f;
+    float rotateSpeedY = 0.0f;
 
     static Mesh mesh;
     static BoundingSphere boundingSphere;

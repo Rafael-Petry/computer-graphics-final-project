@@ -5,8 +5,6 @@
 #include "../objects/celestialBody/planet/planet.h"
 #include "../objects/celestialBody/sun/sun.h"
 #include "../objects/spaceship/spaceship.h"
-#include "../objects/tree/tree.h"
-#include "../objects/bush/bush.h"
 
 #include <list>
 #include <vector>
@@ -29,14 +27,15 @@ public:
     void updateUI(Window *window);
     void updateRadar(Window *window);
 
+    static std::vector<Planet> &getPlanets() { return planets; }
+    static std::list<Asteroid> &getAsteroids() { return asteroids; }
+
 private:
     float lastFrame;
     Spaceship &spaceship;
-    std::list<Asteroid> asteroids;
-    std::vector<Planet> planets;
-    std::vector<Tree> trees;
-    std::vector<Bush> bushes;
     Sun &sun;
+    static std::list<Asteroid> asteroids;
+    static std::vector<Planet> planets;
 };
 
 #endif

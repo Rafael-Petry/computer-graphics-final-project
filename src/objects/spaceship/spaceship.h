@@ -22,23 +22,31 @@ public:
 
     static Spaceship &getInstance();
 
-    void update(GLint modelUniform, GLint colorUniform, Window *window);
-    void updateShooting(GLint modelUniform, GLint colorUniform, Window *window, std::list<Asteroid> &asteroids);
+    void update(GLint modelUniform,
+                GLint colorUniform,
+                Window *window,
+                GLint useTextureUniform = -1,
+                GLint texSamplerUniform = -1,
+                GLint isEmissiveUniform = -1,
+                bool isEmissive = false,
+                GLint metallicUniform = -1,
+                GLint roughnessUniform = -1,
+                GLint specularUniform = -1);
     void updateRotation(Window *window);
     static void updateView(GLFWwindow *window, double xpos, double ypos);
 
     void addScore(int amount);
     void applyDamage(int amount);
     void landOn(const Planet *planet, const glm::vec3 &surfaceNormal, float distanceFromCenter, const glm::vec3 &shipCenterOffset);
-    void stopMovement();
 
     int getScore() const;
     int getHealth() const;
     glm::mat4 getViewMatrix() const;
     glm::vec3 getCameraPosition() const;
     glm::vec3 getFrontVector() const;
-    glm::vec3 getUpVector() const;
     const BoundingBox &getBoundingBox() const;
+
+    void setVelocity(const glm::vec4 &newVelocity) { velocity = newVelocity; }
 
     void toggleCameraMode() { cameraIsFirstPerson = !cameraIsFirstPerson; }
 
@@ -56,6 +64,7 @@ private:
     void renderRay(GLint modelUniform, GLint colorUniform) const;
     glm::mat4 getOrientationMatrix() const;
     void updateOrientation(float deltaYaw, float deltaPitch, float deltaRoll);
+    void updateShooting(GLint modelUniform, GLint colorUniform, Window *window);
 
     glm::vec4 velocity;
     glm::vec4 front;
@@ -77,7 +86,7 @@ private:
     float rotationVelocityEpsilon = 0.01f;
 
     float movementAcceleration = 8.0f;
-    float maxMovementSpeed = 5.0f;
+    float maxMovementSpeed = 10.0f;
     float movementDrag = 0.2f;
     float movementVelocityEpsilon = 0.005f;
 
@@ -94,7 +103,7 @@ private:
     float rayVisibleDuration = 0.12f;
     float rayMaxRange = 50.0f;
     float rayRadius = 0.02f;
-    float crosshairDistance = 2.0f;
+    float crosshairDistance = 5.0f;
     float crosshairLength = 0.08f;
     float crosshairThickness = 0.008f;
 
