@@ -242,10 +242,15 @@ glm::mat4 Spaceship::translate(Window *window)
             front = landedFront;
             up = landedUp;
             right = landedRight;
+            const glm::vec3 radiusDirection = glm::normalize(position - glm::vec3(landedPlanet->getPosition()));
+            position = landedPlanet->getPosition() + radiusDirection * 22.0f;
+            return Matrix_Translate(position.x, position.y, position.z);
+            /*
             const glm::vec3 planetCenter = landedPlanet->getPosition();
             const glm::vec3 shipCenter = planetCenter + (landedNormal * landedDistance);
             position = shipCenter - landedShipCenterOffset;
             return Matrix_Translate(position.x, position.y, position.z);
+            */
         }
     }
 

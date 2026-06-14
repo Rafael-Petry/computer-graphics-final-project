@@ -109,4 +109,4 @@ glm::mat4 Planet::translate(Window *window)
     return Matrix_Translate(position.x, position.y, position.z);
 }
 
-glm::mat4 Planet::rotate(Window *window) { return Matrix_Rotate_Y(window->getCurrentFrame() * 0.01f); }
+glm::mat4 Planet::rotate(Window *window) { return Matrix_Rotate_Y(window->getCurrentFrame() * 0.1f); }

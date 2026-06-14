@@ -25,12 +25,10 @@ Tree::Tree(const glm::vec3 &color, Planet *planet, const glm::vec3 &offset, floa
         mesh = RenderHelper::loadObjMesh("../../src/objects/tree/tree.obj");
     }
 
-    if (!boundingBox.isInitialized() && mesh.vao != 0) {
-        boundingBox = CollisionHelper::generateBoundingBox(mesh);
-    }
+    boundingBox = CollisionHelper::generateBoundingBox(mesh);
 
     scaleValue = glm::vec3(scale);
-    this->position = glm::vec3(0.0f);
+    position = (planet != nullptr) ? planet->getPosition() + offset : glm::vec3(0.0f);
 }
 
 void Tree::collide(Window *window)
@@ -38,9 +36,8 @@ void Tree::collide(Window *window)
     const Spaceship &spaceship = Spaceship::getInstance();
 
     if (boundingBox.testCollisionBoundingBox(*this, spaceship)) {
-        glm::vec3 currentPosition = (planet != nullptr) ? planet->getPosition() + offset : position;
         const glm::vec3 treeScale = getScale();
-        const glm::vec3 treeCenter = (boundingBox.getMin() + boundingBox.getMax()) * 0.5f * treeScale + currentPosition;
+        const glm::vec3 treeCenter = (boundingBox.getMin() + boundingBox.getMax()) * 0.5f * treeScale + position;
         const glm::vec3 treeExtents = (boundingBox.getMax() - boundingBox.getMin()) * 0.5f * treeScale;
         const float treeRadius = glm::length(treeExtents);
 
@@ -68,8 +65,27 @@ void Tree::collide(Window *window)
 
 glm::mat4 Tree::translate(Window *window)
 {
-    glm::vec3 currentPosition = (planet != nullptr) ? planet->getPosition() + offset : position;
-    return Matrix_Translate(currentPosition.x, currentPosition.y, currentPosition.z);
+    position = (planet != nullptr) ? planet->getPosition() + offset : position;
+    return Matrix_Translate(position.x, position.y, position.z);
 }
 
-glm::mat4 Tree::rotate(Window *window) { return Matrix_Rotate_Y(0.0f); }
+glm::mat4 Tree::rotate(Window *window)
+{
+    if (planet == nullptr) {
+        return Matrix_Identity();
+    }
+
+    glm::vec3 up = glm::normalize(position - planet->getPosition());
+
+    glm::vec3 worldRight = glm::vec3(1, 0, 0);
+    glm::vec3 worldFront = glm::vec3(0, 0, -1);
+
+    glm::vec3 right = glm::normalize(glm::cross(worldFront, up));
+
+    if (glm::length(right) < 0.0001f)
+        right = glm::normalize(glm::cross(worldRight, up));
+
+    glm::vec3 front = glm::normalize(glm::cross(up, right));
+
+    return Matrix(right.x, up.x, front.x, 0.0f, right.y, up.y, front.y, 0.0f, right.z, up.z, front.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+}
