@@ -49,9 +49,18 @@ Spaceship &Spaceship::getInstance()
     return instance;
 }
 
-void Spaceship::update(GLint modelUniform, GLint colorUniform, Window *window)
+void Spaceship::update(GLint modelUniform,
+                       GLint colorUniform,
+                       Window *window,
+                       GLint useTextureUniform,
+                       GLint texSamplerUniform,
+                       GLint isEmissiveUniform,
+                       bool isEmissive,
+                       GLint metallicUniform,
+                       GLint roughnessUniform,
+                       GLint specularUniform)
 {
-    Object::update(modelUniform, colorUniform, window);
+    Object::update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
 
     isRolling = false;
     if (glfwGetKey(window->getGlfwWindow(), GLFW_KEY_R) == GLFW_PRESS) {

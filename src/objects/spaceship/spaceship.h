@@ -22,7 +22,16 @@ public:
 
     static Spaceship &getInstance();
 
-    void update(GLint modelUniform, GLint colorUniform, Window *window);
+    void update(GLint modelUniform,
+                GLint colorUniform,
+                Window *window,
+                GLint useTextureUniform = -1,
+                GLint texSamplerUniform = -1,
+                GLint isEmissiveUniform = -1,
+                bool isEmissive = false,
+                GLint metallicUniform = -1,
+                GLint roughnessUniform = -1,
+                GLint specularUniform = -1);
     void updateShooting(GLint modelUniform, GLint colorUniform, Window *window, std::list<Asteroid> &asteroids);
     void updateRotation(Window *window);
     static void updateView(GLFWwindow *window, double xpos, double ypos);
