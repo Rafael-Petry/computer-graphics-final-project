@@ -124,9 +124,6 @@ void Window::update()
         return;
     }
 
-    updateShaderProgram();
-    updateTime();
-
     if (imguiInitialized) {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -134,6 +131,8 @@ void Window::update()
     }
 
     updateScene();
+    updateShaderProgram();
+    updateTime();
 
     if (imguiInitialized) {
         ImGui::Render();

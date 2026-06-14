@@ -114,7 +114,6 @@ void Scene::update(GLint modelUniform,
                    GLint specularUniform,
                    Window *window)
 {
-    spaceship.update(modelUniform, colorUniform, window);
     sun.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, true, metallicUniform, roughnessUniform, specularUniform);
 
     for (Planet &planet : planets) {
@@ -157,7 +156,6 @@ void Scene::update(GLint modelUniform,
             }
         }
     }
-    spaceship.updateShooting(modelUniform, colorUniform, window, asteroids);
 
     struct FragmentSpawn
     {
@@ -188,6 +186,9 @@ void Scene::update(GLint modelUniform,
 
     asteroids.remove_if([](const Asteroid &asteroid) { return asteroid.isDestroyed(); });
     AsteroidSpawnerHelper::update(asteroids, spaceship, window->getCurrentFrame());
+
+    spaceship.updateShooting(modelUniform, colorUniform, window, asteroids);
+    spaceship.update(modelUniform, colorUniform, window);
 
     this->updateUI(window);
 }
