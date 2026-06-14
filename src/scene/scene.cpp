@@ -101,7 +101,6 @@ void Scene::update(GLint modelUniform,
         AsteroidSpawnerHelper::update(Scene::asteroids, spaceship, window->getCurrentFrame());
     }
 
-    spaceship.updateShooting(modelUniform, colorUniform, window, Scene::asteroids);
     spaceship.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
 
     this->updateUI(window);

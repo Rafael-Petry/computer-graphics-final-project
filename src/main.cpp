@@ -5,6 +5,7 @@
 
 #include "shaders/loader/loader.h"
 #include "window/window.h"
+#include "objects/spaceship/spaceship.h"
 
 int main()
 {
@@ -49,6 +50,8 @@ int main()
     while (!glfwWindowShouldClose(Window::getInstance().getGlfwWindow())) {
         Window::getInstance().update();
     }
+
+    std::cout << "Final Score: " << Spaceship::getInstance().getScore() << std::endl;
 
     Window::getInstance().close();
     glDeleteProgram(shaderProgram);

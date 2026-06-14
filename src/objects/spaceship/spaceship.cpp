@@ -13,6 +13,7 @@
 #include "../../objects/celestialBody/asteroid/asteroid.h"
 #include "../../objects/celestialBody/planet/planet.h"
 #include "../../vendor/include/matrices.h"
+#include "../../scene/scene.h"
 
 Mesh Spaceship::mesh;
 BoundingBox Spaceship::boundingBox;
@@ -60,6 +61,7 @@ void Spaceship::update(GLint modelUniform,
                        GLint roughnessUniform,
                        GLint specularUniform)
 {
+    updateShooting(modelUniform, colorUniform, window);
     Object::update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
 
     isRolling = false;
@@ -70,9 +72,9 @@ void Spaceship::update(GLint modelUniform,
     updateRotation(window);
 }
 
-void Spaceship::updateShooting(GLint modelUniform, GLint colorUniform, Window *window, std::list<Asteroid> &asteroids)
+void Spaceship::updateShooting(GLint modelUniform, GLint colorUniform, Window *window)
 {
-    shoot(window, asteroids);
+    shoot(window, Scene::getAsteroids());
 
     if (window->getCurrentFrame() <= rayVisibleUntil) {
         renderRay(modelUniform, colorUniform);
@@ -136,6 +138,36 @@ void Spaceship::updateRotation(Window *window)
     updateOrientation(deltaYaw, deltaPitch, deltaRoll);
 }
 
+void Spaceship::updateOrientation(float deltaYaw, float deltaPitch, float deltaRoll)
+{
+    if (deltaYaw != 0.0f) {
+        const float yawRad = deltaYaw * (M_PI / 180.0f);
+        const glm::mat4 yawMatrix = Matrix_Rotate(yawRad, up);
+        front = yawMatrix * front;
+        right = yawMatrix * right;
+    }
+
+    if (deltaPitch != 0.0f) {
+        const float pitchRad = deltaPitch * (M_PI / 180.0f);
+        const glm::mat4 pitchMatrix = Matrix_Rotate(pitchRad, right);
+        front = pitchMatrix * front;
+        up = pitchMatrix * up;
+    }
+
+    if (deltaRoll != 0.0f) {
+        const float rollRad = deltaRoll * (M_PI / 180.0f);
+        const glm::mat4 rollMatrix = Matrix_Rotate(rollRad, front);
+        right = rollMatrix * right;
+        up = rollMatrix * up;
+    }
+
+    front = front / norm(front);
+    right = crossproduct(front, up);
+    right = right / norm(right);
+    up = crossproduct(right, front);
+    up = up / norm(up);
+}
+
 void Spaceship::updateView(GLFWwindow *window, double xpos, double ypos)
 {
     Spaceship *spaceship = &Spaceship::getInstance();
@@ -170,116 +202,6 @@ void Spaceship::updateView(GLFWwindow *window, double xpos, double ypos)
             spaceship->pitchVelocity += yoffset * spaceship->rotationAcceleration;
         }
     }
-}
-
-void Spaceship::updateOrientation(float deltaYaw, float deltaPitch, float deltaRoll)
-{
-    if (deltaYaw != 0.0f) {
-        const float yawRad = deltaYaw * (M_PI / 180.0f);
-        const glm::mat4 yawMatrix = Matrix_Rotate(yawRad, up);
-        front = yawMatrix * front;
-        right = yawMatrix * right;
-    }
-
-    if (deltaPitch != 0.0f) {
-        const float pitchRad = deltaPitch * (M_PI / 180.0f);
-        const glm::mat4 pitchMatrix = Matrix_Rotate(pitchRad, right);
-        front = pitchMatrix * front;
-        up = pitchMatrix * up;
-    }
-
-    if (deltaRoll != 0.0f) {
-        const float rollRad = deltaRoll * (M_PI / 180.0f);
-        const glm::mat4 rollMatrix = Matrix_Rotate(rollRad, front);
-        right = rollMatrix * right;
-        up = rollMatrix * up;
-    }
-
-    front = front / norm(front);
-    right = crossproduct(front, up);
-    right = right / norm(right);
-    up = crossproduct(right, front);
-    up = up / norm(up);
-}
-
-void Spaceship::shoot(Window *window, std::list<Asteroid> &asteroids)
-{
-    const float currentTime = window->getCurrentFrame();
-    if (glfwGetMouseButton(window->getGlfwWindow(), GLFW_MOUSE_BUTTON_LEFT) != GLFW_PRESS) {
-        return;
-    }
-
-    if ((currentTime - lastShotTime) < shotCooldown) {
-        return;
-    }
-
-    lastShotTime = currentTime;
-    rayVisibleUntil = currentTime + rayVisibleDuration;
-
-    rayOrigin = getCameraPosition();
-    rayDirection = glm::normalize(glm::vec3(front));
-
-    std::vector<Asteroid *> hitAsteroids;
-
-    for (Asteroid &asteroid : asteroids) {
-        const BoundingSphere *sphere = dynamic_cast<const BoundingSphere *>(&asteroid.getCollider());
-        if (sphere == nullptr) {
-            continue;
-        }
-
-        float hitDistance = 0.0f;
-        if (sphere->testRay(asteroid, rayOrigin, rayDirection, &hitDistance)) {
-            hitAsteroids.push_back(&asteroid);
-        }
-    }
-
-    for (Asteroid *asteroid : hitAsteroids) {
-        asteroid->destroy();
-        addScore(100);
-    }
-}
-
-glm::mat4 Spaceship::translate(Window *window)
-{
-    if (isLanded && landedPlanet != nullptr) {
-        if (glfwGetKey(window->getGlfwWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-            isLanded = false;
-            landedPlanet = nullptr;
-        } else {
-            front = landedFront;
-            up = landedUp;
-            right = landedRight;
-            const glm::vec3 planetCenter = landedPlanet->getPosition();
-            const glm::vec3 shipCenter = planetCenter + (landedNormal * landedDistance);
-            position = shipCenter - landedShipCenterOffset;
-            return Matrix_Translate(position.x, position.y, position.z);
-        }
-    }
-
-    const float deltaTime = window->getDeltaTime();
-    const glm::vec3 movement = MovementHelper::getMovementInputs(window->getGlfwWindow());
-
-    glm::vec4 acceleration = (front * movement.z) + (right * movement.x) + (up * movement.y);
-    acceleration *= movementAcceleration;
-    acceleration.w = 0.0f;
-
-    velocity += acceleration * deltaTime;
-
-    const float movementDamping = expf(-movementDrag * deltaTime);
-    velocity *= movementDamping;
-
-    if (norm(velocity) < movementVelocityEpsilon) {
-        velocity = glm::vec4(0.0f);
-    }
-
-    const float speed = norm(velocity);
-    if (speed > maxMovementSpeed) {
-        velocity = (velocity / speed) * maxMovementSpeed;
-    }
-
-    position += glm::vec3(velocity) * deltaTime;
-
-    return Matrix_Translate(position.x, position.y, position.z);
 }
 
 void Spaceship::landOn(const Planet *planet, const glm::vec3 &surfaceNormal, float distanceFromCenter, const glm::vec3 &shipCenterOffset)
@@ -347,77 +269,92 @@ void Spaceship::landOn(const Planet *planet, const glm::vec3 &surfaceNormal, flo
     up = landedUp;
     right = landedRight;
 
-    stopMovement();
+    velocity = glm::vec4(0.0f);
     yawVelocity = 0.0f;
     pitchVelocity = 0.0f;
     rollVelocity = 0.0f;
 }
 
-glm::mat4 Spaceship::rotate(Window *window) { return Matrix(right.x, up.x, front.x, 0.0f, right.y, up.y, front.y, 0.0f, right.z, up.z, front.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f); }
-
-glm::mat4 Spaceship::getViewMatrix() const
+glm::mat4 Spaceship::translate(Window *window)
 {
-    if (cameraIsFirstPerson) {
-        const glm::vec4 position4(position, 1.0f);
-        return Matrix_cameraView(position4 + front * 3.0f, front, up);
-    }
-
-    const glm::vec3 shipFront = glm::normalize(getFrontVector());
-    const glm::vec3 shipUp = glm::normalize(getUpVector());
-
-    const float cameraDistance = 6.0f;
-    const float cameraHeight = 2.0f;
-    const glm::vec3 cameraPosition = position - shipFront * cameraDistance + shipUp * cameraHeight;
-    const glm::vec3 viewDirection = glm::normalize(position - cameraPosition);
-
-    return Matrix_cameraView(glm::vec4(cameraPosition, 1.0f), glm::vec4(viewDirection, 0.0f), glm::vec4(shipUp, 0.0f));
-}
-
-glm::vec3 Spaceship::getCameraPosition() const { return position + glm::vec3(front); }
-
-glm::vec3 Spaceship::getFrontVector() const { return glm::vec3(front); }
-
-glm::vec3 Spaceship::getUpVector() const { return glm::vec3(up); }
-
-const BoundingBox &Spaceship::getBoundingBox() const { return boundingBox; }
-
-int Spaceship::getScore() const { return score; }
-
-int Spaceship::getHealth() const { return health; }
-
-void Spaceship::addScore(int amount)
-{
-    if (amount <= 0) {
-        return;
-    }
-
-    score += amount;
-}
-
-void Spaceship::applyDamage(int amount)
-{
-    if (amount <= 0) {
-        return;
-    }
-
-    health -= amount;
-    if (health < 0) {
-        health = 0;
-    }
-
-    if (health == 0) {
-        GLFWwindow *glfwWindow = Window::getInstance().getGlfwWindow();
-        if (glfwWindow != nullptr) {
-            glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
+    if (isLanded && landedPlanet != nullptr) {
+        if (glfwGetKey(window->getGlfwWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+            isLanded = false;
+            landedPlanet = nullptr;
+        } else {
+            front = landedFront;
+            up = landedUp;
+            right = landedRight;
+            const glm::vec3 planetCenter = landedPlanet->getPosition();
+            const glm::vec3 shipCenter = planetCenter + (landedNormal * landedDistance);
+            position = shipCenter - landedShipCenterOffset;
+            return Matrix_Translate(position.x, position.y, position.z);
         }
     }
+
+    const float deltaTime = window->getDeltaTime();
+    const glm::vec3 movement = MovementHelper::getMovementInputs(window->getGlfwWindow());
+
+    glm::vec4 acceleration = (front * movement.z) + (right * movement.x) + (up * movement.y);
+    acceleration *= movementAcceleration;
+    acceleration.w = 0.0f;
+
+    velocity += acceleration * deltaTime;
+
+    const float movementDamping = expf(-movementDrag * deltaTime);
+    velocity *= movementDamping;
+
+    if (norm(velocity) < movementVelocityEpsilon) {
+        velocity = glm::vec4(0.0f);
+    }
+
+    const float speed = norm(velocity);
+    if (speed > maxMovementSpeed) {
+        velocity = (velocity / speed) * maxMovementSpeed;
+    }
+
+    position += glm::vec3(velocity) * deltaTime;
+
+    return Matrix_Translate(position.x, position.y, position.z);
 }
 
-void Spaceship::stopMovement() { velocity = glm::vec4(0.0f); }
+glm::mat4 Spaceship::rotate(Window *window) { return Matrix(right.x, up.x, front.x, 0.0f, right.y, up.y, front.y, 0.0f, right.z, up.z, front.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f); }
 
-glm::mat4 Spaceship::getOrientationMatrix() const
+void Spaceship::shoot(Window *window, std::list<Asteroid> &asteroids)
 {
-    return Matrix(right.x, up.x, front.x, 0.0f, right.y, up.y, front.y, 0.0f, right.z, up.z, front.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+    const float currentTime = window->getCurrentFrame();
+    if (glfwGetMouseButton(window->getGlfwWindow(), GLFW_MOUSE_BUTTON_LEFT) != GLFW_PRESS) {
+        return;
+    }
+
+    if ((currentTime - lastShotTime) < shotCooldown) {
+        return;
+    }
+
+    lastShotTime = currentTime;
+    rayVisibleUntil = currentTime + rayVisibleDuration;
+
+    rayOrigin = getCameraPosition();
+    rayDirection = glm::normalize(glm::vec3(front));
+
+    std::vector<Asteroid *> hitAsteroids;
+
+    for (Asteroid &asteroid : asteroids) {
+        const BoundingSphere *sphere = dynamic_cast<const BoundingSphere *>(&asteroid.getCollider());
+        if (sphere == nullptr) {
+            continue;
+        }
+
+        float hitDistance = 0.0f;
+        if (sphere->testRay(asteroid, rayOrigin, rayDirection, &hitDistance)) {
+            hitAsteroids.push_back(&asteroid);
+        }
+    }
+
+    for (Asteroid *asteroid : hitAsteroids) {
+        asteroid->destroy();
+        addScore(100);
+    }
 }
 
 void Spaceship::renderCrosshair(GLint modelUniform, GLint colorUniform) const
@@ -466,4 +403,65 @@ void Spaceship::renderRay(GLint modelUniform, GLint colorUniform) const
 
     const glm::mat4 model = Matrix_Translate(center.x, center.y, center.z) * orientation * Matrix_Scale(radiusScale, radiusScale, rayMaxRange);
     RenderHelper::renderModel(modelUniform, colorUniform, model, rayMesh, glm::vec3(1.0f, 0.1f, 0.1f));
+}
+
+glm::mat4 Spaceship::getViewMatrix() const
+{
+    if (cameraIsFirstPerson) {
+        const glm::vec4 position4(position, 1.0f);
+        return Matrix_cameraView(position4 + front * 3.0f, front, up);
+    }
+
+    const glm::vec3 shipFront = glm::normalize(getFrontVector());
+    const glm::vec3 shipUp = glm::normalize(up);
+
+    const float cameraDistance = 6.0f;
+    const float cameraHeight = 2.0f;
+    const glm::vec3 cameraPosition = position - shipFront * cameraDistance + shipUp * cameraHeight;
+    const glm::vec3 viewDirection = glm::normalize(position - cameraPosition);
+
+    return Matrix_cameraView(glm::vec4(cameraPosition, 1.0f), glm::vec4(viewDirection, 0.0f), glm::vec4(shipUp, 0.0f));
+}
+
+glm::vec3 Spaceship::getCameraPosition() const { return position + glm::vec3(front); }
+
+glm::vec3 Spaceship::getFrontVector() const { return glm::vec3(front); }
+
+const BoundingBox &Spaceship::getBoundingBox() const { return boundingBox; }
+
+int Spaceship::getScore() const { return score; }
+
+int Spaceship::getHealth() const { return health; }
+
+glm::mat4 Spaceship::getOrientationMatrix() const
+{
+    return Matrix(right.x, up.x, front.x, 0.0f, right.y, up.y, front.y, 0.0f, right.z, up.z, front.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+}
+
+void Spaceship::addScore(int amount)
+{
+    if (amount <= 0) {
+        return;
+    }
+
+    score += amount;
+}
+
+void Spaceship::applyDamage(int amount)
+{
+    if (amount <= 0) {
+        return;
+    }
+
+    health -= amount;
+    if (health < 0) {
+        health = 0;
+    }
+
+    if (health == 0) {
+        GLFWwindow *glfwWindow = Window::getInstance().getGlfwWindow();
+        if (glfwWindow != nullptr) {
+            glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
+        }
+    }
 }
