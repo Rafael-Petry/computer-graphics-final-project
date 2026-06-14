@@ -52,7 +52,6 @@ This file defines a bunch of to do lists for different tasks and functionalities
     - [] For the sun you can probably generate the texture procedurally too
 - [x] Make lighting work
     - [x] The sun needs to be a light source
-- [] ...
 
 ## 6. Collisions
 
