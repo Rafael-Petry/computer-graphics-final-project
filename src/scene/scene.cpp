@@ -94,12 +94,21 @@ Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spacesh
         }
 
         for (int b = 0; b < bushesPerPlanet; ++b) {
-            float theta = (2.0f * 3.14159f * b) / bushesPerPlanet + (3.14159f / bushesPerPlanet) * 0.5f;
-            float phi = (3.14159f * treeBushDist(rng));
+            float z = 2.0f * treeBushDist(rng) - 1.0f; // [-1, 1]
+            float a = treeBushDist(rng) * 2.0f * M_PI; // [0, 2π]
 
-            glm::vec3 offset(spawnDistance * std::sin(phi) * std::cos(theta), spawnDistance * std::cos(phi), spawnDistance * std::sin(phi) * std::sin(theta));
-            glm::vec3 bushColor = colors[i % colors.size()] * glm::vec3(0.6f, 1.0f, 0.6f);
-            bushes.emplace_back(bushColor, &currentPlanet, glm::normalize(offset) * 10.0f, 0.6f);
+            float r = sqrt(1.0f - z * z);
+
+            glm::vec3 offset = glm::vec3(r * cos(a), r * sin(a), z);
+            glm::vec3 bushColor = colors[i % colors.size()] * glm::vec3(0.5f, 1.0f, 0.5f);
+            bushes.emplace_back(bushColor, &currentPlanet, offset * 15.0f);
+
+            // float theta = (2.0f * 3.14159f * b) / bushesPerPlanet + (3.14159f / bushesPerPlanet) * 0.5f;
+            // float phi = (3.14159f * treeBushDist(rng));
+
+            // glm::vec3 offset(spawnDistance * std::sin(phi) * std::cos(theta), spawnDistance * std::cos(phi), spawnDistance * std::sin(phi) * std::sin(theta));
+            // glm::vec3 bushColor = colors[i % colors.size()] * glm::vec3(0.6f, 1.0f, 0.6f);
+            // bushes.emplace_back(bushColor, &currentPlanet, glm::normalize(offset) * 15.0f);
         }
     }
 }
