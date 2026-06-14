@@ -18,44 +18,6 @@
 std::vector<Planet> Scene::planets = std::vector<Planet>();
 std::list<Asteroid> Scene::asteroids = std::list<Asteroid>();
 
-namespace {
-    ImVec2 projectToRadar(const glm::vec3 &delta, float radarRange, float radarHalf)
-    {
-        float x = delta.x;
-        float y = -delta.z;
-        float maxAbs = std::max(std::fabs(x), std::fabs(y));
-        if (maxAbs > radarRange && maxAbs > 0.0f) {
-            const float scale = radarRange / maxAbs;
-            x *= scale;
-            y *= scale;
-        }
-
-        const float pixelScale = radarHalf / radarRange;
-        return ImVec2(x * pixelScale, y * pixelScale);
-    }
-
-    void drawRadarMarker(ImDrawList *drawList, const ImVec2 &position, ImU32 color, float size, int verticalDirection)
-    {
-        if (verticalDirection > 0) {
-            const ImVec2 top(position.x, position.y - size);
-            const ImVec2 left(position.x - size * 0.6f, position.y + size);
-            const ImVec2 right(position.x + size * 0.6f, position.y + size);
-            drawList->AddTriangleFilled(top, left, right, color);
-            return;
-        }
-
-        if (verticalDirection < 0) {
-            const ImVec2 bottom(position.x, position.y + size);
-            const ImVec2 left(position.x - size * 0.6f, position.y - size);
-            const ImVec2 right(position.x + size * 0.6f, position.y - size);
-            drawList->AddTriangleFilled(bottom, left, right, color);
-            return;
-        }
-
-        drawList->AddCircleFilled(position, size * 0.6f, color);
-    }
-}
-
 Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spaceship::getInstance()), sun(Sun::getInstance())
 {
     AsteroidSpawnerHelper::initialize(Scene::asteroids, spaceship);
@@ -104,6 +66,45 @@ void Scene::update(GLint modelUniform,
     spaceship.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
 
     this->updateUI(window);
+}
+
+// UI
+namespace {
+    ImVec2 projectToRadar(const glm::vec3 &delta, float radarRange, float radarHalf)
+    {
+        float x = delta.x;
+        float y = -delta.z;
+        float maxAbs = std::max(std::fabs(x), std::fabs(y));
+        if (maxAbs > radarRange && maxAbs > 0.0f) {
+            const float scale = radarRange / maxAbs;
+            x *= scale;
+            y *= scale;
+        }
+
+        const float pixelScale = radarHalf / radarRange;
+        return ImVec2(x * pixelScale, y * pixelScale);
+    }
+
+    void drawRadarMarker(ImDrawList *drawList, const ImVec2 &position, ImU32 color, float size, int verticalDirection)
+    {
+        if (verticalDirection > 0) {
+            const ImVec2 top(position.x, position.y - size);
+            const ImVec2 left(position.x - size * 0.6f, position.y + size);
+            const ImVec2 right(position.x + size * 0.6f, position.y + size);
+            drawList->AddTriangleFilled(top, left, right, color);
+            return;
+        }
+
+        if (verticalDirection < 0) {
+            const ImVec2 bottom(position.x, position.y + size);
+            const ImVec2 left(position.x - size * 0.6f, position.y - size);
+            const ImVec2 right(position.x + size * 0.6f, position.y - size);
+            drawList->AddTriangleFilled(bottom, left, right, color);
+            return;
+        }
+
+        drawList->AddCircleFilled(position, size * 0.6f, color);
+    }
 }
 
 void Scene::updateUI(Window *window)

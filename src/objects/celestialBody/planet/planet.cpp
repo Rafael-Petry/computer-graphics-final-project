@@ -115,14 +115,12 @@ void Planet::collide(Window *window)
     if (instanceBoundingSphere.testCollisionBoundingBox(*this, spaceship)) {
         const glm::vec3 planetScale = getScale();
         const glm::vec3 planetCenter = (instanceBoundingSphere.getCenter() * planetScale) + position;
-        const float planetRadius = 14.6f;
 
         const BoundingBox &shipBox = spaceship.getBoundingBox();
         const glm::vec3 shipScale = spaceship.getScale();
         const glm::vec3 shipBoxCenter = (shipBox.getMin() + shipBox.getMax()) * 0.5f;
         const glm::vec3 shipBoxExtents = (shipBox.getMax() - shipBox.getMin()) * 0.5f;
         const glm::vec3 shipCenterOffset = shipBoxCenter * shipScale;
-        const float shipRadius = glm::length(shipBoxExtents * shipScale);
 
         glm::vec3 shipCenter = spaceship.getPosition() + shipCenterOffset;
         glm::vec3 normal = shipCenter - planetCenter;
@@ -133,6 +131,8 @@ void Planet::collide(Window *window)
             normal /= normalLength;
         }
 
+        const float planetRadius = 14.6f;
+        const float shipRadius = glm::length(shipBoxExtents * shipScale);
         const float landingPadding = 0.05f;
         const float distanceFromCenter = planetRadius + shipRadius + landingPadding;
         spaceship.landOn(this, normal, distanceFromCenter, shipCenterOffset);
