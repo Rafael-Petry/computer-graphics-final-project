@@ -38,14 +38,12 @@ void Tree::collide(Window *window)
         const glm::vec3 treeScale = getScale();
         const glm::vec3 treeCenter = (boundingBox.getMin() + boundingBox.getMax()) * treeScale + position;
         const glm::vec3 treeExtents = (boundingBox.getMax() - boundingBox.getMin()) * treeScale;
-        const float treeRadius = glm::length(treeExtents);
 
         const BoundingBox &shipBox = spaceship.getBoundingBox();
         const glm::vec3 shipScale = spaceship.getScale();
         const glm::vec3 shipBoxCenter = (shipBox.getMin() + shipBox.getMax()) * 0.5f;
         const glm::vec3 shipBoxExtents = (shipBox.getMax() - shipBox.getMin()) * 0.5f;
         const glm::vec3 shipCenterOffset = shipBoxCenter * shipScale;
-        const float shipRadius = glm::length(shipBoxExtents * shipScale);
 
         glm::vec3 shipCenter = spaceship.getPosition() + shipCenterOffset;
         glm::vec3 normal = shipCenter - treeCenter;
@@ -56,7 +54,6 @@ void Tree::collide(Window *window)
             normal /= normalLength;
         }
 
-        const float bumpDistance = treeRadius + shipRadius + 0.1f;
         spaceship.applyDamage(1);
         spaceship.setVelocity(glm::vec4(glm::normalize(normal), 0.0f) * 5.0f);
     }

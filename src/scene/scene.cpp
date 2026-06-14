@@ -60,8 +60,8 @@ Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spacesh
     const std::vector<glm::vec3> colors = {
         glm::vec3(0.2f, 0.6f, 1.0f), glm::vec3(0.9f, 0.4f, 0.2f), glm::vec3(0.4f, 0.9f, 0.5f), glm::vec3(0.8f, 0.8f, 0.3f), glm::vec3(0.7f, 0.5f, 1.0f)};
 
-    const float baseRadius = 50.0f;
-    const float radiusStep = 50.0f;
+    const float baseRadius = 85.0f;
+    const float radiusStep = 75.0f;
     const int planetCount = 5;
 
     std::mt19937 rng(std::random_device{}());
@@ -79,7 +79,6 @@ Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spacesh
         // Spawn trees and bushes on the planet's surface
         const int treesPerPlanet = 30;
         const int bushesPerPlanet = 30;
-        const float planetRadius = 15.0f; // Approximate planet scale
 
         for (int t = 0; t < treesPerPlanet; ++t) {
             float z = 2.0f * treeBushDist(rng) - 1.0f; // [-1, 1]

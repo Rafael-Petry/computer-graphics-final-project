@@ -88,17 +88,16 @@ glm::mat4 Planet::translate(Window *window)
 
     const Sun &sun = Sun::getInstance();
     const glm::vec3 center = sun.getPosition();
-    const float safeOrbitRadius = std::max(orbitRadius, sun.getScale().x + scaleValue.x + 5.0f);
 
-    const glm::vec3 curve1[4] = {center + glm::vec3(safeOrbitRadius, 0.0f, 0.0f),
-                                 center + glm::vec3(safeOrbitRadius, 0.0f, safeOrbitRadius),
-                                 center + glm::vec3(-safeOrbitRadius, 0.0f, safeOrbitRadius),
-                                 center + glm::vec3(-safeOrbitRadius, 0.0f, 0.0f)};
+    const glm::vec3 curve1[4] = {center + glm::vec3(orbitRadius, 0.0f, 0.0f),
+                                 center + glm::vec3(orbitRadius, 0.0f, orbitRadius),
+                                 center + glm::vec3(-orbitRadius, 0.0f, orbitRadius),
+                                 center + glm::vec3(-orbitRadius, 0.0f, 0.0f)};
 
-    const glm::vec3 curve2[4] = {center + glm::vec3(-safeOrbitRadius, 0.0f, 0.0f),
-                                 center + glm::vec3(-safeOrbitRadius, 0.0f, -safeOrbitRadius),
-                                 center + glm::vec3(safeOrbitRadius, 0.0f, -safeOrbitRadius),
-                                 center + glm::vec3(safeOrbitRadius, 0.0f, 0.0f)};
+    const glm::vec3 curve2[4] = {center + glm::vec3(-orbitRadius, 0.0f, 0.0f),
+                                 center + glm::vec3(-orbitRadius, 0.0f, -orbitRadius),
+                                 center + glm::vec3(orbitRadius, 0.0f, -orbitRadius),
+                                 center + glm::vec3(orbitRadius, 0.0f, 0.0f)};
 
     if (orbitPhase < 1.0f) {
         position = cubicBezier(curve1[0], curve1[1], curve1[2], curve1[3], orbitPhase);
@@ -109,4 +108,4 @@ glm::mat4 Planet::translate(Window *window)
     return Matrix_Translate(position.x, position.y, position.z);
 }
 
-glm::mat4 Planet::rotate(Window *window) { return Matrix_Rotate_Y(window->getCurrentFrame() * 0.1f); }
+glm::mat4 Planet::rotate(Window *window) { return Matrix_Identity(); }
