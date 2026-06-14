@@ -5,8 +5,6 @@
 #include "../objects/celestialBody/planet/planet.h"
 #include "../objects/celestialBody/sun/sun.h"
 #include "../objects/spaceship/spaceship.h"
-#include "../objects/tree/tree.h"
-#include "../objects/bush/bush.h"
 
 #include <list>
 #include <vector>
@@ -34,8 +32,6 @@ private:
     Spaceship &spaceship;
     std::list<Asteroid> asteroids;
     std::vector<Planet> planets;
-    std::vector<Tree> trees;
-    std::vector<Bush> bushes;
     Sun &sun;
 };
 

@@ -7,6 +7,7 @@
 #include "../../spaceship/spaceship.h"
 #include "../../../window/window.h"
 #include "../../vendor/include/matrices.h"
+#include "../../objects/celestialBody/sun/sun.h"
 
 Mesh Asteroid::mesh;
 BoundingSphere Asteroid::boundingSphere;
@@ -117,6 +118,11 @@ glm::mat4 Asteroid::rotate(Window *window) { return Matrix_Rotate_Y(window->getC
 void Asteroid::collide(Window *window)
 {
     const Spaceship &spaceship = Spaceship::getInstance();
+
+    if (boundingSphere.testCollisionBoundingSphere(*this, Sun::getInstance())) {
+        destroyWithoutFragments();
+        return;
+    }
 
     if (boundingSphere.testCollisionBoundingBox(*this, spaceship)) {
         Spaceship::getInstance().applyDamage((int)size + 1);

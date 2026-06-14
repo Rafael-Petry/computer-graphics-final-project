@@ -57,50 +57,16 @@ Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spacesh
 {
     AsteroidSpawnerHelper::initialize(asteroids, spaceship);
 
-    const std::vector<glm::vec3> colors = {
-        glm::vec3(0.2f, 0.6f, 1.0f), glm::vec3(0.9f, 0.4f, 0.2f), glm::vec3(0.4f, 0.9f, 0.5f), glm::vec3(0.8f, 0.8f, 0.3f), glm::vec3(0.7f, 0.5f, 1.0f)};
-
     const float baseRadius = 85.0f;
     const float radiusStep = 75.0f;
     const int planetCount = 5;
 
     std::mt19937 rng(std::random_device{}());
-    std::uniform_real_distribution<float> phaseDist(0.0f, 2.0f);
-    std::uniform_real_distribution<float> treeBushDist(0.0f, 1.0f);
 
     planets.reserve(planetCount);
     for (int i = 0; i < planetCount; ++i) {
         const float orbitRadius = baseRadius + (radiusStep * static_cast<float>(i));
-        const float orbitSpeed = 0.01f;
-        const float orbitPhase = phaseDist(rng);
-        planets.emplace_back(colors[i % colors.size()], orbitRadius, orbitSpeed, orbitPhase);
-        Planet &currentPlanet = planets[i];
-
-        // Spawn trees and bushes on the planet's surface
-        const int treesPerPlanet = 30;
-        const int bushesPerPlanet = 30;
-
-        for (int t = 0; t < treesPerPlanet; ++t) {
-            float z = 2.0f * treeBushDist(rng) - 1.0f; // [-1, 1]
-            float a = treeBushDist(rng) * 2.0f * M_PI; // [0, 2π]
-
-            float r = sqrt(1.0f - z * z);
-
-            glm::vec3 offset = glm::vec3(r * cos(a), r * sin(a), z);
-            glm::vec3 treeColor = colors[i % colors.size()] * glm::vec3(0.5f, 1.0f, 0.5f);
-            trees.emplace_back(treeColor, &currentPlanet, offset * 15.0f);
-        }
-
-        for (int b = 0; b < bushesPerPlanet; ++b) {
-            float z = 2.0f * treeBushDist(rng) - 1.0f; // [-1, 1]
-            float a = treeBushDist(rng) * 2.0f * M_PI; // [0, 2π]
-
-            float r = sqrt(1.0f - z * z);
-
-            glm::vec3 offset = glm::vec3(r * cos(a), r * sin(a), z);
-            glm::vec3 bushColor = colors[i % colors.size()] * glm::vec3(0.5f, 1.0f, 0.5f);
-            bushes.emplace_back(bushColor, &currentPlanet, offset * 15.0f);
-        }
+        planets.emplace_back(orbitRadius);
     }
 }
 
@@ -120,14 +86,6 @@ void Scene::update(GLint modelUniform,
         planet.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
     }
 
-    for (Tree &tree : trees) {
-        tree.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
-    }
-
-    for (Bush &bush : bushes) {
-        bush.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
-    }
-
     for (Asteroid &asteroid : asteroids) {
         if (!asteroid.isDestroyed()) {
             asteroid.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
@@ -141,11 +99,6 @@ void Scene::update(GLint modelUniform,
 
         const BoundingSphere *sphere = dynamic_cast<const BoundingSphere *>(&asteroid.getCollider());
         if (sphere == nullptr) {
-            continue;
-        }
-
-        if (sphere->testCollisionBoundingSphere(asteroid, sun)) {
-            asteroid.destroyWithoutFragments();
             continue;
         }
 
