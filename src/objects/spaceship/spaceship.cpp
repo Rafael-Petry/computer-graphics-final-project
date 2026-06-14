@@ -242,15 +242,10 @@ glm::mat4 Spaceship::translate(Window *window)
             front = landedFront;
             up = landedUp;
             right = landedRight;
-            const glm::vec3 radiusDirection = glm::normalize(position - glm::vec3(landedPlanet->getPosition()));
-            position = landedPlanet->getPosition() + radiusDirection * 22.0f;
-            return Matrix_Translate(position.x, position.y, position.z);
-            /*
             const glm::vec3 planetCenter = landedPlanet->getPosition();
             const glm::vec3 shipCenter = planetCenter + (landedNormal * landedDistance);
             position = shipCenter - landedShipCenterOffset;
             return Matrix_Translate(position.x, position.y, position.z);
-            */
         }
     }
 
@@ -296,17 +291,21 @@ void Spaceship::landOn(const Planet *planet, const glm::vec3 &surfaceNormal, flo
     const float minApproachSpeed = 0.2f;
     const float minUpAlignment = 0.75f;
 
-    if (approachDot > -minApproachSpeed || upAlignment < minUpAlignment) {
+    if (upAlignment < minUpAlignment) {
         applyDamage(1);
         landedPlanet = nullptr;
         isLanded = false;
 
-        const float bumpDistance = 0.6f;
-        const float bumpSpeed = 3.0f;
+        const float bumpDistance = 6.0f;
+        const float bumpSpeed = 6.0f;
         const glm::vec3 planetCenter = planet->getPosition();
         const glm::vec3 shipCenter = planetCenter + (normalizedNormal * (distanceFromCenter + bumpDistance));
         position = shipCenter - shipCenterOffset;
         velocity = glm::vec4(normalizedNormal * bumpSpeed, 0.0f);
+        return;
+    }
+
+    if (approachDot > -minApproachSpeed) {
         return;
     }
 

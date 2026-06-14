@@ -55,7 +55,7 @@ void Planet::collide(Window *window)
     if (instanceBoundingSphere.testCollisionBoundingBox(*this, spaceship)) {
         const glm::vec3 planetScale = getScale();
         const glm::vec3 planetCenter = (instanceBoundingSphere.getCenter() * planetScale) + position;
-        const float planetRadius = instanceBoundingSphere.getRadius() * maxAbsComponent(planetScale);
+        const float planetRadius = 12.0f;
 
         const BoundingBox &shipBox = spaceship.getBoundingBox();
         const glm::vec3 shipScale = spaceship.getScale();
