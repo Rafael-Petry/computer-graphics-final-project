@@ -77,10 +77,9 @@ Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spacesh
         Planet &currentPlanet = planets[i];
 
         // Spawn trees and bushes on the planet's surface
-        const int treesPerPlanet = 3;
-        const int bushesPerPlanet = 5;
-        const float planetRadius = 15.0f;                // Approximate planet scale
-        const float spawnDistance = planetRadius + 1.5f; // Distance from planet center to surface spawn point
+        const int treesPerPlanet = 30;
+        const int bushesPerPlanet = 30;
+        const float planetRadius = 15.0f; // Approximate planet scale
 
         for (int t = 0; t < treesPerPlanet; ++t) {
             float z = 2.0f * treeBushDist(rng) - 1.0f; // [-1, 1]
