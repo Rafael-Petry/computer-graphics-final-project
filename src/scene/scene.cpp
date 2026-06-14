@@ -195,6 +195,8 @@ void Scene::update(GLint modelUniform,
 void Scene::updateUI(Window *window)
 {
     ImGuiIO &io = ImGui::GetIO();
+    io.FontGlobalScale = 1.8f;
+
     const float padding = 12.0f;
     const ImGuiWindowFlags hudFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
                                       ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_AlwaysAutoResize;
