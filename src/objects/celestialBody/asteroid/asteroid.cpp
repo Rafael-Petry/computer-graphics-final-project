@@ -20,7 +20,7 @@ namespace {
         case Asteroid::Size::Small:
             return 0.2f;
         case Asteroid::Size::Large:
-            return 1.6f;
+            return 1.2f;
         case Asteroid::Size::Medium:
         default:
             return 0.8f;
@@ -55,7 +55,7 @@ namespace {
     }
 }
 
-Asteroid::Asteroid(const glm::vec3 &color) : CelestialBody(mesh, boundingSphere, color)
+Asteroid::Asteroid() : CelestialBody(mesh, boundingSphere, color)
 {
     if (mesh.vao == 0 && !mesh.hasSubMeshes()) {
         mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/asteroid/asteroid.obj");
@@ -121,40 +121,41 @@ void Asteroid::collide(Window *window)
     const Spaceship &spaceship = Spaceship::getInstance();
 
     if (boundingSphere.testCollisionBoundingSphere(*this, Sun::getInstance())) {
-        destroyWithoutFragments();
+        destroy(false);
         return;
     }
 
     if (boundingSphere.testCollisionBoundingBox(*this, spaceship)) {
         Spaceship::getInstance().applyDamage((int)size + 1);
-        destroyWithoutFragments();
+        destroy(false);
     }
 
     for (Planet &planet : Scene::getPlanets()) {
         if (boundingSphere.testCollisionBoundingSphere(*this, planet)) {
-            destroyWithoutFragments();
+            destroy(false);
             break;
         }
     }
 }
 
-void Asteroid::destroy()
+void Asteroid::destroy(bool spawnFragments)
 {
-    if (size != Size::Small) {
-        pendingFragmentSpawn = true;
+    if (spawnFragments && size != Size::Small) {
+        std::mt19937 rng(std::random_device{}());
+        std::uniform_real_distribution<float> offsetDist(-12.0f, 12.0f);
+
+        for (int i = 0; i < 2; i++) {
+            Scene::getAsteroids().emplace_back();
+            glm::vec3 offset(offsetDist(rng), offsetDist(rng), offsetDist(rng));
+
+            Asteroid &fragment = Scene::getAsteroids().back();
+            fragment.setSize((size == Size::Large) ? Size::Medium : Size::Small);
+            fragment.setPosition(position + offset);
+        }
+
         fragmentSize = (size == Size::Large) ? Size::Medium : Size::Small;
         fragmentOrigin = position;
     }
 
     destroyed = true;
-    scaleValue = glm::vec3(0.0f);
-    chaseSpeed = 0.0f;
-}
-
-void Asteroid::destroyWithoutFragments()
-{
-    pendingFragmentSpawn = false;
-    destroyed = true;
-    scaleValue = glm::vec3(0.0f);
-    chaseSpeed = 0.0f;
 }

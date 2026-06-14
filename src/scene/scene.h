@@ -28,13 +28,14 @@ public:
     void updateRadar(Window *window);
 
     static std::vector<Planet> &getPlanets() { return planets; }
+    static std::list<Asteroid> &getAsteroids() { return asteroids; }
 
 private:
     float lastFrame;
     Spaceship &spaceship;
-    std::list<Asteroid> asteroids;
-    static std::vector<Planet> planets;
     Sun &sun;
+    static std::list<Asteroid> asteroids;
+    static std::vector<Planet> planets;
 };
 
 #endif

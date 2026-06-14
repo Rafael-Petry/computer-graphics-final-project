@@ -16,6 +16,7 @@
 #include <imgui.h>
 
 std::vector<Planet> Scene::planets = std::vector<Planet>();
+std::list<Asteroid> Scene::asteroids = std::list<Asteroid>();
 
 namespace {
     ImVec2 projectToRadar(const glm::vec3 &delta, float radarRange, float radarHalf)
@@ -57,7 +58,7 @@ namespace {
 
 Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spaceship::getInstance()), sun(Sun::getInstance())
 {
-    AsteroidSpawnerHelper::initialize(asteroids, spaceship);
+    AsteroidSpawnerHelper::initialize(Scene::asteroids, spaceship);
 
     const float baseRadius = 85.0f;
     const float radiusStep = 75.0f;
@@ -88,43 +89,19 @@ void Scene::update(GLint modelUniform,
         planet.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
     }
 
-    for (Asteroid &asteroid : asteroids) {
+    for (Asteroid &asteroid : Scene::asteroids) {
         if (!asteroid.isDestroyed()) {
             asteroid.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
         }
     }
 
-    struct FragmentSpawn
-    {
-        Asteroid::Size size;
-        glm::vec3 origin;
-    };
+    Scene::asteroids.remove_if([](const Asteroid &asteroid) { return asteroid.isDestroyed(); });
 
-    std::vector<FragmentSpawn> spawns;
-    std::mt19937 rng(std::random_device{}());
-    std::uniform_real_distribution<float> offsetDist(-12.0f, 12.0f);
-    for (Asteroid &asteroid : asteroids) {
-        FragmentSpawn spawn;
-        if (!asteroid.consumeFragmentSpawn(spawn.size, spawn.origin)) {
-            continue;
-        }
-        spawns.push_back(spawn);
+    if (Scene::asteroids.empty()) {
+        AsteroidSpawnerHelper::update(Scene::asteroids, spaceship, window->getCurrentFrame());
     }
 
-    for (const FragmentSpawn &spawn : spawns) {
-        for (int i = 0; i < 3; ++i) {
-            asteroids.emplace_back();
-            Asteroid &fragment = asteroids.back();
-            fragment.setSize(spawn.size);
-            glm::vec3 offset(offsetDist(rng), offsetDist(rng), offsetDist(rng));
-            fragment.setPosition(spawn.origin + offset);
-        }
-    }
-
-    asteroids.remove_if([](const Asteroid &asteroid) { return asteroid.isDestroyed(); });
-    AsteroidSpawnerHelper::update(asteroids, spaceship, window->getCurrentFrame());
-
-    spaceship.updateShooting(modelUniform, colorUniform, window, asteroids);
+    spaceship.updateShooting(modelUniform, colorUniform, window, Scene::asteroids);
     spaceship.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
 
     this->updateUI(window);
@@ -224,7 +201,7 @@ void Scene::updateRadar(Window *window)
         drawRadarMarker(drawList, markerPos, color, markerSize, verticalDirection);
     };
 
-    for (const Asteroid &asteroid : asteroids) {
+    for (const Asteroid &asteroid : Scene::asteroids) {
         if (!asteroid.isDestroyed()) {
             drawRadarObject(asteroid.getPosition(), asteroidColor);
         }
