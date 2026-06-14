@@ -37,12 +37,10 @@ void Tree::collide(Window *window)
     if (boundingBox.testCollisionBoundingBox(*this, spaceship)) {
         const glm::vec3 treeScale = getScale();
         const glm::vec3 treeCenter = (boundingBox.getMin() + boundingBox.getMax()) * treeScale + position;
-        const glm::vec3 treeExtents = (boundingBox.getMax() - boundingBox.getMin()) * treeScale;
 
         const BoundingBox &shipBox = spaceship.getBoundingBox();
         const glm::vec3 shipScale = spaceship.getScale();
         const glm::vec3 shipBoxCenter = (shipBox.getMin() + shipBox.getMax()) * 0.5f;
-        const glm::vec3 shipBoxExtents = (shipBox.getMax() - shipBox.getMin()) * 0.5f;
         const glm::vec3 shipCenterOffset = shipBoxCenter * shipScale;
 
         glm::vec3 shipCenter = spaceship.getPosition() + shipCenterOffset;
