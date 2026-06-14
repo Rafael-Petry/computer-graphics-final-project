@@ -13,7 +13,7 @@ float AsteroidSpawnerHelper::downtimeSeconds = 30.0f;
 
 void AsteroidSpawnerHelper::initialize(std::list<Asteroid> &asteroids, const Spaceship &spaceship)
 {
-    currentWaveSize = 10;
+    currentWaveSize = 5;
     waitingForNextWave = false;
     nextWaveStartTime = 0.0f;
     initialized = true;

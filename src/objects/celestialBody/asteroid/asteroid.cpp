@@ -66,6 +66,13 @@ Asteroid::Asteroid(const glm::vec3 &color) : CelestialBody(mesh, boundingSphere,
     std::mt19937 rng(std::random_device{}());
     setSize(randomAsteroidSize(rng));
     position = glm::vec3(2.7f, 0.4f, 0.0f);
+
+    static std::mt19937 genX(std::random_device{}());
+    static std::mt19937 genY(std::random_device{}());
+    std::uniform_real_distribution<float> rotateSpeed(-1.7f, 1.7f);
+
+    rotateSpeedX = rotateSpeed(genX);
+    rotateSpeedY = rotateSpeed(genY);
 }
 
 void Asteroid::setSize(Size newSize)
@@ -104,7 +111,8 @@ glm::mat4 Asteroid::translate(Window *window)
 
     return Matrix_Translate(position.x, position.y, position.z);
 }
-glm::mat4 Asteroid::rotate(Window *window) { return Matrix_Rotate_Y(window->getCurrentFrame() * 1.7f); }
+
+glm::mat4 Asteroid::rotate(Window *window) { return Matrix_Rotate_Y(window->getCurrentFrame() * rotateSpeedY) * Matrix_Rotate_X(window->getCurrentFrame() * rotateSpeedX); }
 
 void Asteroid::collide(Window *window)
 {
