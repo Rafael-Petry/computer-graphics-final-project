@@ -69,6 +69,13 @@ void Spaceship::update(GLint modelUniform,
         isRolling = true;
     }
 
+    if (invencibilityTimer > 0.0f) {
+        invencibilityTimer -= window->getDeltaTime();
+        if (invencibilityTimer < 0.0f) {
+            invencibilityTimer = 0.0f;
+        }
+    }
+
     updateRotation(window);
 }
 
@@ -221,16 +228,22 @@ void Spaceship::landOn(const Planet *planet, const glm::vec3 &surfaceNormal, flo
     const float minUpAlignment = 0.75f;
 
     if (upAlignment < minUpAlignment) {
-        applyDamage(1);
-        landedPlanet = nullptr;
-        isLanded = false;
-
         const float bumpDistance = 6.0f;
         const float bumpSpeed = 6.0f;
         const glm::vec3 planetCenter = planet->getPosition();
         const glm::vec3 shipCenter = planetCenter + (normalizedNormal * (distanceFromCenter + bumpDistance));
         position = shipCenter - shipCenterOffset;
         velocity = glm::vec4(normalizedNormal * bumpSpeed, 0.0f);
+
+        landedPlanet = nullptr;
+        isLanded = false;
+
+        if (invencibilityTimer >= 0.001f) {
+            return;
+        }
+
+        applyDamage(1);
+        invencibilityTimer = 1.0f;
         return;
     }
 

@@ -45,8 +45,11 @@ public:
     glm::vec3 getCameraPosition() const;
     glm::vec3 getFrontVector() const;
     const BoundingBox &getBoundingBox() const;
+    const bool getIsLanded() const { return isLanded; }
+    float getInvencibilityTimer() const { return invencibilityTimer; }
 
     void setVelocity(const glm::vec4 &newVelocity) { velocity = newVelocity; }
+    void setInvencibilityTimer(float timer) { invencibilityTimer = timer; }
 
     void toggleCameraMode() { cameraIsFirstPerson = !cameraIsFirstPerson; }
 
@@ -123,6 +126,8 @@ private:
     glm::vec4 landedRight = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
 
     bool cameraIsFirstPerson = false;
+
+    float invencibilityTimer = 0.0f;
 
     static Mesh mesh;
     static BoundingBox boundingBox;
