@@ -89,7 +89,7 @@ private:
     float rotationVelocityEpsilon = 0.01f;
 
     float movementAcceleration = 8.0f;
-    float maxMovementSpeed = 10.0f;
+    float maxMovementSpeed = 20.0f;
     float movementDrag = 0.2f;
     float movementVelocityEpsilon = 0.005f;
 
