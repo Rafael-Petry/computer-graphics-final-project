@@ -49,7 +49,7 @@ Planet::Planet(float orbitRadius) : CelestialBody(instanceMesh, instanceBounding
     position = glm::vec3(0.0f);
 
     this->orbitRadius = orbitRadius;
-    orbitSpeed = 0.03f;
+    orbitSpeed = 0.02f;
 
     const std::vector<glm::vec3> colors = {
         glm::vec3(0.2f, 0.6f, 1.0f), glm::vec3(0.9f, 0.4f, 0.2f), glm::vec3(0.4f, 0.9f, 0.5f), glm::vec3(0.8f, 0.8f, 0.3f), glm::vec3(0.7f, 0.5f, 1.0f)};
