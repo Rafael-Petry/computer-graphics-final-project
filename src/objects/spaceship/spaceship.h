@@ -128,6 +128,7 @@ private:
     bool cameraIsFirstPerson = false;
 
     float invencibilityTimer = 0.0f;
+    float takeOffSpeed = 0.0f;
 
     static Mesh mesh;
     static BoundingBox boundingBox;

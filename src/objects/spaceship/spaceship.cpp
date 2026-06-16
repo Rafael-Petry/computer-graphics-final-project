@@ -217,14 +217,12 @@ void Spaceship::landOn(const Planet *planet, const glm::vec3 &surfaceNormal, flo
         return;
     }
 
-    if (isLanded && landedPlanet == planet) {
+    if ((isLanded && landedPlanet == planet)) {
         return;
     }
 
     const glm::vec3 normalizedNormal = glm::normalize(surfaceNormal);
-    const float approachDot = glm::dot(glm::vec3(velocity), normalizedNormal);
     const float upAlignment = glm::dot(glm::vec3(up), normalizedNormal);
-    const float minApproachSpeed = 0.2f;
     const float minUpAlignment = 0.75f;
 
     if (upAlignment < minUpAlignment) {
@@ -244,15 +242,6 @@ void Spaceship::landOn(const Planet *planet, const glm::vec3 &surfaceNormal, flo
 
         applyDamage(1);
         invencibilityTimer = 1.0f;
-        return;
-    }
-
-    if (approachDot > -minApproachSpeed) {
-        landedPlanet = nullptr;
-        isLanded = false;
-
-        const float bumpSpeed = 6.0f;
-        velocity = glm::vec4(normalizedNormal * bumpSpeed, 0.0f);
         return;
     }
 
@@ -290,11 +279,10 @@ void Spaceship::landOn(const Planet *planet, const glm::vec3 &surfaceNormal, flo
 
 glm::mat4 Spaceship::translate(Window *window)
 {
-    if (isLanded && landedPlanet != nullptr) {
+    if (isLanded && landedPlanet != nullptr && takeOffSpeed <= 0.0f) {
         if (glfwGetKey(window->getGlfwWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-            isLanded = false;
-            landedPlanet = nullptr;
-        } else {
+            takeOffSpeed = 60.0f;
+        } else if (takeOffSpeed <= 0.0f) {
             front = landedFront;
             up = landedUp;
             right = landedRight;
@@ -306,24 +294,35 @@ glm::mat4 Spaceship::translate(Window *window)
     }
 
     const float deltaTime = window->getDeltaTime();
-    const glm::vec3 movement = MovementHelper::getMovementInputs(window->getGlfwWindow());
 
-    glm::vec4 acceleration = (front * movement.z) + (right * movement.x) + (up * movement.y);
-    acceleration *= movementAcceleration;
-    acceleration.w = 0.0f;
+    if (takeOffSpeed > 0.0f) {
+        velocity += glm::vec4(landedNormal * takeOffSpeed, 0.0f) * deltaTime;
+        takeOffSpeed -= 30.0f * deltaTime;
+        if (takeOffSpeed < 0.0f) {
+            takeOffSpeed = 0.0f;
+            landedPlanet = nullptr;
+            isLanded = false;
+        }
+    } else {
+        const glm::vec3 movement = MovementHelper::getMovementInputs(window->getGlfwWindow());
 
-    velocity += acceleration * deltaTime;
+        glm::vec4 acceleration = (front * movement.z) + (right * movement.x) + (up * movement.y);
+        acceleration *= movementAcceleration;
+        acceleration.w = 0.0f;
 
-    const float movementDamping = expf(-movementDrag * deltaTime);
-    velocity *= movementDamping;
+        velocity += acceleration * deltaTime;
 
-    if (norm(velocity) < movementVelocityEpsilon) {
-        velocity = glm::vec4(0.0f);
-    }
+        const float movementDamping = expf(-movementDrag * deltaTime);
+        velocity *= movementDamping;
 
-    const float speed = norm(velocity);
-    if (speed > maxMovementSpeed) {
-        velocity = (velocity / speed) * maxMovementSpeed;
+        if (norm(velocity) < movementVelocityEpsilon) {
+            velocity = glm::vec4(0.0f);
+        }
+
+        const float speed = norm(velocity);
+        if (speed > maxMovementSpeed) {
+            velocity = (velocity / speed) * maxMovementSpeed;
+        }
     }
 
     position += glm::vec3(velocity) * deltaTime;
