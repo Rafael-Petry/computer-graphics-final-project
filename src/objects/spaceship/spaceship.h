@@ -60,11 +60,11 @@ private:
     static constexpr int maxHealth = 5;
 
     void shoot(Window *window, std::list<Asteroid> &asteroids);
-    void renderCrosshair(GLint modelUniform, GLint colorUniform) const;
-    void renderRay(GLint modelUniform, GLint colorUniform) const;
+    void renderCrosshair(GLint modelUniform, GLint colorUniform, GLint isEmissiveUniform) const;
+    void renderRay(GLint modelUniform, GLint colorUniform, GLint isEmissiveUniform) const;
     glm::mat4 getOrientationMatrix() const;
     void updateOrientation(float deltaYaw, float deltaPitch, float deltaRoll);
-    void updateShooting(GLint modelUniform, GLint colorUniform, Window *window);
+    void updateShooting(GLint modelUniform, GLint colorUniform, Window *window, GLint isEmissiveUniform = -1);
 
     glm::vec4 velocity;
     glm::vec4 front;
@@ -122,7 +122,7 @@ private:
     glm::vec4 landedUp = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
     glm::vec4 landedRight = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
 
-    bool cameraIsFirstPerson = true;
+    bool cameraIsFirstPerson = false;
 
     static Mesh mesh;
     static BoundingBox boundingBox;
