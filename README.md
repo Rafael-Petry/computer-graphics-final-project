@@ -1,5 +1,53 @@
-# Computação Gráfica e Visualização I (INF01047) - INF/UFRGS
+# Asteroids-3D
 
-Este repositório contém o código base para o trabalho final. O enunciado completo do trabalho final está no Moodle:
+Asteroids-3D trata-se de um jogo baseado em Outer Wilds e Asteroids, desenvolvido como projeto final da disciplina de Computação Gráfica e Visualização (CGVis) da UFRGS. O jogador controla uma nave nas proximidades de um sistema solar, enquanto asteróides tentam destruí-la. Destruir asteróides concede pontos ao jogador, sendo o objetivo do jogo realizar o maior número de pontos.
 
-https://moodle.ufrgs.br/mod/assign/view.php?id=6018620
+## Contribuições
+
+- **Rafael Petry da Silva:** Game design, arquitetura do projeto, renderização de meshes, implementação da física (animação, colisões, etc), implementação de câmeras e interface.
+- **Thibault Pelenc:** - Game design, escolha de meshes e texturas, renderização de texturas, implementação de texturas procedurais e implementação do shader.
+
+## Uso de IA
+
+A dupla fez uso de IA, utilizando a ferramenta Github Copilot com os seguintes agentes: GPT-5.2-Codex, GPT-5.3-Codex e Claude Haiku. Ela foi usada para gerar a implementação incial de grande parte das funcionalidades, mas os códigos foram, posteriormente, analisados, refatorados e alterados para se alinharem corretamente à especificação e arquitetura do projeto. Neste sentido (da IA ser usada como o "ponta-pé" inicial do desenvolvimento), ela se demonstrou bastante útil, poupando muito tempo que seria investido em buscar a documentação de funções específicas das bibliotecas. O que a IA mais pecou foi na organização do código, que muitas vezes, era gerado em um arquivo único e extenso, contendo "valores mágicos" de difícil compreensão e sem seguir a arquitetura geral do projeto.
+
+## Imagens
+
+_(Serão adicionadas na versão final)_
+
+## Manual
+
+### Controles
+
+- **W:** Acelera a nave para frente.
+- **A:** Acelera a nave para a esquerda.
+- **S:** Acelera a nave para trás.
+- **D:** Acelera a nave para a direita.
+- **Shift (Esquerdo):** Acelera a nave para cima.
+- **Ctrl (Esquerdo):** Acelera a nave para baixo.
+- **Mouse:** Movimento do mouse controla guinada e inclinação da nave.
+- **Mouse (Botão Esquerdo):** Atira um raio laser.
+- **R:** Enquanto é segurado, o movimento do mouse controla a rolagem da nave.
+- **C:** Alterna entre as câmeras de primeira e terceira pessoa.
+- **F1:** Alterna a janela entre modo _full screen_ e _windowed_.
+- **ESC:** Fecha o jogo.
+
+### Como Jogar
+
+O jogo funciona em um sistema de "levas" de asteróides, que são gerados para destruir a nave espacial. A primeira leva possui 5 asteróides e as próximas aumentam em incrementos de 5. Cada asteróide possui um entre três tamanhos (pequeno, médio ou grande), quanto maior nesta escala, maior o dano que ele causa à nave e destruir um asteróide de um tamanho, gera dois asteróides de um tamanho menor. Após destruir todos asteróides de uma leva, o jogador tem 30 segundos para o início da próxima. Ele pode usar este tempo para realizar um pouso em algum dos planetas, recuperando seus 5 pontos de vida. Contudo, um pouso mal-sucedido ou uma colisão com alguma das árvores do planeta causa 1 ponto de dano à nave. Uma colisão com o sol encerra o jogo imediatamente. Destruir um asetróide concede 100 pontos, sendo o objetivo realizar o maior número de pontos antes de ser destruído.
+
+## Créditos
+
+Para desenvolver o trabalho, foram usados assets disponíveis livremente ou em laboratórios da disciplina, cujos créditos são listados à seguir:
+
+- **Nave:** https://free3d.com/3d-model/modular-ufo-190921.html
+- **Sol:** https://free3d.com/3d-model/sun-43982.html
+- **Asteróide:** https://free3d.com/3d-model/moon-17150.html
+- **Planeta:** https://github.com/cgvis-inf-ufrgs/cgvis-base-trabalho-final/blob/main/data/sphere.obj
+- **Árvore:** https://free3d.com/3d-model/tree-74556.html
+- **Arbusto:** https://free3d.com/3d-model/bush-84314.html
+
+Além disso, os seguintes arquivos de shader (em especial o "Disney's PBR") foram obtidos de laboratórios anteriores da disciplina.
+
+**shader_vertex:** https://github.com/cgvis-inf-ufrgs/cgvis-2026-1-lab-2-coelinhos-da-pascoa-cgvis-lab2-coelinhos-da-pascoa/blob/main/src/shader_vertex.glsl
+**shader_fragment:** https://github.com/cgvis-inf-ufrgs/cgvis-2026-1-lab-2-coelinhos-da-pascoa-cgvis-lab2-coelinhos-da-pascoa/blob/main/src/shader_fragment.glsl
