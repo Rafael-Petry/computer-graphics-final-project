@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "../objects/celestialBody/sun/sun.h"
+#include "../objects/skybox/skybox.h"
 #include "../helpers/collision/colliders/boundingSphere.h"
 #include "../helpers/spawners/asteroid/asteroidSpawner.h"
 #include "../window/window.h"
@@ -18,7 +19,7 @@
 std::vector<Planet> Scene::planets = std::vector<Planet>();
 std::list<Asteroid> Scene::asteroids = std::list<Asteroid>();
 
-Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spaceship::getInstance()), sun(Sun::getInstance())
+Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spaceship::getInstance()), sun(Sun::getInstance()), skybox(Skybox::getInstance())
 {
     AsteroidSpawnerHelper::initialize(Scene::asteroids, spaceship);
 
@@ -45,6 +46,9 @@ void Scene::update(GLint modelUniform,
                    GLint specularUniform,
                    Window *window)
 {
+    // Skybox en premier (toujours derrière tout)
+    skybox.update(modelUniform, colorUniform, useTextureUniform, texSamplerUniform, isEmissiveUniform, window);
+
     sun.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, true, metallicUniform, roughnessUniform, specularUniform);
 
     for (Planet &planet : Scene::planets) {

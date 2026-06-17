@@ -39,6 +39,12 @@ public:
     // Texture procédurale désertique pour les planètes
     static void generateDesertPlanetTexture(Mesh &mesh, int width = 512, int height = 512, unsigned int seed = 0);
 
+    // Texture procédurale herbe pour les planètes
+    static void generateGrassPlanetTexture(Mesh &mesh, int width = 512, int height = 512, unsigned int seed = 0);
+
+    // Texture procédurale surface solaire
+    static void generateSunTexture(Mesh &mesh, int width = 512, int height = 512);
+
 private:
     // Charge une image .jpg/.png en texture GPU via stb_image
     // baseDir = dossier où chercher le fichier

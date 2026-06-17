@@ -40,7 +40,7 @@ Planet::Planet(float orbitRadius) : CelestialBody(instanceMesh, instanceBounding
     }
 
     // Texture procédurale désertique/rocheuse, seed différent par planète
-    RenderHelper::generateDesertPlanetTexture(instanceMesh, 512, 512, nextSeed++);
+    RenderHelper::generateGrassPlanetTexture(instanceMesh, 512, 512, nextSeed++);
 
     std::mt19937 rng(std::random_device{}());
     std::uniform_real_distribution<float> phaseDist(0.0f, 2.0f);

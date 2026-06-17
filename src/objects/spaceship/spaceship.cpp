@@ -61,7 +61,7 @@ void Spaceship::update(GLint modelUniform,
                        GLint roughnessUniform,
                        GLint specularUniform)
 {
-    updateShooting(modelUniform, colorUniform, window);
+    updateShooting(modelUniform, colorUniform, window, isEmissiveUniform);
     Object::update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
 
     isRolling = false;
@@ -72,15 +72,15 @@ void Spaceship::update(GLint modelUniform,
     updateRotation(window);
 }
 
-void Spaceship::updateShooting(GLint modelUniform, GLint colorUniform, Window *window)
+void Spaceship::updateShooting(GLint modelUniform, GLint colorUniform, Window *window, GLint isEmissiveUniform)
 {
     shoot(window, Scene::getAsteroids());
 
     if (window->getCurrentFrame() <= rayVisibleUntil) {
-        renderRay(modelUniform, colorUniform);
+        renderRay(modelUniform, colorUniform, isEmissiveUniform);
     }
 
-    renderCrosshair(modelUniform, colorUniform);
+    renderCrosshair(modelUniform, colorUniform, isEmissiveUniform);
 }
 
 void Spaceship::updateRotation(Window *window)
@@ -357,7 +357,7 @@ void Spaceship::shoot(Window *window, std::list<Asteroid> &asteroids)
     }
 }
 
-void Spaceship::renderCrosshair(GLint modelUniform, GLint colorUniform) const
+void Spaceship::renderCrosshair(GLint modelUniform, GLint colorUniform, GLint isEmissiveUniform) const
 {
     if (crosshairMesh.vao == 0) {
         return;
@@ -367,6 +367,8 @@ void Spaceship::renderCrosshair(GLint modelUniform, GLint colorUniform) const
     const glm::mat4 orientation = getOrientationMatrix();
 
     glDisable(GL_DEPTH_TEST);
+    if (isEmissiveUniform >= 0)
+        glUniform1i(isEmissiveUniform, 1);
 
     const glm::vec3 crosshairColor(0.95f, 0.95f, 0.95f);
     const glm::mat4 base = Matrix_Translate(center.x, center.y, center.z) * orientation;
@@ -377,10 +379,12 @@ void Spaceship::renderCrosshair(GLint modelUniform, GLint colorUniform) const
     const glm::mat4 vertical = base * Matrix_Scale(crosshairThickness, crosshairLength, crosshairThickness);
     RenderHelper::renderModel(modelUniform, colorUniform, vertical, crosshairMesh, crosshairColor);
 
+    if (isEmissiveUniform >= 0)
+        glUniform1i(isEmissiveUniform, 0);
     glEnable(GL_DEPTH_TEST);
 }
 
-void Spaceship::renderRay(GLint modelUniform, GLint colorUniform) const
+void Spaceship::renderRay(GLint modelUniform, GLint colorUniform, GLint isEmissiveUniform) const
 {
     if (rayMesh.vao == 0) {
         return;
@@ -401,8 +405,12 @@ void Spaceship::renderRay(GLint modelUniform, GLint colorUniform) const
     const glm::vec3 center = rayOrigin + (direction * (rayMaxRange * 0.5f));
     const float radiusScale = rayRadius * 2.0f;
 
+    if (isEmissiveUniform >= 0)
+        glUniform1i(isEmissiveUniform, 1);
     const glm::mat4 model = Matrix_Translate(center.x, center.y, center.z) * orientation * Matrix_Scale(radiusScale, radiusScale, rayMaxRange);
     RenderHelper::renderModel(modelUniform, colorUniform, model, rayMesh, glm::vec3(1.0f, 0.1f, 0.1f));
+    if (isEmissiveUniform >= 0)
+        glUniform1i(isEmissiveUniform, 0);
 }
 
 glm::mat4 Spaceship::getViewMatrix() const

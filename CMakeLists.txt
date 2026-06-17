@@ -30,6 +30,7 @@ set(SOURCES
   src/vendor/imgui/imgui_widgets.cpp
   src/vendor/imgui/backends/imgui_impl_glfw.cpp
   src/vendor/imgui/backends/imgui_impl_opengl3.cpp
+  src/objects/skybox/skybox.cpp
   src/vendor/glad.c
 )
 
