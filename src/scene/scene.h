@@ -5,6 +5,7 @@
 #include "../objects/celestialBody/planet/planet.h"
 #include "../objects/celestialBody/sun/sun.h"
 #include "../objects/spaceship/spaceship.h"
+#include "../objects/skybox/skybox.h"
 
 #include <list>
 #include <vector>
@@ -34,6 +35,7 @@ private:
     float lastFrame;
     Spaceship &spaceship;
     Sun &sun;
+    Skybox &skybox;
     static std::list<Asteroid> asteroids;
     static std::vector<Planet> planets;
 };

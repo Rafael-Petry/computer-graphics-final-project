@@ -47,9 +47,9 @@ This file defines a bunch of to do lists for different tasks and functionalities
 
 - [x] Import better meshes for the objects
 - [x] Import Disney's PBR shader code from other labs (https://github.com/cgvis-inf-ufrgs/cgvis-2026-1-lab-2-coelinhos-da-pascoa-cgvis-lab2-coelinhos-da-pascoa/blob/main/src/shader_fragment.glsl)
-- [] Make textures work
-    - [] For planets, make an algorithm to generate a grass texture procedurally
-    - [] For the sun you can probably generate the texture procedurally too
+- [x] Make textures work
+    - [x] For planets, make an algorithm to generate a grass texture procedurally
+    - [x] For the sun you can probably generate the texture procedurally too
 - [x] Make lighting work
     - [x] The sun needs to be a light source
 
