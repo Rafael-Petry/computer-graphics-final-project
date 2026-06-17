@@ -40,7 +40,7 @@ O jogo funciona em um sistema de "levas" de asteróides, que são gerados para d
 
 Para desenvolver o trabalho, foram usados assets disponíveis livremente ou em laboratórios da disciplina, cujos créditos são listados à seguir:
 
-- **Nave:** https://free3d.com/3d-model/modular-ufo-190921.html
+- **Nave:** https://free3d.com/3d-model/uss-yeager-ncc-61947-spaceship-80266.html
 - **Sol:** https://free3d.com/3d-model/sun-43982.html
 - **Asteróide:** https://free3d.com/3d-model/moon-17150.html
 - **Planeta:** https://github.com/cgvis-inf-ufrgs/cgvis-base-trabalho-final/blob/main/data/sphere.obj
@@ -49,5 +49,5 @@ Para desenvolver o trabalho, foram usados assets disponíveis livremente ou em l
 
 Além disso, os seguintes arquivos de shader (em especial o "Disney's PBR") foram obtidos de laboratórios anteriores da disciplina.
 
-**shader_vertex:** https://github.com/cgvis-inf-ufrgs/cgvis-2026-1-lab-2-coelinhos-da-pascoa-cgvis-lab2-coelinhos-da-pascoa/blob/main/src/shader_vertex.glsl
-**shader_fragment:** https://github.com/cgvis-inf-ufrgs/cgvis-2026-1-lab-2-coelinhos-da-pascoa-cgvis-lab2-coelinhos-da-pascoa/blob/main/src/shader_fragment.glsl
+- **shader_vertex:** https://github.com/cgvis-inf-ufrgs/cgvis-2026-1-lab-2-coelinhos-da-pascoa-cgvis-lab2-coelinhos-da-pascoa/blob/main/src/shader_vertex.glsl
+- **shader_fragment:** https://github.com/cgvis-inf-ufrgs/cgvis-2026-1-lab-2-coelinhos-da-pascoa-cgvis-lab2-coelinhos-da-pascoa/blob/main/src/shader_fragment.glsl
