@@ -63,23 +63,19 @@ Planet::Planet(float orbitRadius) : CelestialBody(instanceMesh, instanceBounding
     const int bushesPerPlanet = 30;
 
     for (int t = 0; t < treesPerPlanet; ++t) {
-        float z = 2.0f * treeBushDist(rng) - 1.0f; // [-1, 1]
-        float a = treeBushDist(rng) * 2.0f * M_PI; // [0, 2π]
+        float theta = (2.0f * 3.14159f * t) / treesPerPlanet;
+        float phi = (3.14159f * treeBushDist(rng));
 
-        float r = sqrt(1.0f - z * z);
-
-        glm::vec3 offset = glm::vec3(r * cos(a), r * sin(a), z);
+        glm::vec3 offset(std::sin(phi) * std::cos(theta), std::cos(phi), std::sin(phi) * std::sin(theta));
         glm::vec3 treeColor = glm::vec3(0.2f, 0.6f, 1.0f) * glm::vec3(0.5f, 1.0f, 0.5f);
         trees.emplace_back(treeColor, this, offset * 15.0f);
     }
 
     for (int b = 0; b < bushesPerPlanet; ++b) {
-        float z = 2.0f * treeBushDist(rng) - 1.0f; // [-1, 1]
-        float a = treeBushDist(rng) * 2.0f * M_PI; // [0, 2π]
+        float theta = (2.0f * 3.14159f * b) / bushesPerPlanet;
+        float phi = (3.14159f * treeBushDist(rng));
 
-        float r = sqrt(1.0f - z * z);
-
-        glm::vec3 offset = glm::vec3(r * cos(a), r * sin(a), z);
+        glm::vec3 offset(std::sin(phi) * std::cos(theta), std::cos(phi), std::sin(phi) * std::sin(theta));
         glm::vec3 bushColor = glm::vec3(0.2f, 0.6f, 1.0f) * glm::vec3(0.5f, 1.0f, 0.5f);
         bushes.emplace_back(bushColor, this, offset * 15.0f);
     }
