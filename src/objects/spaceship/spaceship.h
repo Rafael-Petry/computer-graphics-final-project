@@ -45,8 +45,11 @@ public:
     glm::vec3 getCameraPosition() const;
     glm::vec3 getFrontVector() const;
     const BoundingBox &getBoundingBox() const;
+    const bool getIsLanded() const { return isLanded; }
+    float getInvencibilityTimer() const { return invencibilityTimer; }
 
     void setVelocity(const glm::vec4 &newVelocity) { velocity = newVelocity; }
+    void setInvencibilityTimer(float timer) { invencibilityTimer = timer; }
 
     void toggleCameraMode() { cameraIsFirstPerson = !cameraIsFirstPerson; }
 
@@ -86,7 +89,7 @@ private:
     float rotationVelocityEpsilon = 0.01f;
 
     float movementAcceleration = 8.0f;
-    float maxMovementSpeed = 10.0f;
+    float maxMovementSpeed = 20.0f;
     float movementDrag = 0.2f;
     float movementVelocityEpsilon = 0.005f;
 
@@ -123,6 +126,9 @@ private:
     glm::vec4 landedRight = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
 
     bool cameraIsFirstPerson = false;
+
+    float invencibilityTimer = 0.0f;
+    float takeOffSpeed = 0.0f;
 
     static Mesh mesh;
     static BoundingBox boundingBox;

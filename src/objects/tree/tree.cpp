@@ -34,7 +34,7 @@ void Tree::collide(Window *window)
 {
     Spaceship &spaceship = Spaceship::getInstance();
 
-    if (boundingBox.testCollisionBoundingBox(*this, spaceship)) {
+    if (!spaceship.getIsLanded() && boundingBox.testCollisionBoundingBox(*this, spaceship)) {
         const glm::vec3 treeScale = getScale();
         const glm::vec3 treeCenter = (boundingBox.getMin() + boundingBox.getMax()) * treeScale + position;
 
@@ -52,8 +52,14 @@ void Tree::collide(Window *window)
             normal /= normalLength;
         }
 
-        spaceship.applyDamage(1);
         spaceship.setVelocity(glm::vec4(glm::normalize(normal), 0.0f) * 5.0f);
+
+        if (spaceship.getInvencibilityTimer() >= 0.001f) {
+            return;
+        }
+
+        spaceship.applyDamage(1);
+        spaceship.setInvencibilityTimer(1.0f);
     }
 }
 
