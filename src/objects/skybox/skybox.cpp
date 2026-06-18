@@ -202,13 +202,11 @@ void Skybox::update(GLint modelUniform, GLint colorUniform, GLint useTextureUnif
 
     // Désactive le depth write pour que la skybox soit toujours derrière
     glDepthMask(GL_FALSE);
-    glDisable(GL_CULL_FACE);
 
     glBindVertexArray(mesh.vao);
     glDrawArrays(GL_TRIANGLES, 0, mesh.vertexCount);
     glBindVertexArray(0);
 
-    glEnable(GL_CULL_FACE);
     glDepthMask(GL_TRUE);
 
     glBindTexture(GL_TEXTURE_2D, 0);
