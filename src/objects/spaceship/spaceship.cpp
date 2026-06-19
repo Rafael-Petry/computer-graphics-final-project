@@ -77,6 +77,18 @@ void Spaceship::update(GLint modelUniform,
     }
 
     updateRotation(window);
+
+    cameraUp = up;
+
+    if (cameraIsFirstPerson) {
+        cameraPosition = glm::vec4(position, 1.0f) + front * 3.0f;
+        cameraFront = front;
+    } else {
+        const float cameraDistance = 6.0f;
+        const float cameraHeight = 2.0f;
+        cameraPosition = glm::vec4(position, 1.0f) - front * cameraDistance + up * cameraHeight;
+        cameraFront = glm::normalize(glm::vec4(position, 1.0f) - cameraPosition);
+    }
 }
 
 void Spaceship::updateShooting(GLint modelUniform, GLint colorUniform, Window *window, GLint isEmissiveUniform)
@@ -425,23 +437,7 @@ void Spaceship::renderRay(GLint modelUniform, GLint colorUniform, GLint isEmissi
         glUniform1i(isEmissiveUniform, 0);
 }
 
-glm::mat4 Spaceship::getViewMatrix() const
-{
-    if (cameraIsFirstPerson) {
-        const glm::vec4 position4(position, 1.0f);
-        return Matrix_cameraView(position4 + front * 3.0f, front, up);
-    }
-
-    const glm::vec3 shipFront = glm::normalize(getFrontVector());
-    const glm::vec3 shipUp = glm::normalize(up);
-
-    const float cameraDistance = 6.0f;
-    const float cameraHeight = 2.0f;
-    const glm::vec3 cameraPosition = position - shipFront * cameraDistance + shipUp * cameraHeight;
-    const glm::vec3 viewDirection = glm::normalize(position - cameraPosition);
-
-    return Matrix_cameraView(glm::vec4(cameraPosition, 1.0f), glm::vec4(viewDirection, 0.0f), glm::vec4(shipUp, 0.0f));
-}
+glm::mat4 Spaceship::getViewMatrix() const { return Matrix_cameraView(cameraPosition, cameraFront, cameraUp); }
 
 glm::vec3 Spaceship::getCameraPosition() const { return position + glm::vec3(front); }
 
