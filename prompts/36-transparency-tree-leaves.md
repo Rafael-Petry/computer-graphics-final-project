@@ -1,3 +1,8 @@
+# 36-transparency-tree-leaves
+
+Change my fragment shader to use the alpha channel correctly to render the tree leaves texture. Right now, it incorrectly has some white background around it.
+
+<pre>
 #version 330 core
 
 // ─── Entrées depuis le Vertex Shader ────────────────────────────────────────
@@ -19,34 +24,34 @@ uniform bool useTexture;
 
 // ─── Lumière : position du soleil en world space ─────────────────────────────
 // À passer depuis le C++ à chaque frame :
-//   glUniform3f(sunPositionUniform, sun.x, sun.y, sun.z);
+// glUniform3f(sunPositionUniform, sun.x, sun.y, sun.z);
 uniform vec3 sunPosition;
-uniform vec3 sunColor;       // ex. vec3(1.0, 0.95, 0.8) pour un soleil chaud
-uniform float sunIntensity;  // ex. 3.0
+uniform vec3 sunColor; // ex. vec3(1.0, 0.95, 0.8) pour un soleil chaud
+uniform float sunIntensity; // ex. 3.0
 
 // ─── Paramètres PBR Disney ──────────────────────────────────────────────────
 // Ces valeurs peuvent devenir des uniforms plus tard pour les varier par objet.
-uniform float metallic        ; // 0 = diélectrique, 1 = métal
-uniform float roughness       ; // 0 = miroir, 1 = mat
-uniform float subsurface      ;
-uniform float specular        ;
-uniform float specularTint    ;
-uniform float anisotropic     ;
-uniform float sheen           ;
-uniform float sheenTint       ;
-uniform float clearcoat       ;
-uniform float clearcoatGloss  ;
+uniform float metallic ; // 0 = diélectrique, 1 = métal
+uniform float roughness ; // 0 = miroir, 1 = mat
+uniform float subsurface ;
+uniform float specular ;
+uniform float specularTint ;
+uniform float anisotropic ;
+uniform float sheen ;
+uniform float sheenTint ;
+uniform float clearcoat ;
+uniform float clearcoatGloss ;
 
 // ─── Émission (ex: soleil) ───────────────────────────────────────────────────
-uniform bool isEmissive;  // true = pas de shading, couleur pure émissive
-uniform vec3 ambientColor;    // ex. vec3(0.02, 0.02, 0.05) pour l'espace
+uniform bool isEmissive; // true = pas de shading, couleur pure émissive
+uniform vec3 ambientColor; // ex. vec3(0.02, 0.02, 0.05) pour l'espace
 
 // ─── Sortie ──────────────────────────────────────────────────────────────────
 out vec4 color;
 
 // ════════════════════════════════════════════════════════════════════════════
 // <START OF THIRD-PARTY SOURCE CODE>
-// Copyright Disney Enterprises, Inc.  All rights reserved.
+// Copyright Disney Enterprises, Inc. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License
@@ -63,57 +68,57 @@ out vec4 color;
 
 const float PI = 3.14159265358979323846;
 
-float sqr(float x) { return x * x; }
+float sqr(float x) { return x \* x; }
 
 float SchlickFresnel(float u)
 {
-    float m = clamp(1.0 - u, 0.0, 1.0);
-    float m2 = m * m;
-    return m2 * m2 * m;
+float m = clamp(1.0 - u, 0.0, 1.0);
+float m2 = m _ m;
+return m2 _ m2 \* m;
 }
 
 float GTR1(float NdotH, float a)
 {
-    if (a >= 1.0) return 1.0 / PI;
-    float a2 = a * a;
-    float t = 1.0 + (a2 - 1.0) * NdotH * NdotH;
-    return (a2 - 1.0) / (PI * log(a2) * t);
+if (a >= 1.0) return 1.0 / PI;
+float a2 = a _ a;
+float t = 1.0 + (a2 - 1.0) _ NdotH _ NdotH;
+return (a2 - 1.0) / (PI _ log(a2) \* t);
 }
 
 float GTR2(float NdotH, float a)
 {
-    float a2 = a * a;
-    float t = 1.0 + (a2 - 1.0) * NdotH * NdotH;
-    return a2 / (PI * t * t);
+float a2 = a _ a;
+float t = 1.0 + (a2 - 1.0) _ NdotH _ NdotH;
+return a2 / (PI _ t \* t);
 }
 
 float GTR2_aniso(float NdotH, float HdotX, float HdotY, float ax, float ay)
 {
-    return 1.0 / (PI * ax * ay * sqr(sqr(HdotX / ax) + sqr(HdotY / ay) + NdotH * NdotH));
+return 1.0 / (PI _ ax _ ay _ sqr(sqr(HdotX / ax) + sqr(HdotY / ay) + NdotH _ NdotH));
 }
 
 float smithG_GGX(float NdotV, float alphaG)
 {
-    float a = alphaG * alphaG;
-    float b = NdotV * NdotV;
-    return 1.0 / (NdotV + sqrt(a + b - a * b));
+float a = alphaG _ alphaG;
+float b = NdotV _ NdotV;
+return 1.0 / (NdotV + sqrt(a + b - a \* b));
 }
 
 float smithG_GGX_aniso(float NdotV, float VdotX, float VdotY, float ax, float ay)
 {
-    return 1.0 / (NdotV + sqrt(sqr(VdotX * ax) + sqr(VdotY * ay) + sqr(NdotV)));
+return 1.0 / (NdotV + sqrt(sqr(VdotX _ ax) + sqr(VdotY _ ay) + sqr(NdotV)));
 }
 
 vec3 mon2lin(vec3 x)
 {
-    return vec3(pow(x[0], 2.2), pow(x[1], 2.2), pow(x[2], 2.2));
+return vec3(pow(x[0], 2.2), pow(x[1], 2.2), pow(x[2], 2.2));
 }
 
 vec3 BRDF(vec3 L, vec3 V, vec3 N, vec3 X, vec3 Y, vec3 baseColor)
 {
-    float NdotL = dot(N, L);
-    float NdotV = dot(N, V);
-    if (NdotL < 0.0 || NdotV < 0.0) return vec3(0.0);
+float NdotL = dot(N, L);
+float NdotV = dot(N, V);
+if (NdotL < 0.0 || NdotV < 0.0) return vec3(0.0);
 
     vec3 H = normalize(L + V);
     float NdotH = dot(N, H);
@@ -154,32 +159,16 @@ vec3 BRDF(vec3 L, vec3 V, vec3 N, vec3 X, vec3 Y, vec3 baseColor)
     return ((1.0 / PI) * mix(Fd, ss, subsurface) * Cdlin + Fsheen) * (1.0 - metallic)
          + Gs * Fs * Ds
          + 0.25 * clearcoat * Gr * Fr * Dr;
+
 }
 // <END OF THIRD-PARTY SOURCE CODE>
 // ════════════════════════════════════════════════════════════════════════════
 
 void main()
 {
-    vec3 baseColor;
-    float texAlpha = 1.0;
-
-    if (useTexture)
-    {
-        vec4 texSample = texture(textureColormap, texcoords);
-        baseColor = texSample.rgb;
-        texAlpha  = texSample.a;
-    }
-    else
-    {
-        baseColor = objectColor;
-    }
-
-    if (useTexture && texAlpha < 0.5)
-        discard;
-
-    // ── Position caméra ──────────────────────────────────────────────────────
-    vec4 origin          = vec4(0.0, 0.0, 0.0, 1.0);
-    vec4 camera_position = inverse(view) * origin;
+// ── Position caméra ──────────────────────────────────────────────────────
+vec4 origin = vec4(0.0, 0.0, 0.0, 1.0);
+vec4 camera_position = inverse(view) \* origin;
 
     vec4 p = position_world;
 
@@ -190,6 +179,7 @@ void main()
     vec3 V = normalize((camera_position - p).xyz);
 
     // ── Couleur de base : texture ou objectColor ──────────────────────────────
+    vec3 baseColor;
     if (useTexture)
         baseColor = texture(textureColormap, texcoords).rgb;
     else
@@ -247,4 +237,6 @@ void main()
 
     // ── Correction gamma (sRGB) ───────────────────────────────────────────────
     color.rgb = pow(color.rgb, vec3(1.0 / 2.2));
+
 }
+</pre>
