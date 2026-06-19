@@ -51,10 +51,20 @@ void Scene::update(GLint modelUniform,
 
     sun.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, true, metallicUniform, roughnessUniform, specularUniform);
 
+    glUniform1f(glGetUniformLocation(window->getShaderProgram(), "specular"), 0.0f);
+    glUniform1f(glGetUniformLocation(window->getShaderProgram(), "metallic"), 0.0f);
+    glUniform1f(glGetUniformLocation(window->getShaderProgram(), "specularTint"), 0.0f);
+    glUniform1f(glGetUniformLocation(window->getShaderProgram(), "clearcoat"), 0.0f);
+    glUniform1f(glGetUniformLocation(window->getShaderProgram(), "clearcoatGloss"), 0.0f);
     for (Planet &planet : Scene::planets) {
         planet.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
     }
 
+    glUniform1f(glGetUniformLocation(window->getShaderProgram(), "specular"), 0.8f);
+    glUniform1f(glGetUniformLocation(window->getShaderProgram(), "metallic"), 0.6f);
+    glUniform1f(glGetUniformLocation(window->getShaderProgram(), "specularTint"), 0.2f);
+    glUniform1f(glGetUniformLocation(window->getShaderProgram(), "clearcoat"), 0.5f);
+    glUniform1f(glGetUniformLocation(window->getShaderProgram(), "clearcoatGloss"), 0.8f);
     for (Asteroid &asteroid : Scene::asteroids) {
         if (!asteroid.isDestroyed()) {
             asteroid.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
@@ -67,6 +77,9 @@ void Scene::update(GLint modelUniform,
         AsteroidSpawnerHelper::update(Scene::asteroids, spaceship, window->getCurrentFrame());
     }
 
+    glUniform1f(glGetUniformLocation(window->getShaderProgram(), "metallic"), 1.0f);
+    glUniform1f(glGetUniformLocation(window->getShaderProgram(), "specular"), 1.0f);
+    glUniform1f(glGetUniformLocation(window->getShaderProgram(), "specularTint"), 0.5f);
     spaceship.update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
 
     this->updateUI(window);
