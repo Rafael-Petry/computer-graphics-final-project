@@ -9,7 +9,7 @@ Asteroids-3D trata-se de um jogo baseado em Outer Wilds e Asteroids, desenvolvid
 
 ## Uso de IA
 
-A dupla fez uso de IA, utilizando a ferramenta Github Copilot com os seguintes agentes: GPT-5.2-Codex, GPT-5.3-Codex e Claude Haiku. Ela foi usada para gerar a implementação incial de grande parte das funcionalidades, mas os códigos foram, posteriormente, analisados, refatorados e alterados para se alinharem corretamente à especificação e arquitetura do projeto. Neste sentido (da IA ser usada como o "ponta-pé" inicial do desenvolvimento), ela se demonstrou bastante útil, poupando muito tempo que seria investido em buscar a documentação de funções específicas das bibliotecas. O que a IA mais pecou foi na organização do código, que muitas vezes, era gerado em um arquivo único e extenso, contendo "valores mágicos" de difícil compreensão e sem seguir a arquitetura geral do projeto.
+A dupla fez uso de IA, utilizando a ferramenta Github Copilot (com os agentes GPT-5.2-Codex, GPT-5.3-Codex e Claude Haiku) e o Claude Chat (com o agente Sonnet 4.6). Ela foi usada para gerar as implementações inciais de grande parte das funcionalidades, que foram, posteriormente, alteradas para se alinharem corretamente à especificação e arquitetura do projeto. Neste sentido (da IA ser usada como o "ponta-pé" inicial do desenvolvimento), ela se demonstrou bastante útil, poupando muito tempo que seria investido em buscar a documentação de funções específicas das bibliotecas. O que a IA mais pecou foi na organização do código, que muitas vezes, era gerado em um arquivo único e extenso, contendo "valores mágicos" de difícil compreensão e sem seguir a arquitetura geral do projeto.
 
 ## Imagens
 
