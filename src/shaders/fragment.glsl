@@ -160,6 +160,23 @@ vec3 BRDF(vec3 L, vec3 V, vec3 N, vec3 X, vec3 Y, vec3 baseColor)
 
 void main()
 {
+    vec3 baseColor;
+    float texAlpha = 1.0;
+
+    if (useTexture)
+    {
+        vec4 texSample = texture(textureColormap, texcoords);
+        baseColor = texSample.rgb;
+        texAlpha  = texSample.a;
+    }
+    else
+    {
+        baseColor = objectColor;
+    }
+
+    if (useTexture && texAlpha < 0.5)
+        discard;
+
     // ── Position caméra ──────────────────────────────────────────────────────
     vec4 origin          = vec4(0.0, 0.0, 0.0, 1.0);
     vec4 camera_position = inverse(view) * origin;
@@ -173,7 +190,6 @@ void main()
     vec3 V = normalize((camera_position - p).xyz);
 
     // ── Couleur de base : texture ou objectColor ──────────────────────────────
-    vec3 baseColor;
     if (useTexture)
         baseColor = texture(textureColormap, texcoords).rgb;
     else

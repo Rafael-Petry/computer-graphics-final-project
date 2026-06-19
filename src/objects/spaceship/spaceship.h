@@ -68,6 +68,7 @@ private:
     glm::mat4 getOrientationMatrix() const;
     void updateOrientation(float deltaYaw, float deltaPitch, float deltaRoll);
     void updateShooting(GLint modelUniform, GLint colorUniform, Window *window, GLint isEmissiveUniform = -1);
+    void UpdateCamera(glm::vec4 position, glm::vec4 front, glm::vec4 up, bool cameraIsFirstPerson);
 
     glm::vec4 velocity;
     glm::vec4 front;
@@ -129,6 +130,10 @@ private:
 
     float invencibilityTimer = 0.0f;
     float takeOffSpeed = 0.0f;
+
+    glm::vec4 cameraPosition;
+    glm::vec4 cameraFront;
+    glm::vec4 cameraUp;
 
     static Mesh mesh;
     static BoundingBox boundingBox;

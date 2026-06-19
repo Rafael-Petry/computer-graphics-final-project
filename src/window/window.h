@@ -26,6 +26,7 @@ public:
     GLFWwindow *getGlfwWindow() const;
     float getDeltaTime() const;
     float getCurrentFrame() const;
+    GLuint getShaderProgram() { return shaderProgram; };
     void setShaderProgram(GLuint shaderProgram);
 
 private:
