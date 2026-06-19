@@ -21,7 +21,7 @@ BoundingBox Tree::boundingBox;
 
 Tree::Tree(const glm::vec3 &color, Planet *planet, const glm::vec3 &offset) : Object(mesh, boundingBox, color), planet(planet), offset(offset)
 {
-    if (mesh.vao == 0) {
+    if (mesh.vao == 0 && !mesh.hasSubMeshes()) {
         mesh = RenderHelper::loadObjMesh("../../src/objects/tree/tree.obj");
         boundingBox = BoundingBox(glm::vec3(-1.0f), glm::vec3(2.0f));
     }
