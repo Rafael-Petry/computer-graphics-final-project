@@ -25,7 +25,7 @@ Scene::Scene() : lastFrame(static_cast<float>(glfwGetTime())), spaceship(Spacesh
 
     const float baseRadius = 85.0f;
     const float radiusStep = 75.0f;
-    const int planetCount = 5;
+    const int planetCount = 3;
 
     std::mt19937 rng(std::random_device{}());
 
