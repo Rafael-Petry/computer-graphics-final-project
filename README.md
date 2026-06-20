@@ -9,7 +9,7 @@ Asteroids-3D trata-se de um jogo baseado em Outer Wilds e Asteroids, desenvolvid
 
 ## Uso de IA
 
-A dupla fez uso de IA, utilizando a ferramenta Github Copilot (com os agentes GPT-5.2-Codex, GPT-5.3-Codex e Claude Haiku) e o Claude Chat (com o agente Sonnet 4.6). Ela foi usada para gerar as implementações inciais de grande parte das funcionalidades, que foram, posteriormente, alteradas para se alinharem corretamente à especificação e arquitetura do projeto. Neste sentido (da IA ser usada como o "ponta-pé" inicial do desenvolvimento), ela se demonstrou bastante útil, poupando muito tempo que seria investido em buscar a documentação de funções específicas das bibliotecas. O que a IA mais pecou foi na organização do código, que muitas vezes, era gerado em um arquivo único e extenso, contendo "valores mágicos" de difícil compreensão e sem seguir a arquitetura geral do projeto.
+A dupla fez uso de IA, utilizando a ferramenta Github Copilot (com os agentes GPT-5.2-Codex, GPT-5.3-Codex e Claude Haiku), além do Claude Chat (com o agente Sonnet 4.6). Ela foi usada para gerar as implementações inciais de grande parte das funcionalidades, que foram, posteriormente, alteradas manualmente para se alinharem corretamente à especificação e arquitetura do projeto. Neste sentido (da IA ser usada como o "ponta-pé" inicial do desenvolvimento), ela se demonstrou bastante útil, poupando muito tempo que seria investido em buscar a documentação de funções específicas das bibliotecas. Em algumas correções de bugs mais difíceis de depurar, a IA também se mostrou útil recebendo as funções como entrada e gerando o código corrigido. O que a IA mais pecou foi na organização do código, que muitas vezes, era gerado em um arquivo único e extenso, contendo "valores mágicos" de difícil compreensão e sem seguir a arquitetura geral do projeto.
 
 ## Imagens
 
@@ -40,7 +40,7 @@ O jogo funciona em um sistema de "levas" de asteróides, que são gerados para d
 
 Os passos a seguir foram adaptados do arquivo COMPILACAO.md de laboratórios anteriores da disciplina, visto que os passos são os mesmos.
 
-1. Instale as dependências do projeto.
+**1. Instale as dependências do projeto.**
 
 ```bash
 sudo apt install build-essential make libx11-dev libxrandr-dev \
@@ -54,7 +54,7 @@ Se você usa Linux Mint, talvez seja necessário instalar mais algumas bibliotec
 sudo apt install libmesa-dev libxxf86vm-dev cmake
 ```
 
-2. Realize o build e execute 
+**2. Faça o build e execute.**
 
 ```bash
 cmake -B build -S .
