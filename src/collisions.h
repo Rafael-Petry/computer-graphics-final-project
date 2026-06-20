@@ -13,6 +13,8 @@
 
 class Object;
 class Asteroid;
+class Planet;
+class Sun;
 class Spaceship;
 
 class Collider
@@ -58,6 +60,10 @@ private:
     bool initialized = false;
 };
 
-void collideAsteroidRay(Spaceship &spaceship, std::list<Asteroid> &asteroids, const glm::vec3 &rayOrigin, const glm::vec3 &rayDirection);
+bool collideRayWithAsteroids(Spaceship &spaceship, std::list<Asteroid> &asteroids, const glm::vec3 &rayOrigin, const glm::vec3 &rayDirection);
+
+bool collideAsteroidWithSun(Asteroid &asteroid, Sun &sun);
+bool collideAsteroidWithPlanet(Asteroid &asteroid, Planet &planet);
+bool collideAsteroidWithSpaceship(Asteroid &asteroid, Spaceship &spaceship);
 
 #endif

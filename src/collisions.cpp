@@ -9,6 +9,8 @@
 #include "collisions.h"
 #include "objects/object.h"
 #include "objects/celestialBody/asteroid/asteroid.h"
+#include "objects/celestialBody/planet/planet.h"
+#include "objects/celestialBody/sun/sun.h"
 #include "objects/spaceship/spaceship.h"
 
 ////// Bounding Box definition //////
@@ -161,7 +163,7 @@ bool BoundingSphere::testRay(const Object &sphereObject, const glm::vec3 &rayOri
 }
 
 ////// Ray collision //////
-void collideAsteroidRay(Spaceship &spaceship, std::list<Asteroid> &asteroids, const glm::vec3 &rayOrigin, const glm::vec3 &rayDirection)
+bool collideRayWithAsteroids(Spaceship &spaceship, std::list<Asteroid> &asteroids, const glm::vec3 &rayOrigin, const glm::vec3 &rayDirection)
 {
     for (Asteroid &asteroid : asteroids) {
         const BoundingSphere *sphere = dynamic_cast<const BoundingSphere *>(&asteroid.getCollider());
@@ -173,6 +175,61 @@ void collideAsteroidRay(Spaceship &spaceship, std::list<Asteroid> &asteroids, co
         if (sphere->testRay(asteroid, rayOrigin, rayDirection, &hitDistance)) {
             asteroid.destroy();
             spaceship.addScore(100);
+            return true;
         }
     }
+
+    return false;
+}
+
+////// Asteroid collisions //////
+bool collideAsteroidWithSun(Asteroid &asteroid, Sun &sun)
+{
+    if (asteroid.getBoundingSphere().testCollisionBoundingSphere(asteroid, sun)) {
+        asteroid.destroy(false);
+        return true;
+    }
+
+    return false;
+}
+
+bool collideAsteroidWithPlanet(Asteroid &asteroid, Planet &planet)
+{
+    if (asteroid.getBoundingSphere().testCollisionBoundingSphere(asteroid, planet)) {
+        asteroid.destroy(false);
+        return true;
+    }
+
+    return false;
+}
+
+bool collideAsteroidWithSpaceship(Asteroid &asteroid, Spaceship &spaceship)
+{
+    if (asteroid.getBoundingSphere().testCollisionBoundingBox(asteroid, spaceship)) {
+        Spaceship::getInstance().applyDamage((int)asteroid.getSize() + 1);
+
+        const glm::vec3 asteroidScale = asteroid.getScale();
+        const glm::vec3 asteroidCenter = (asteroid.getBoundingSphere().getCenter() * asteroidScale) + asteroid.getPosition();
+
+        const BoundingBox &shipBox = spaceship.getBoundingBox();
+        const glm::vec3 shipScale = spaceship.getScale();
+        const glm::vec3 shipBoxCenter = (shipBox.getMin() + shipBox.getMax()) * 0.5f;
+        const glm::vec3 shipCenterOffset = shipBoxCenter * shipScale;
+
+        glm::vec3 shipCenter = spaceship.getPosition() + shipCenterOffset;
+        glm::vec3 normal = shipCenter - asteroidCenter;
+        const float normalLength = glm::length(normal);
+        if (normalLength < 0.0001f) {
+            normal = glm::vec3(0.0f, 1.0f, 0.0f);
+        } else {
+            normal /= normalLength;
+        }
+
+        const float bumpSpeed = 20.0f;
+        Spaceship::getInstance().setVelocity(glm::vec4(glm::normalize(normal) * bumpSpeed, 0.0f));
+        asteroid.destroy(false);
+        return true;
+    }
+
+    return false;
 }

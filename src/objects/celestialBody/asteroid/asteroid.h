@@ -26,6 +26,7 @@ public:
     Size getSize() const;
     bool isDestroyed() const;
     bool consumeFragmentSpawn(Size &outSize, glm::vec3 &outOrigin);
+    BoundingSphere getBoundingSphere() const { return boundingSphere; }
 
 protected:
     glm::mat4 translate(Window *window) override;

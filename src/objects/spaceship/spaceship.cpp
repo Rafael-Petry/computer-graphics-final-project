@@ -366,7 +366,7 @@ void Spaceship::shoot(Window *window, std::list<Asteroid> &asteroids)
     rayOrigin = getCameraPosition();
     rayDirection = glm::normalize(glm::vec3(front));
 
-    collideAsteroidRay(*this, asteroids, rayOrigin, rayDirection);
+    collideRayWithAsteroids(*this, asteroids, rayOrigin, rayDirection);
 }
 
 void Spaceship::renderCrosshair(GLint modelUniform, GLint colorUniform, GLint isEmissiveUniform) const
