@@ -41,7 +41,7 @@ O jogo funciona em um sistema de "levas" de asteróides, que são gerados para d
 Para desenvolver o trabalho, foram usados assets disponíveis livremente ou em laboratórios da disciplina, cujos créditos são listados à seguir:
 
 - **Nave:** https://free3d.com/3d-model/uss-yeager-ncc-61947-spaceship-80266.html
-- **Sol:** https://free3d.com/3d-model/sun-43982.html
+- **Sol:** https://gist.github.com/svmhdvn/efc5779e79780e8b72fb3040423f512f
 - **Asteróide:** https://free3d.com/3d-model/moon-17150.html
 - **Planeta:** https://gist.github.com/svmhdvn/efc5779e79780e8b72fb3040423f512f
 - **Árvore:** https://free3d.com/3d-model/tree-74556.html

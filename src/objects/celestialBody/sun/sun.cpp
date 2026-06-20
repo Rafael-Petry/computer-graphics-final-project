@@ -26,7 +26,7 @@ Sun::Sun() : CelestialBody(mesh, boundingSphere, glm::vec3(1.0f, 1.0f, 0.0f))
         RenderHelper::generateSunTexture(mesh, 512, 512);
     }
 
-    scaleValue = glm::vec3(0.002f);
+    scaleValue = glm::vec3(30.0f);
     position = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
