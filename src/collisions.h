@@ -60,10 +60,12 @@ private:
     bool initialized = false;
 };
 
-bool collideRayWithAsteroids(Spaceship &spaceship, std::list<Asteroid> &asteroids, const glm::vec3 &rayOrigin, const glm::vec3 &rayDirection);
+void collideRayWithAsteroids(Spaceship &spaceship, std::list<Asteroid> &asteroids, const glm::vec3 &rayOrigin, const glm::vec3 &rayDirection);
 
 bool collideAsteroidWithSun(Asteroid &asteroid, Sun &sun);
 bool collideAsteroidWithPlanet(Asteroid &asteroid, Planet &planet);
 bool collideAsteroidWithSpaceship(Asteroid &asteroid, Spaceship &spaceship);
+
+bool collidePlanetWithSpaceship(Planet *planet, Spaceship &spaceship);
 
 #endif

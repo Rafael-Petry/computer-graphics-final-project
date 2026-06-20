@@ -26,6 +26,8 @@ public:
                 GLint roughnessUniform = -1,
                 GLint specularUniform = -1);
 
+    BoundingSphere getBoundingSphere() { return instanceBoundingSphere; }
+
 protected:
     void collide(Window *window) override;
     glm::mat4 translate(Window *window) override;

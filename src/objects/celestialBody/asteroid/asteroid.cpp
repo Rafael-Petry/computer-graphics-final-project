@@ -119,8 +119,6 @@ glm::mat4 Asteroid::rotate(Window *window) { return Matrix_Rotate_Y(window->getC
 
 void Asteroid::collide(Window *window)
 {
-    Spaceship &spaceship = Spaceship::getInstance();
-
     if (collideAsteroidWithSun(*this, Sun::getInstance())) {
         return;
     }

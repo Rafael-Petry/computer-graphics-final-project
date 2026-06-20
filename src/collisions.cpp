@@ -163,7 +163,7 @@ bool BoundingSphere::testRay(const Object &sphereObject, const glm::vec3 &rayOri
 }
 
 ////// Ray collision //////
-bool collideRayWithAsteroids(Spaceship &spaceship, std::list<Asteroid> &asteroids, const glm::vec3 &rayOrigin, const glm::vec3 &rayDirection)
+void collideRayWithAsteroids(Spaceship &spaceship, std::list<Asteroid> &asteroids, const glm::vec3 &rayOrigin, const glm::vec3 &rayDirection)
 {
     for (Asteroid &asteroid : asteroids) {
         const BoundingSphere *sphere = dynamic_cast<const BoundingSphere *>(&asteroid.getCollider());
@@ -175,11 +175,8 @@ bool collideRayWithAsteroids(Spaceship &spaceship, std::list<Asteroid> &asteroid
         if (sphere->testRay(asteroid, rayOrigin, rayDirection, &hitDistance)) {
             asteroid.destroy();
             spaceship.addScore(100);
-            return true;
         }
     }
-
-    return false;
 }
 
 ////// Asteroid collisions //////
@@ -228,6 +225,40 @@ bool collideAsteroidWithSpaceship(Asteroid &asteroid, Spaceship &spaceship)
         const float bumpSpeed = 20.0f;
         Spaceship::getInstance().setVelocity(glm::vec4(glm::normalize(normal) * bumpSpeed, 0.0f));
         asteroid.destroy(false);
+        return true;
+    }
+
+    return false;
+}
+
+////// Planet collisions //////
+bool collidePlanetWithSpaceship(Planet *planet, Spaceship &spaceship)
+{
+    if (planet->getBoundingSphere().testCollisionBoundingBox(*planet, spaceship)) {
+        const glm::vec3 planetScale = planet->getScale();
+        const glm::vec3 planetCenter = (planet->getBoundingSphere().getCenter() * planetScale) + planet->getPosition();
+
+        const BoundingBox &shipBox = spaceship.getBoundingBox();
+        const glm::vec3 shipScale = spaceship.getScale();
+        const glm::vec3 shipBoxCenter = (shipBox.getMin() + shipBox.getMax()) * 0.5f;
+        const glm::vec3 shipBoxExtents = (shipBox.getMax() - shipBox.getMin()) * 0.5f;
+        const glm::vec3 shipCenterOffset = shipBoxCenter * shipScale;
+
+        glm::vec3 shipCenter = spaceship.getPosition() + shipCenterOffset;
+        glm::vec3 normal = shipCenter - planetCenter;
+        const float normalLength = glm::length(normal);
+        if (normalLength < 0.0001f) {
+            normal = glm::vec3(0.0f, 1.0f, 0.0f);
+        } else {
+            normal /= normalLength;
+        }
+
+        const float planetRadius = 14.6f;
+        const float shipRadius = glm::length(shipBoxExtents * shipScale);
+        const float landingPadding = 0.05f;
+        const float distanceFromCenter = planetRadius + shipRadius + landingPadding;
+        spaceship.landOn(planet, normal, distanceFromCenter, shipCenterOffset);
+
         return true;
     }
 
