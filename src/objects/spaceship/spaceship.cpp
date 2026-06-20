@@ -99,6 +99,10 @@ void Spaceship::updateShooting(GLint modelUniform, GLint colorUniform, Window *w
         renderRay(modelUniform, colorUniform, isEmissiveUniform);
     }
 
+    if (!cameraIsFirstPerson) {
+        return;
+    }
+
     renderCrosshair(modelUniform, colorUniform, isEmissiveUniform);
 }
 
