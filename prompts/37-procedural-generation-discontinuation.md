@@ -1,3 +1,8 @@
+# 37-procedural-generation-discontinuation
+
+Procedural generation of grass and sun textures look not continuous where both ends meet.
+
+<pre>
 #define TINYOBJLOADER_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 
@@ -501,42 +506,29 @@ namespace {
         unsigned char r, g, b;
     };
 
-    // Hash périodique : on enroule (x, y) modulo "period" avant de hasher,
-    // donc hash2(x, y, p) == hash2(x + p, y, p) == hash2(x, y + p, p).
-    // C'est cette propriété qui rend le bruit tileable.
-    float hash2(int x, int y, int period)
+    float hash2(int x, int y)
     {
-        x = ((x % period) + period) % period;
-        y = ((y % period) + period) % period;
         int n = x + y * 57;
         n = (n << 13) ^ n;
         return 1.0f - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0f;
     }
     float smoothstep2(float t) { return t * t * (3.0f - 2.0f * t); }
     float lerp2(float a, float b, float t) { return a + t * (b - a); }
-
-    float valueNoise2(float x, float y, int period)
+    float valueNoise2(float x, float y)
     {
         const int ix = static_cast<int>(std::floor(x));
         const int iy = static_cast<int>(std::floor(y));
         const float fx = x - static_cast<float>(ix);
         const float fy = y - static_cast<float>(iy);
-        return lerp2(lerp2(hash2(ix, iy, period), hash2(ix + 1, iy, period), smoothstep2(fx)),
-                     lerp2(hash2(ix, iy + 1, period), hash2(ix + 1, iy + 1, period), smoothstep2(fx)),
-                     smoothstep2(fy));
+        return lerp2(lerp2(hash2(ix, iy), hash2(ix + 1, iy), smoothstep2(fx)), lerp2(hash2(ix, iy + 1), hash2(ix + 1, iy + 1), smoothstep2(fx)), smoothstep2(fy));
     }
-
-    // period double à chaque octave, exactement comme la fréquence,
-    // pour que chaque octave reste individuellement tileable.
-    float fbm2(float x, float y, int period, int octaves = 5)
+    float fbm2(float x, float y, int octaves = 5)
     {
         float v = 0.f, a = 0.5f, f = 1.f;
-        int p = period;
         for (int o = 0; o < octaves; ++o) {
-            v += a * valueNoise2(x * f, y * f, p);
+            v += a * valueNoise2(x * f, y * f);
             a *= 0.5f;
             f *= 2.f;
-            p *= 2;
         }
         return v;
     }
@@ -610,24 +602,26 @@ static GLuint uploadTexture(const std::vector<unsigned char> &pixels, int w, int
     return texId;
 }
 
+// ---------------------------------------------------------------------------
+// Texture procédurale herbe (planètes)
+// ---------------------------------------------------------------------------
 void RenderHelper::generateGrassPlanetTexture(Mesh &mesh, int width, int height, unsigned int seed)
 {
     std::vector<unsigned char> pixels(static_cast<size_t>(width * height * 3));
     const float ox = static_cast<float>(seed) * 3.7f;
     const float oy = static_cast<float>(seed) * 2.3f;
-    constexpr int kBasePeriod = 6; // doit matcher le "* 6.0f" ci-dessous
 
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
             const float fx = (static_cast<float>(x) / static_cast<float>(width)) * 6.0f + ox;
             const float fy = (static_cast<float>(y) / static_cast<float>(height)) * 6.0f + oy;
 
-            const float wx = fbm2(fx + 1.7f, fy + 9.2f, kBasePeriod, 2) * 0.3f;
-            const float wy = fbm2(fx + 8.3f, fy + 2.8f, kBasePeriod, 2) * 0.3f;
-            float n = fbm2(fx + wx, fy + wy, kBasePeriod, 4);
+            const float wx = fbm2(fx + 1.7f, fy + 9.2f, 2) * 0.3f;
+            const float wy = fbm2(fx + 8.3f, fy + 2.8f, 2) * 0.3f;
+            float n = fbm2(fx + wx, fy + wy, 4);
             n = std::fmax(0.f, std::fmin(1.f, (n + 1.0f) * 0.5f));
 
-            float detail = valueNoise2(fx * 8.0f, fy * 8.0f, kBasePeriod * 8);
+            float detail = valueNoise2(fx * 8.0f, fy * 8.0f);
             detail = (detail + 1.0f) * 0.5f;
 
             const RGB2 c = grassColor2(n, detail);
@@ -640,26 +634,28 @@ void RenderHelper::generateGrassPlanetTexture(Mesh &mesh, int width, int height,
     mesh.textureId = uploadTexture(pixels, width, height);
 }
 
+// ---------------------------------------------------------------------------
+// Texture procédurale surface solaire (soleil)
+// ---------------------------------------------------------------------------
 void RenderHelper::generateSunTexture(Mesh &mesh, int width, int height)
 {
     std::vector<unsigned char> pixels(static_cast<size_t>(width * height * 3));
-    constexpr int kBasePeriod = 5; // doit matcher le "* 5.0f" ci-dessous
 
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
             const float fx = (static_cast<float>(x) / static_cast<float>(width)) * 5.0f;
             const float fy = (static_cast<float>(y) / static_cast<float>(height)) * 5.0f;
 
-            const float wx = fbm2(fx + 2.3f, fy + 7.1f, kBasePeriod, 3) * 0.5f;
-            const float wy = fbm2(fx + 9.4f, fy + 1.6f, kBasePeriod, 3) * 0.5f;
-            float n = fbm2(fx + wx, fy + wy, kBasePeriod, 5);
+            const float wx = fbm2(fx + 2.3f, fy + 7.1f, 3) * 0.5f;
+            const float wy = fbm2(fx + 9.4f, fy + 1.6f, 3) * 0.5f;
+            float n = fbm2(fx + wx, fy + wy, 5);
             n = std::fmax(0.f, std::fmin(1.f, (n + 1.0f) * 0.5f));
 
-            float turb = fbm2(fx * 3.0f + 4.4f, fy * 3.0f + 2.2f, kBasePeriod * 3, 3);
+            float turb = fbm2(fx * 3.0f + 4.4f, fy * 3.0f + 2.2f, 3);
             turb = (turb + 1.0f) * 0.5f;
 
-            // 0.8 == 4/5, et kBasePeriod == 5, donc le period reste un entier exact (4)
-            const float spot = (fbm2(fx * 0.8f + 1.1f, fy * 0.8f + 3.3f, 4, 2) + 1.0f) * 0.5f;
+            // Taches solaires
+            const float spot = (fbm2(fx * 0.8f + 1.1f, fy * 0.8f + 3.3f, 2) + 1.0f) * 0.5f;
             if (spot < 0.2f)
                 n *= spot * 2.5f;
 
@@ -672,3 +668,4 @@ void RenderHelper::generateSunTexture(Mesh &mesh, int width, int height)
     }
     mesh.textureId = uploadTexture(pixels, width, height);
 }
+</pre>
