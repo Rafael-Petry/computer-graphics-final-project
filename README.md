@@ -43,7 +43,7 @@ Para desenvolver o trabalho, foram usados assets disponíveis livremente ou em l
 - **Nave:** https://free3d.com/3d-model/uss-yeager-ncc-61947-spaceship-80266.html
 - **Sol:** https://free3d.com/3d-model/sun-43982.html
 - **Asteróide:** https://free3d.com/3d-model/moon-17150.html
-- **Planeta:** https://github.com/cgvis-inf-ufrgs/cgvis-base-trabalho-final/blob/main/data/sphere.obj
+- **Planeta:** https://gist.github.com/svmhdvn/efc5779e79780e8b72fb3040423f512f
 - **Árvore:** https://free3d.com/3d-model/tree-74556.html
 - **Arbusto:** https://free3d.com/3d-model/bush-84314.html
 
