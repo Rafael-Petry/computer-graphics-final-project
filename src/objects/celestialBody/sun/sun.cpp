@@ -4,7 +4,7 @@
 
 #include "sun.h"
 #include "../../spaceship/spaceship.h"
-#include "../../../helpers/collision/collision.h"
+#include "../../../helpers/colliderGenerator/colliderGenerator.h"
 #include "../../../helpers/render/render.h"
 #include "../../../window/window.h"
 #include "../../vendor/include/matrices.h"
@@ -19,7 +19,7 @@ Sun::Sun() : CelestialBody(mesh, boundingSphere, glm::vec3(1.0f, 1.0f, 0.0f))
     }
 
     if (!boundingSphere.isInitialized() && mesh.vao != 0) {
-        boundingSphere = CollisionHelper::generateBoundingSphere(mesh);
+        boundingSphere = ColliderGenerator::generateBoundingSphere(mesh);
     }
 
     if (mesh.textureId == 0 && mesh.vao != 0) {

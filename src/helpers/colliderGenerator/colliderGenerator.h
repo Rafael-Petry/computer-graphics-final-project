@@ -4,7 +4,7 @@
 #include "../../collisions.h"
 #include "../render/mesh.h"
 
-class CollisionHelper
+class ColliderGenerator
 {
 public:
     static BoundingBox generateBoundingBox(const Mesh &mesh);

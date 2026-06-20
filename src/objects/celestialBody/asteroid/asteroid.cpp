@@ -3,7 +3,7 @@
 #include <glm/geometric.hpp>
 #include <glm/vec4.hpp>
 #include "asteroid.h"
-#include "../../../helpers/collision/collision.h"
+#include "../../../helpers/colliderGenerator/colliderGenerator.h"
 #include "../../../helpers/render/render.h"
 #include "../../spaceship/spaceship.h"
 #include "../../../window/window.h"
@@ -63,7 +63,7 @@ Asteroid::Asteroid() : CelestialBody(mesh, boundingSphere, color)
     }
 
     if (!boundingSphere.isInitialized() && (mesh.vao != 0 || mesh.hasSubMeshes())) {
-        boundingSphere = CollisionHelper::generateBoundingSphere(mesh);
+        boundingSphere = ColliderGenerator::generateBoundingSphere(mesh);
     }
 
     std::mt19937 rng(std::random_device{}());

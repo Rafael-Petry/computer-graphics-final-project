@@ -5,9 +5,9 @@
 #include <glm/geometric.hpp>
 #include <glm/vec3.hpp>
 
-#include "collision.h"
+#include "colliderGenerator.h"
 
-BoundingBox CollisionHelper::generateBoundingBox(const Mesh &mesh)
+BoundingBox ColliderGenerator::generateBoundingBox(const Mesh &mesh)
 {
     if (mesh.attrib.vertices.empty() || mesh.shapes.empty()) {
         return BoundingBox();
@@ -43,7 +43,7 @@ BoundingBox CollisionHelper::generateBoundingBox(const Mesh &mesh)
     return BoundingBox(min, max);
 }
 
-BoundingSphere CollisionHelper::generateBoundingSphere(const Mesh &mesh)
+BoundingSphere ColliderGenerator::generateBoundingSphere(const Mesh &mesh)
 {
     if (mesh.attrib.vertices.empty() || mesh.shapes.empty()) {
         return BoundingSphere();

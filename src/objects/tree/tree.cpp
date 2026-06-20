@@ -5,7 +5,7 @@
 #include <glm/geometric.hpp>
 
 #include "tree.h"
-#include "../../helpers/collision/collision.h"
+#include "../../helpers/colliderGenerator/colliderGenerator.h"
 #include "../../helpers/render/render.h"
 #include "../../window/window.h"
 #include "../../objects/spaceship/spaceship.h"

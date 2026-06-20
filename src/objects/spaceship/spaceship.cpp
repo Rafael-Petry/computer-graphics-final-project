@@ -6,7 +6,7 @@
 #include <glm/geometric.hpp>
 
 #include "spaceship.h"
-#include "../../helpers/collision/collision.h"
+#include "../../helpers/colliderGenerator/colliderGenerator.h"
 #include "../../helpers/render/render.h"
 #include "../../helpers/movement/movement.h"
 #include "../../window/window.h"
@@ -24,7 +24,7 @@ Spaceship::Spaceship(const glm::vec3 &color) : Object(mesh, boundingBox, color)
 {
     if (mesh.vao == 0) {
         mesh = RenderHelper::loadObjMesh("../../src/objects/spaceship/mesh/spaceship.obj");
-        boundingBox = CollisionHelper::generateBoundingBox(mesh);
+        boundingBox = ColliderGenerator::generateBoundingBox(mesh);
     }
 
     if (crosshairMesh.vao == 0) {

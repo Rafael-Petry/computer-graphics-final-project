@@ -7,7 +7,7 @@
 
 #include "planet.h"
 #include "../../spaceship/spaceship.h"
-#include "../../../helpers/collision/collision.h"
+#include "../../../helpers/colliderGenerator/colliderGenerator.h"
 #include "../../../helpers/render/render.h"
 #include "../../../window/window.h"
 #include "../sun/sun.h"
@@ -36,7 +36,7 @@ Planet::Planet(float orbitRadius) : CelestialBody(instanceMesh, instanceBounding
     instanceMesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/planet/mesh/planet.obj");
 
     if (!instanceBoundingSphere.isInitialized() && instanceMesh.vao != 0) {
-        instanceBoundingSphere = CollisionHelper::generateBoundingSphere(instanceMesh);
+        instanceBoundingSphere = ColliderGenerator::generateBoundingSphere(instanceMesh);
     }
 
     // Texture procédurale désertique/rocheuse, seed différent par planète
