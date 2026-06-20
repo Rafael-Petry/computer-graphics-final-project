@@ -59,7 +59,7 @@ namespace {
 Asteroid::Asteroid() : CelestialBody(mesh, boundingSphere, color)
 {
     if (mesh.vao == 0 && !mesh.hasSubMeshes()) {
-        mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/asteroid/asteroid.obj");
+        mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/asteroid/mesh/asteroid.obj");
     }
 
     if (!boundingSphere.isInitialized() && (mesh.vao != 0 || mesh.hasSubMeshes())) {

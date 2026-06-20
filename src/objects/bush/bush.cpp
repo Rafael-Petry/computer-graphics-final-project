@@ -11,17 +11,17 @@
 Mesh Bush::mesh;
 BoundingBox Bush::boundingBox;
 
-Bush::Bush(const glm::vec3 &color, Planet *planet, const glm::vec3 &offset) : Object(mesh, boundingBox, color), planet(planet), offset(offset)
+Bush::Bush(Planet *planet, const glm::vec3 &offset) : Object(mesh, boundingBox, color), planet(planet), offset(offset)
 {
     if (mesh.vao == 0 && !mesh.hasSubMeshes()) {
-        mesh = RenderHelper::loadObjMesh("../../src/objects/bush/bush.obj");
+        mesh = RenderHelper::loadObjMesh("../../src/objects/bush/mesh/bush.obj");
     }
 
     if (!boundingBox.isInitialized() && mesh.vao != 0) {
         boundingBox = CollisionHelper::generateBoundingBox(mesh);
     }
 
-    scaleValue = glm::vec3(0.6f);
+    scaleValue = glm::vec3(2.0f);
     position = (planet != nullptr) ? planet->getPosition() + offset : position;
 }
 

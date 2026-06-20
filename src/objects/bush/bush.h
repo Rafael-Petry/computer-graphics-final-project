@@ -13,7 +13,7 @@ class Planet;
 class Bush : public Object
 {
 public:
-    Bush(const glm::vec3 &color = glm::vec3(0.3f, 0.7f, 0.3f), Planet *planet = nullptr, const glm::vec3 &offset = glm::vec3(0.0f));
+    Bush(Planet *planet = nullptr, const glm::vec3 &offset = glm::vec3(0.0f));
 
 protected:
     glm::mat4 translate(Window *window) override;

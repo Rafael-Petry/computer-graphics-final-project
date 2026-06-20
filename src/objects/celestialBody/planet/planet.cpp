@@ -33,7 +33,7 @@ unsigned int Planet::nextSeed = 0;
 Planet::Planet(float orbitRadius) : CelestialBody(instanceMesh, instanceBoundingSphere, color)
 {
     // Chaque planète charge son propre mesh et génère une texture unique
-    instanceMesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/planet/planet.obj");
+    instanceMesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/planet/mesh/planet.obj");
 
     if (!instanceBoundingSphere.isInitialized() && instanceMesh.vao != 0) {
         instanceBoundingSphere = CollisionHelper::generateBoundingSphere(instanceMesh);
@@ -67,8 +67,7 @@ Planet::Planet(float orbitRadius) : CelestialBody(instanceMesh, instanceBounding
         float phi = (3.14159f * treeBushDist(rng));
 
         glm::vec3 offset(std::sin(phi) * std::cos(theta), std::cos(phi), std::sin(phi) * std::sin(theta));
-        glm::vec3 treeColor = glm::vec3(0.2f, 0.6f, 1.0f) * glm::vec3(0.5f, 1.0f, 0.5f);
-        trees.emplace_back(treeColor, this, offset * 15.0f);
+        trees.emplace_back(this, offset * 15.0f);
     }
 
     for (int b = 0; b < bushesPerPlanet; ++b) {
@@ -76,8 +75,7 @@ Planet::Planet(float orbitRadius) : CelestialBody(instanceMesh, instanceBounding
         float phi = (3.14159f * treeBushDist(rng));
 
         glm::vec3 offset(std::sin(phi) * std::cos(theta), std::cos(phi), std::sin(phi) * std::sin(theta));
-        glm::vec3 bushColor = glm::vec3(0.2f, 0.6f, 1.0f) * glm::vec3(0.5f, 1.0f, 0.5f);
-        bushes.emplace_back(bushColor, this, offset * 15.0f);
+        bushes.emplace_back(this, offset * 15.3f);
     }
 }
 

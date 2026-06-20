@@ -23,7 +23,7 @@ Mesh Spaceship::rayMesh;
 Spaceship::Spaceship(const glm::vec3 &color) : Object(mesh, boundingBox, color)
 {
     if (mesh.vao == 0) {
-        mesh = RenderHelper::loadObjMesh("../../src/objects/spaceship/spaceship.obj");
+        mesh = RenderHelper::loadObjMesh("../../src/objects/spaceship/mesh/spaceship.obj");
         boundingBox = CollisionHelper::generateBoundingBox(mesh);
     }
 

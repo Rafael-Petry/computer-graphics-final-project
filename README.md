@@ -38,16 +38,15 @@ O jogo funciona em um sistema de "levas" de asteróides, que são gerados para d
 
 ## Créditos
 
-Para desenvolver o trabalho, foram usados assets disponíveis livremente ou em laboratórios da disciplina, cujos créditos são listados à seguir:
+Para desenvolver o trabalho, foram usados assets de mesh disponíveis em sites ou repositórios do github, cujos créditos são listados à seguir:
 
 - **Nave:** https://free3d.com/3d-model/uss-yeager-ncc-61947-spaceship-80266.html
-- **Sol:** https://gist.github.com/svmhdvn/efc5779e79780e8b72fb3040423f512f
+- **Sol e Planeta:** https://gist.github.com/svmhdvn/efc5779e79780e8b72fb3040423f512f
 - **Asteróide:** https://free3d.com/3d-model/moon-17150.html
-- **Planeta:** https://gist.github.com/svmhdvn/efc5779e79780e8b72fb3040423f512f
 - **Árvore:** https://free3d.com/3d-model/tree-74556.html
-- **Arbusto:** https://free3d.com/3d-model/bush-84314.html
+- **Arbusto:** https://www.cgtrader.com/free-3d-models/plant/bush/agave-eae5af72-2661-40e1-b475-038e3ce759a7
 
 Além disso, os seguintes arquivos de shader (em especial o "Disney's PBR") foram obtidos de laboratórios anteriores da disciplina.
 
-- **shader_vertex:** https://github.com/cgvis-inf-ufrgs/cgvis-2026-1-lab-2-coelinhos-da-pascoa-cgvis-lab2-coelinhos-da-pascoa/blob/main/src/shader_vertex.glsl
-- **shader_fragment:** https://github.com/cgvis-inf-ufrgs/cgvis-2026-1-lab-2-coelinhos-da-pascoa-cgvis-lab2-coelinhos-da-pascoa/blob/main/src/shader_fragment.glsl
+- **Vertex Shader:** https://github.com/cgvis-inf-ufrgs/cgvis-2026-1-lab-2-coelinhos-da-pascoa-cgvis-lab2-coelinhos-da-pascoa/blob/main/src/shader_vertex.glsl
+- **Fragment Shader:** https://github.com/cgvis-inf-ufrgs/cgvis-2026-1-lab-2-coelinhos-da-pascoa-cgvis-lab2-coelinhos-da-pascoa/blob/main/src/shader_fragment.glsl

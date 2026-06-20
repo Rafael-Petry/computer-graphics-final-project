@@ -15,7 +15,7 @@ BoundingSphere Sun::boundingSphere;
 Sun::Sun() : CelestialBody(mesh, boundingSphere, glm::vec3(1.0f, 1.0f, 0.0f))
 {
     if (mesh.vao == 0) {
-        mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/sun/sun.obj");
+        mesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/sun/mesh/sun.obj");
     }
 
     if (!boundingSphere.isInitialized() && mesh.vao != 0) {

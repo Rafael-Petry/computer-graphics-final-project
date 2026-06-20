@@ -13,7 +13,7 @@ class Planet;
 class Tree : public Object
 {
 public:
-    Tree(const glm::vec3 &color = glm::vec3(0.2f, 0.6f, 0.2f), Planet *planet = nullptr, const glm::vec3 &offset = glm::vec3(0.0f));
+    Tree(Planet *planet = nullptr, const glm::vec3 &offset = glm::vec3(0.0f));
 
 protected:
     void collide(Window *window) override;
