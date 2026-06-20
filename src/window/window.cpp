@@ -130,9 +130,9 @@ void Window::update()
         ImGui::NewFrame();
     }
 
+    updateTime();
     updateScene();
     updateShaderProgram();
-    updateTime();
 
     if (imguiInitialized) {
         ImGui::Render();

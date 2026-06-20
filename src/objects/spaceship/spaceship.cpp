@@ -62,7 +62,6 @@ void Spaceship::update(GLint modelUniform,
                        GLint specularUniform)
 {
     updateShooting(modelUniform, colorUniform, window, isEmissiveUniform);
-    Object::update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
 
     isRolling = false;
     if (glfwGetKey(window->getGlfwWindow(), GLFW_KEY_R) == GLFW_PRESS) {
@@ -77,6 +76,8 @@ void Spaceship::update(GLint modelUniform,
     }
 
     updateRotation(window);
+
+    Object::update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
 
     cameraUp = up;
 

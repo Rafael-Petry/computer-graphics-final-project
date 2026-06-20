@@ -13,7 +13,7 @@ BoundingBox Bush::boundingBox;
 
 Bush::Bush(const glm::vec3 &color, Planet *planet, const glm::vec3 &offset) : Object(mesh, boundingBox, color), planet(planet), offset(offset)
 {
-    if (mesh.vao == 0) {
+    if (mesh.vao == 0 && !mesh.hasSubMeshes()) {
         mesh = RenderHelper::loadObjMesh("../../src/objects/bush/bush.obj");
     }
 
