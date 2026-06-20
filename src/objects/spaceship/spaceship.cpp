@@ -366,24 +366,7 @@ void Spaceship::shoot(Window *window, std::list<Asteroid> &asteroids)
     rayOrigin = getCameraPosition();
     rayDirection = glm::normalize(glm::vec3(front));
 
-    std::vector<Asteroid *> hitAsteroids;
-
-    for (Asteroid &asteroid : asteroids) {
-        const BoundingSphere *sphere = dynamic_cast<const BoundingSphere *>(&asteroid.getCollider());
-        if (sphere == nullptr) {
-            continue;
-        }
-
-        float hitDistance = 0.0f;
-        if (sphere->testRay(asteroid, rayOrigin, rayDirection, &hitDistance)) {
-            hitAsteroids.push_back(&asteroid);
-        }
-    }
-
-    for (Asteroid *asteroid : hitAsteroids) {
-        asteroid->destroy();
-        addScore(100);
-    }
+    collideAsteroidRay(*this, asteroids, rayOrigin, rayDirection);
 }
 
 void Spaceship::renderCrosshair(GLint modelUniform, GLint colorUniform, GLint isEmissiveUniform) const

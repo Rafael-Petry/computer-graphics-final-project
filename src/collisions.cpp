@@ -1,12 +1,17 @@
 #include <algorithm>
 #include <cmath>
+#include <list>
 
 #include <glm/common.hpp>
 #include <glm/geometric.hpp>
+#include <glm/vec3.hpp>
 
 #include "collisions.h"
 #include "objects/object.h"
+#include "objects/celestialBody/asteroid/asteroid.h"
+#include "objects/spaceship/spaceship.h"
 
+////// Bounding Box definition //////
 BoundingBox::BoundingBox() : min(0.0f), max(0.0f), initialized(false) {}
 BoundingBox::BoundingBox(const glm::vec3 &min, const glm::vec3 &max) : min(min), max(max), initialized(true) {}
 bool BoundingBox::isInitialized() const { return initialized; }
@@ -46,6 +51,7 @@ bool BoundingBox::testCollisionBoundingBox(const Object &objectA, const Object &
     return false;
 }
 
+////// Bounding Sphere definition //////
 namespace {
     float maxAbsComponent(const glm::vec3 &value) { return std::max(std::max(std::fabs(value.x), std::fabs(value.y)), std::fabs(value.z)); }
 }
@@ -152,4 +158,21 @@ bool BoundingSphere::testRay(const Object &sphereObject, const glm::vec3 &rayOri
     }
 
     return true;
+}
+
+////// Ray collision //////
+void collideAsteroidRay(Spaceship &spaceship, std::list<Asteroid> &asteroids, const glm::vec3 &rayOrigin, const glm::vec3 &rayDirection)
+{
+    for (Asteroid &asteroid : asteroids) {
+        const BoundingSphere *sphere = dynamic_cast<const BoundingSphere *>(&asteroid.getCollider());
+        if (sphere == nullptr) {
+            continue;
+        }
+
+        float hitDistance = 0.0f;
+        if (sphere->testRay(asteroid, rayOrigin, rayDirection, &hitDistance)) {
+            asteroid.destroy();
+            spaceship.addScore(100);
+        }
+    }
 }

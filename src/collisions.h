@@ -1,9 +1,19 @@
 #ifndef COLLISIONS_H
 #define COLLISIONS_H
 
+#include <algorithm>
+#include <cmath>
+#include <list>
+
+#include <glm/common.hpp>
+#include <glm/geometric.hpp>
 #include <glm/vec3.hpp>
 
+#include "objects/object.h"
+
 class Object;
+class Asteroid;
+class Spaceship;
 
 class Collider
 {
@@ -47,5 +57,7 @@ private:
     float radius = 0.0f;
     bool initialized = false;
 };
+
+void collideAsteroidRay(Spaceship &spaceship, std::list<Asteroid> &asteroids, const glm::vec3 &rayOrigin, const glm::vec3 &rayDirection);
 
 #endif
