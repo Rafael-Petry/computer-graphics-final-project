@@ -12,6 +12,7 @@
 #include "objects/celestialBody/planet/planet.h"
 #include "objects/celestialBody/sun/sun.h"
 #include "objects/spaceship/spaceship.h"
+#include "objects/tree/tree.h"
 
 ////// Bounding Box definition //////
 BoundingBox::BoundingBox() : min(0.0f), max(0.0f), initialized(false) {}
@@ -270,6 +271,42 @@ bool collideSunWithSpaceship(Sun &sun, Spaceship &spaceship)
 {
     if (sun.getBoundingSphere().testCollisionBoundingBox(sun, spaceship)) {
         spaceship.applyDamage(Spaceship::getInstance().getHealth());
+        return true;
+    }
+
+    return false;
+}
+
+////// Tree collisions //////
+bool collideTreeWithSpaceship(Tree &tree, Spaceship &spaceship)
+{
+    if (!spaceship.getIsLanded() && tree.getBoundingBox().testCollisionBoundingBox(tree, spaceship)) {
+        const glm::vec3 treeScale = tree.getScale();
+        const glm::vec3 treeCenter = (tree.getBoundingBox().getMin() + tree.getBoundingBox().getMax()) * treeScale + tree.getPosition();
+
+        const BoundingBox &shipBox = spaceship.getBoundingBox();
+        const glm::vec3 shipScale = spaceship.getScale();
+        const glm::vec3 shipBoxCenter = (shipBox.getMin() + shipBox.getMax()) * 0.5f;
+        const glm::vec3 shipCenterOffset = shipBoxCenter * shipScale;
+
+        glm::vec3 shipCenter = spaceship.getPosition() + shipCenterOffset;
+        glm::vec3 normal = shipCenter - treeCenter;
+        const float normalLength = glm::length(normal);
+        if (normalLength < 0.0001f) {
+            normal = glm::vec3(0.0f, 1.0f, 0.0f);
+        } else {
+            normal /= normalLength;
+        }
+
+        spaceship.setVelocity(glm::vec4(glm::normalize(normal), 0.0f) * 5.0f);
+
+        if (spaceship.getInvencibilityTimer() >= 0.001f) {
+            return true;
+        }
+
+        spaceship.applyDamage(1);
+        spaceship.setInvencibilityTimer(1.0f);
+
         return true;
     }
 

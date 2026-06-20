@@ -16,6 +16,7 @@ class Asteroid;
 class Planet;
 class Sun;
 class Spaceship;
+class Tree;
 
 class Collider
 {
@@ -69,5 +70,7 @@ bool collideAsteroidWithSpaceship(Asteroid &asteroid, Spaceship &spaceship);
 bool collidePlanetWithSpaceship(Planet *planet, Spaceship &spaceship);
 
 bool collideSunWithSpaceship(Sun &sun, Spaceship &spaceship);
+
+bool collideTreeWithSpaceship(Tree &tree, Spaceship &spaceship);
 
 #endif
