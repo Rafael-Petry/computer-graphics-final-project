@@ -6,7 +6,7 @@
 #include <glm/vec4.hpp>
 
 #include "../../objects/celestialBody/celestialBody.h"
-#include "../../../helpers/collision/colliders/boundingSphere.h"
+#include "../../../collisions.h"
 
 class Window;
 
@@ -26,6 +26,7 @@ public:
     Size getSize() const;
     bool isDestroyed() const;
     bool consumeFragmentSpawn(Size &outSize, glm::vec3 &outOrigin);
+    BoundingSphere getBoundingSphere() const { return boundingSphere; }
 
 protected:
     glm::mat4 translate(Window *window) override;

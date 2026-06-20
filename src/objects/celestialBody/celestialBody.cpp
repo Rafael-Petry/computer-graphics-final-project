@@ -3,7 +3,7 @@
 
 #include "../../helpers/render/render.h"
 #include "celestialBody.h"
-#include "../../helpers/collision/collision.h"
+#include "../../helpers/colliderGenerator/colliderGenerator.h"
 #include "../../vendor/include/matrices.h"
 
 Mesh CelestialBody::mesh;
@@ -16,7 +16,7 @@ CelestialBody::CelestialBody(const glm::vec3 &color) : Object(mesh, boundingSphe
     }
 
     if (!boundingSphere.isInitialized() && mesh.vao != 0) {
-        boundingSphere = CollisionHelper::generateBoundingSphere(mesh);
+        boundingSphere = ColliderGenerator::generateBoundingSphere(mesh);
     }
 }
 

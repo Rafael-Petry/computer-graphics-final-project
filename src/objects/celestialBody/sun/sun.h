@@ -5,7 +5,7 @@
 #include <glm/vec3.hpp>
 
 #include "../../objects/celestialBody/celestialBody.h"
-#include "../../../helpers/collision/colliders/boundingSphere.h"
+#include "../../../collisions.h"
 
 class Window;
 
@@ -16,6 +16,8 @@ public:
     Sun &operator=(const Sun &) = delete;
 
     static Sun &getInstance();
+
+    BoundingSphere getBoundingSphere() const { return boundingSphere; }
 
 protected:
     void collide(Window *window) override;

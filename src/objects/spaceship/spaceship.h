@@ -7,7 +7,7 @@
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
-#include "../../helpers/collision/colliders/boundingBox.h"
+#include "../../collisions.h"
 #include "../celestialBody/asteroid/asteroid.h"
 #include "../object.h"
 

@@ -5,7 +5,7 @@
 #include <glm/geometric.hpp>
 
 #include "tree.h"
-#include "../../helpers/collision/collision.h"
+#include "../../helpers/colliderGenerator/colliderGenerator.h"
 #include "../../helpers/render/render.h"
 #include "../../window/window.h"
 #include "../../objects/spaceship/spaceship.h"
@@ -30,38 +30,7 @@ Tree::Tree(Planet *planet, const glm::vec3 &offset) : Object(mesh, boundingBox, 
     position = (planet != nullptr) ? planet->getPosition() + offset : glm::vec3(0.0f);
 }
 
-void Tree::collide(Window *window)
-{
-    Spaceship &spaceship = Spaceship::getInstance();
-
-    if (!spaceship.getIsLanded() && boundingBox.testCollisionBoundingBox(*this, spaceship)) {
-        const glm::vec3 treeScale = getScale();
-        const glm::vec3 treeCenter = (boundingBox.getMin() + boundingBox.getMax()) * treeScale + position;
-
-        const BoundingBox &shipBox = spaceship.getBoundingBox();
-        const glm::vec3 shipScale = spaceship.getScale();
-        const glm::vec3 shipBoxCenter = (shipBox.getMin() + shipBox.getMax()) * 0.5f;
-        const glm::vec3 shipCenterOffset = shipBoxCenter * shipScale;
-
-        glm::vec3 shipCenter = spaceship.getPosition() + shipCenterOffset;
-        glm::vec3 normal = shipCenter - treeCenter;
-        const float normalLength = glm::length(normal);
-        if (normalLength < 0.0001f) {
-            normal = glm::vec3(0.0f, 1.0f, 0.0f);
-        } else {
-            normal /= normalLength;
-        }
-
-        spaceship.setVelocity(glm::vec4(glm::normalize(normal), 0.0f) * 5.0f);
-
-        if (spaceship.getInvencibilityTimer() >= 0.001f) {
-            return;
-        }
-
-        spaceship.applyDamage(1);
-        spaceship.setInvencibilityTimer(1.0f);
-    }
-}
+void Tree::collide(Window *window) { collideTreeWithSpaceship(*this, Spaceship::getInstance()); }
 
 glm::mat4 Tree::translate(Window *window)
 {

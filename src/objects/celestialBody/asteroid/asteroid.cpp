@@ -3,7 +3,7 @@
 #include <glm/geometric.hpp>
 #include <glm/vec4.hpp>
 #include "asteroid.h"
-#include "../../../helpers/collision/collision.h"
+#include "../../../helpers/colliderGenerator/colliderGenerator.h"
 #include "../../../helpers/render/render.h"
 #include "../../spaceship/spaceship.h"
 #include "../../../window/window.h"
@@ -63,7 +63,7 @@ Asteroid::Asteroid() : CelestialBody(mesh, boundingSphere, color)
     }
 
     if (!boundingSphere.isInitialized() && (mesh.vao != 0 || mesh.hasSubMeshes())) {
-        boundingSphere = CollisionHelper::generateBoundingSphere(mesh);
+        boundingSphere = ColliderGenerator::generateBoundingSphere(mesh);
     }
 
     std::mt19937 rng(std::random_device{}());
@@ -119,41 +119,14 @@ glm::mat4 Asteroid::rotate(Window *window) { return Matrix_Rotate_Y(window->getC
 
 void Asteroid::collide(Window *window)
 {
-    const Spaceship &spaceship = Spaceship::getInstance();
-
-    if (boundingSphere.testCollisionBoundingSphere(*this, Sun::getInstance())) {
-        destroy(false);
+    if (collideAsteroidWithSun(*this, Sun::getInstance())) {
         return;
     }
 
-    if (boundingSphere.testCollisionBoundingBox(*this, spaceship)) {
-        Spaceship::getInstance().applyDamage((int)size + 1);
-
-        const glm::vec3 asteroidScale = getScale();
-        const glm::vec3 asteroidCenter = (boundingSphere.getCenter() * asteroidScale) + position;
-
-        const BoundingBox &shipBox = spaceship.getBoundingBox();
-        const glm::vec3 shipScale = spaceship.getScale();
-        const glm::vec3 shipBoxCenter = (shipBox.getMin() + shipBox.getMax()) * 0.5f;
-        const glm::vec3 shipCenterOffset = shipBoxCenter * shipScale;
-
-        glm::vec3 shipCenter = spaceship.getPosition() + shipCenterOffset;
-        glm::vec3 normal = shipCenter - asteroidCenter;
-        const float normalLength = glm::length(normal);
-        if (normalLength < 0.0001f) {
-            normal = glm::vec3(0.0f, 1.0f, 0.0f);
-        } else {
-            normal /= normalLength;
-        }
-
-        const float bumpSpeed = 20.0f;
-        Spaceship::getInstance().setVelocity(glm::vec4(glm::normalize(normal) * bumpSpeed, 0.0f));
-        destroy(false);
-    }
+    collideAsteroidWithSpaceship(*this, Spaceship::getInstance());
 
     for (Planet &planet : Scene::getPlanets()) {
-        if (boundingSphere.testCollisionBoundingSphere(*this, planet)) {
-            destroy(false);
+        if (collideAsteroidWithPlanet(*this, planet)) {
             break;
         }
     }

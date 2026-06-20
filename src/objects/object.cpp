@@ -5,7 +5,7 @@
 
 #include "../helpers/render/render.h"
 #include "object.h"
-#include "../helpers/collision/colliders/collider.h"
+#include "../collisions.h"
 #include "../window/window.h"
 #include "../../vendor/include/matrices.h"
 

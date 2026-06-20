@@ -5,7 +5,7 @@
 #include <glm/vec3.hpp>
 
 #include "../../objects/celestialBody/celestialBody.h"
-#include "../../../helpers/collision/colliders/boundingSphere.h"
+#include "../../../collisions.h"
 #include "../../objects/tree/tree.h"
 #include "../../objects/bush/bush.h"
 class Window;
@@ -25,6 +25,8 @@ public:
                 GLint metallicUniform = -1,
                 GLint roughnessUniform = -1,
                 GLint specularUniform = -1);
+
+    BoundingSphere getBoundingSphere() { return instanceBoundingSphere; }
 
 protected:
     void collide(Window *window) override;

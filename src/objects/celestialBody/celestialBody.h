@@ -6,7 +6,7 @@
 #include <glm/vec3.hpp>
 
 #include "../../helpers/render/mesh.h"
-#include "../../helpers/collision/colliders/boundingSphere.h"
+#include "../../collisions.h"
 
 #include "../object.h"
 

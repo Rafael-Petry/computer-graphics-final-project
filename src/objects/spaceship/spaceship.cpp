@@ -6,7 +6,7 @@
 #include <glm/geometric.hpp>
 
 #include "spaceship.h"
-#include "../../helpers/collision/collision.h"
+#include "../../helpers/colliderGenerator/colliderGenerator.h"
 #include "../../helpers/render/render.h"
 #include "../../helpers/movement/movement.h"
 #include "../../window/window.h"
@@ -24,7 +24,7 @@ Spaceship::Spaceship(const glm::vec3 &color) : Object(mesh, boundingBox, color)
 {
     if (mesh.vao == 0) {
         mesh = RenderHelper::loadObjMesh("../../src/objects/spaceship/mesh/spaceship.obj");
-        boundingBox = CollisionHelper::generateBoundingBox(mesh);
+        boundingBox = ColliderGenerator::generateBoundingBox(mesh);
     }
 
     if (crosshairMesh.vao == 0) {
@@ -366,24 +366,7 @@ void Spaceship::shoot(Window *window, std::list<Asteroid> &asteroids)
     rayOrigin = getCameraPosition();
     rayDirection = glm::normalize(glm::vec3(front));
 
-    std::vector<Asteroid *> hitAsteroids;
-
-    for (Asteroid &asteroid : asteroids) {
-        const BoundingSphere *sphere = dynamic_cast<const BoundingSphere *>(&asteroid.getCollider());
-        if (sphere == nullptr) {
-            continue;
-        }
-
-        float hitDistance = 0.0f;
-        if (sphere->testRay(asteroid, rayOrigin, rayDirection, &hitDistance)) {
-            hitAsteroids.push_back(&asteroid);
-        }
-    }
-
-    for (Asteroid *asteroid : hitAsteroids) {
-        asteroid->destroy();
-        addScore(100);
-    }
+    collideRayWithAsteroids(*this, asteroids, rayOrigin, rayDirection);
 }
 
 void Spaceship::renderCrosshair(GLint modelUniform, GLint colorUniform, GLint isEmissiveUniform) const

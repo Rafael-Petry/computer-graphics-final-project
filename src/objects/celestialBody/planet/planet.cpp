@@ -7,7 +7,7 @@
 
 #include "planet.h"
 #include "../../spaceship/spaceship.h"
-#include "../../../helpers/collision/collision.h"
+#include "../../../helpers/colliderGenerator/colliderGenerator.h"
 #include "../../../helpers/render/render.h"
 #include "../../../window/window.h"
 #include "../sun/sun.h"
@@ -36,7 +36,7 @@ Planet::Planet(float orbitRadius) : CelestialBody(instanceMesh, instanceBounding
     instanceMesh = RenderHelper::loadObjMesh("../../src/objects/celestialBody/planet/mesh/planet.obj");
 
     if (!instanceBoundingSphere.isInitialized() && instanceMesh.vao != 0) {
-        instanceBoundingSphere = CollisionHelper::generateBoundingSphere(instanceMesh);
+        instanceBoundingSphere = ColliderGenerator::generateBoundingSphere(instanceMesh);
     }
 
     // Texture procédurale désertique/rocheuse, seed différent par planète
@@ -102,36 +102,7 @@ void Planet::update(GLint modelUniform,
     }
 }
 
-void Planet::collide(Window *window)
-{
-    Spaceship &spaceship = Spaceship::getInstance();
-
-    if (instanceBoundingSphere.testCollisionBoundingBox(*this, spaceship)) {
-        const glm::vec3 planetScale = getScale();
-        const glm::vec3 planetCenter = (instanceBoundingSphere.getCenter() * planetScale) + position;
-
-        const BoundingBox &shipBox = spaceship.getBoundingBox();
-        const glm::vec3 shipScale = spaceship.getScale();
-        const glm::vec3 shipBoxCenter = (shipBox.getMin() + shipBox.getMax()) * 0.5f;
-        const glm::vec3 shipBoxExtents = (shipBox.getMax() - shipBox.getMin()) * 0.5f;
-        const glm::vec3 shipCenterOffset = shipBoxCenter * shipScale;
-
-        glm::vec3 shipCenter = spaceship.getPosition() + shipCenterOffset;
-        glm::vec3 normal = shipCenter - planetCenter;
-        const float normalLength = glm::length(normal);
-        if (normalLength < 0.0001f) {
-            normal = glm::vec3(0.0f, 1.0f, 0.0f);
-        } else {
-            normal /= normalLength;
-        }
-
-        const float planetRadius = 14.6f;
-        const float shipRadius = glm::length(shipBoxExtents * shipScale);
-        const float landingPadding = 0.05f;
-        const float distanceFromCenter = planetRadius + shipRadius + landingPadding;
-        spaceship.landOn(this, normal, distanceFromCenter, shipCenterOffset);
-    }
-}
+void Planet::collide(Window *window) { collidePlanetWithSpaceship(this, Spaceship::getInstance()); }
 
 glm::mat4 Planet::translate(Window *window)
 {

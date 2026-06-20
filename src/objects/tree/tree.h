@@ -5,7 +5,7 @@
 #include <glm/vec3.hpp>
 
 #include "../object.h"
-#include "../../helpers/collision/colliders/boundingBox.h"
+#include "../../collisions.h"
 
 class Window;
 class Planet;
@@ -14,6 +14,7 @@ class Tree : public Object
 {
 public:
     Tree(Planet *planet = nullptr, const glm::vec3 &offset = glm::vec3(0.0f));
+    BoundingBox getBoundingBox() const { return boundingBox; }
 
 protected:
     void collide(Window *window) override;

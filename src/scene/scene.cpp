@@ -9,7 +9,6 @@
 
 #include "../objects/celestialBody/sun/sun.h"
 #include "../objects/skybox/skybox.h"
-#include "../helpers/collision/colliders/boundingSphere.h"
 #include "../helpers/spawners/asteroid/asteroidSpawner.h"
 #include "../window/window.h"
 #include "scene.h"

@@ -7,6 +7,7 @@
 # ser compilados.
 set(SOURCES
   src/main.cpp
+  src/collisions.cpp
   src/objects/object.cpp
   src/objects/spaceship/spaceship.cpp
   src/objects/celestialBody/celestialBody.cpp
@@ -17,9 +18,7 @@ set(SOURCES
   src/objects/bush/bush.cpp
   src/helpers/movement/movement.cpp
   src/helpers/spawners/asteroid/asteroidSpawner.cpp
-  src/helpers/collision/collision.cpp
-  src/helpers/collision/colliders/boundingBox.cpp
-  src/helpers/collision/colliders/boundingSphere.cpp
+  src/helpers/colliderGenerator/colliderGenerator.cpp
   src/helpers/render/render.cpp
   src/scene/scene.cpp
   src/shaders/loader/loader.cpp
