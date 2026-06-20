@@ -36,14 +36,7 @@ Sun &Sun::getInstance()
     return instance;
 }
 
-void Sun::collide(Window *window)
-{
-    Spaceship &spaceship = Spaceship::getInstance();
-
-    if (boundingSphere.testCollisionBoundingBox(*this, spaceship)) {
-        spaceship.applyDamage(100);
-    }
-}
+void Sun::collide(Window *window) { collideSunWithSpaceship(*this, Spaceship::getInstance()); }
 
 glm::mat4 Sun::translate(Window *window) { return Matrix_Translate(position.x, position.y, position.z); }
 glm::mat4 Sun::rotate(Window *window) { return Matrix_Rotate_Y(window->getCurrentFrame() * 0.1f); }

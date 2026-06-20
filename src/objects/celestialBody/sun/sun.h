@@ -17,6 +17,8 @@ public:
 
     static Sun &getInstance();
 
+    BoundingSphere getBoundingSphere() const { return boundingSphere; }
+
 protected:
     void collide(Window *window) override;
     glm::mat4 translate(Window *window) override;

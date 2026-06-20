@@ -264,3 +264,14 @@ bool collidePlanetWithSpaceship(Planet *planet, Spaceship &spaceship)
 
     return false;
 }
+
+////// Sun collisions //////
+bool collideSunWithSpaceship(Sun &sun, Spaceship &spaceship)
+{
+    if (sun.getBoundingSphere().testCollisionBoundingBox(sun, spaceship)) {
+        spaceship.applyDamage(Spaceship::getInstance().getHealth());
+        return true;
+    }
+
+    return false;
+}

@@ -68,4 +68,6 @@ bool collideAsteroidWithSpaceship(Asteroid &asteroid, Spaceship &spaceship);
 
 bool collidePlanetWithSpaceship(Planet *planet, Spaceship &spaceship);
 
+bool collideSunWithSpaceship(Sun &sun, Spaceship &spaceship);
+
 #endif
