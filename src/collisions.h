@@ -1,12 +1,33 @@
-#ifndef BOUNDING_SPHERE_H
-#define BOUNDING_SPHERE_H
+#ifndef COLLISIONS_H
+#define COLLISIONS_H
 
 #include <glm/vec3.hpp>
 
-#include "collider.h"
-
-class BoundingBox;
 class Object;
+
+class Collider
+{
+public:
+    virtual ~Collider() = default;
+    virtual bool isInitialized() const = 0;
+};
+
+class BoundingBox : public Collider
+{
+public:
+    BoundingBox();
+    BoundingBox(const glm::vec3 &min, const glm::vec3 &max);
+
+    bool isInitialized() const override;
+    const glm::vec3 &getMin() const;
+    const glm::vec3 &getMax() const;
+    bool testCollisionBoundingBox(const Object &objectA, const Object &objectB) const;
+
+private:
+    glm::vec3 min;
+    glm::vec3 max;
+    bool initialized = false;
+};
 
 class BoundingSphere : public Collider
 {

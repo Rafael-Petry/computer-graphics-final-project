@@ -6,7 +6,7 @@
 #include <glm/vec4.hpp>
 
 #include "../../objects/celestialBody/celestialBody.h"
-#include "../../../helpers/collision/colliders/boundingSphere.h"
+#include "../../../collisions.h"
 
 class Window;
 

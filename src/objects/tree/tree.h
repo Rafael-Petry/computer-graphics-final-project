@@ -5,7 +5,7 @@
 #include <glm/vec3.hpp>
 
 #include "../object.h"
-#include "../../helpers/collision/colliders/boundingBox.h"
+#include "../../collisions.h"
 
 class Window;
 class Planet;

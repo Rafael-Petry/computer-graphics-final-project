@@ -1,24 +1,17 @@
 #include <glm/mat4x4.hpp>
 
 #include "bush.h"
-#include "../../helpers/collision/collision.h"
-#include "../../helpers/collision/colliders/boundingBox.h"
 #include "../../helpers/render/render.h"
 #include "../../window/window.h"
 #include "../../objects/celestialBody/planet/planet.h"
 #include "../../vendor/include/matrices.h"
 
 Mesh Bush::mesh;
-BoundingBox Bush::boundingBox;
 
-Bush::Bush(Planet *planet, const glm::vec3 &offset) : Object(mesh, boundingBox, color), planet(planet), offset(offset)
+Bush::Bush(Planet *planet, const glm::vec3 &offset) : Object(mesh, BoundingBox(), color), planet(planet), offset(offset)
 {
     if (mesh.vao == 0 && !mesh.hasSubMeshes()) {
         mesh = RenderHelper::loadObjMesh("../../src/objects/bush/mesh/bush.obj");
-    }
-
-    if (!boundingBox.isInitialized() && mesh.vao != 0) {
-        boundingBox = CollisionHelper::generateBoundingBox(mesh);
     }
 
     scaleValue = glm::vec3(2.0f);

@@ -5,7 +5,6 @@
 #include <glm/vec3.hpp>
 
 #include "../object.h"
-#include "../../helpers/collision/colliders/boundingBox.h"
 
 class Window;
 class Planet;
@@ -23,7 +22,6 @@ private:
     Planet *planet;
     glm::vec3 offset;
     static Mesh mesh;
-    static BoundingBox boundingBox;
 };
 
 #endif
