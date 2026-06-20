@@ -32,9 +32,35 @@ _(Serão adicionadas na versão final)_
 - **F1:** Alterna a janela entre modo _full screen_ e _windowed_.
 - **ESC:** Fecha o jogo.
 
-### Como Jogar
+### Regras
 
 O jogo funciona em um sistema de "levas" de asteróides, que são gerados para destruir a nave espacial. A primeira leva possui 5 asteróides e as próximas aumentam em incrementos de 5. Cada asteróide possui um entre três tamanhos (pequeno, médio ou grande), quanto maior nesta escala, maior o dano que ele causa à nave e destruir um asteróide de um tamanho, gera dois asteróides de um tamanho menor. Após destruir todos asteróides de uma leva, o jogador tem 30 segundos para o início da próxima. Ele pode usar este tempo para realizar um pouso em algum dos planetas, recuperando seus 5 pontos de vida. Contudo, um pouso mal-sucedido ou uma colisão com alguma das árvores do planeta causa 1 ponto de dano à nave. Uma colisão com o sol encerra o jogo imediatamente. Destruir um asetróide concede 100 pontos, sendo o objetivo realizar o maior número de pontos antes de ser destruído.
+
+## Como rodar o jogo (em Linux)
+
+Os passos a seguir foram adaptados do arquivo COMPILACAO.md de laboratórios anteriores da disciplina, visto que os passos são os mesmos.
+
+1. Instale as dependências do projeto.
+
+```bash
+sudo apt install build-essential make libx11-dev libxrandr-dev \
+                     libxinerama-dev libxcursor-dev libxcb1-dev libxext-dev \
+                     libxrender-dev libxfixes-dev libxau-dev libxdmcp-dev
+```
+
+Se você usa Linux Mint, talvez seja necessário instalar mais algumas bibliotecas:
+
+```bash
+sudo apt install libmesa-dev libxxf86vm-dev cmake
+```
+
+2. Realize o build e execute 
+
+```bash
+cmake -B build -S .
+cmake --build build
+cmake --build build -- run
+```
 
 ## Créditos
 
