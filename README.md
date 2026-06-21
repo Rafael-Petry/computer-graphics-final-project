@@ -4,8 +4,8 @@ Asteroids-3D trata-se de um jogo baseado em Outer Wilds e Asteroids, desenvolvid
 
 ## Contribuições
 
-- **Rafael Petry da Silva:** Game design, arquitetura do projeto, renderização de meshes, implementação da física (animação, colisões, etc), implementação de câmeras e interface.
-- **Thibault Pelenc:** - Game design, escolha de meshes e texturas, renderização de texturas, implementação de texturas procedurais e implementação do shader.
+- **Rafael Petry da Silva:** Game design, arquitetura do projeto, renderização de meshes, implementação da física (animação, colisões, curvas cúbicas de bézier, etc), implementação de câmeras e interface.
+- **Thibault Pelenc:** Game design, escolha de meshes e texturas, renderização de texturas, implementação de texturas procedurais e implementação do shader.
 
 ## Uso de IA
 
@@ -13,7 +13,17 @@ A dupla fez uso de IA, utilizando a ferramenta Github Copilot (com os agentes GP
 
 ## Imagens
 
-_(Serão adicionadas na versão final)_
+---
+
+**1) Imagem do jogo em primeira pessoa, mostrando os planetas, sol e asteróides. (Fonte: [/demo/asteroids-3d-1.png](https://github.com/Rafael-Petry/computer-graphics-final-project/blob/main/demo/asteroids-3d-1.png))**
+<img width="1920" height="1080" alt="1" src="https://github.com/user-attachments/assets/fce5704c-28a1-4dce-a3a2-a9db81815588" />
+
+---
+
+**2) Imagem do jogo em terceira pessoa, mostrando a nave pousada no planeta, além das árvores, arbustos/plantas e o sol mais de perto. (Fonte: [/demo/asteroids-3d-2.png](https://github.com/Rafael-Petry/computer-graphics-final-project/blob/main/demo/asteroids-3d-2.png))**
+<img width="1920" height="1080" alt="2" src="https://github.com/user-attachments/assets/bd9e0129-bc77-4972-95fc-8e198dfcc8e1" />
+
+---
 
 ## Manual
 
@@ -38,7 +48,7 @@ O jogo funciona em um sistema de "levas" de asteróides, que são gerados para d
 
 ## Como rodar o jogo (em Linux)
 
-Os passos a seguir foram adaptados do arquivo COMPILACAO.md de laboratórios anteriores da disciplina, visto que os passos são os mesmos.
+Os passos a seguir foram adaptados do arquivo [COMPILACAO.md](https://github.com/cgvis-inf-ufrgs/cgvis-2026-1-lab-2-coelinhos-da-pascoa-cgvis-lab2-coelinhos-da-pascoa/blob/main/COMPILACAO.md) de laboratórios anteriores da disciplina, visto que os passos são os mesmos.
 
 **1. Instale as dependências do projeto.**
 
@@ -72,7 +82,7 @@ Para desenvolver o trabalho, foram usados assets de mesh disponíveis em sites o
 - **Árvore:** https://free3d.com/3d-model/tree-74556.html
 - **Arbusto:** https://www.cgtrader.com/free-3d-models/plant/bush/agave-eae5af72-2661-40e1-b475-038e3ce759a7
 
-Além disso, os seguintes arquivos de shader (em especial o "Disney's PBR") foram obtidos de laboratórios anteriores da disciplina.
+Além disso, os seguintes arquivos de shader (em especial o "Disney's PBR") foram adaptados de laboratórios anteriores da disciplina.
 
 - **Vertex Shader:** https://github.com/cgvis-inf-ufrgs/cgvis-2026-1-lab-2-coelinhos-da-pascoa-cgvis-lab2-coelinhos-da-pascoa/blob/main/src/shader_vertex.glsl
 - **Fragment Shader:** https://github.com/cgvis-inf-ufrgs/cgvis-2026-1-lab-2-coelinhos-da-pascoa-cgvis-lab2-coelinhos-da-pascoa/blob/main/src/shader_fragment.glsl
