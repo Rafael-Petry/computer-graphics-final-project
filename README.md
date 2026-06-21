@@ -16,12 +16,12 @@ A dupla fez uso de IA, utilizando a ferramenta Github Copilot (com os agentes GP
 ---
 
 **1) Imagem do jogo em primeira pessoa, mostrando os planetas, sol e asteróides. (Fonte: [/demo/asteroids-3d-1.png](https://github.com/Rafael-Petry/computer-graphics-final-project/blob/main/demo/asteroids-3d-1.png))**
-<img width="1920" height="1080" alt="1" src="https://github.com/user-attachments/assets/fce5704c-28a1-4dce-a3a2-a9db81815588" />
+<img width="1920" height="1080" alt="asteroids-3d-1" src="https://github.com/user-attachments/assets/89af3828-4fea-447d-a46c-d4a786162ef7" />
 
 ---
 
 **2) Imagem do jogo em terceira pessoa, mostrando a nave pousada no planeta, além das árvores, arbustos/plantas e o sol mais de perto. (Fonte: [/demo/asteroids-3d-2.png](https://github.com/Rafael-Petry/computer-graphics-final-project/blob/main/demo/asteroids-3d-2.png))**
-<img width="1920" height="1080" alt="2" src="https://github.com/user-attachments/assets/bd9e0129-bc77-4972-95fc-8e198dfcc8e1" />
+<img width="1920" height="1080" alt="asteroids-3d-2" src="https://github.com/user-attachments/assets/53d24e2c-83e9-4d39-8f39-8f477d7acedf" />
 
 ---
 
