@@ -9,7 +9,7 @@ Asteroids-3D trata-se de um jogo baseado em Outer Wilds e Asteroids, desenvolvid
 
 ## Uso de IA
 
-A dupla fez uso de IA, utilizando a ferramenta Github Copilot (com os agentes GPT-5.2-Codex, GPT-5.3-Codex e Claude Haiku), além do Claude Chat (com o agente Sonnet 4.6). Ela foi usada para gerar as implementações inciais de grande parte das funcionalidades, que foram, posteriormente, alteradas manualmente para se alinharem corretamente à especificação e arquitetura do projeto. Neste sentido (da IA ser usada como o "ponta-pé" inicial do desenvolvimento), ela se demonstrou bastante útil, poupando muito tempo que seria investido em buscar a documentação de funções específicas das bibliotecas. Em algumas correções de bugs mais difíceis de depurar, a IA também se mostrou útil recebendo as funções como entrada e gerando o código corrigido. O que a IA mais pecou foi na organização do código, que muitas vezes, era gerado em um arquivo único e extenso, contendo "valores mágicos" de difícil compreensão e sem seguir a arquitetura geral do projeto.
+A dupla fez uso de IA, utilizando a ferramenta Github Copilot (com os agentes GPT-5.2-Codex, GPT-5.3-Codex e Claude Haiku), além do Claude Chat (com o agente Sonnet 4.6). Ela foi usada para gerar as implementações inciais de grande parte das funcionalidades, que foram, posteriormente, alteradas manualmente para se alinharem corretamente à especificação e arquitetura do projeto. Neste sentido (da IA ser usada como o "ponta-pé" inicial do desenvolvimento), ela se demonstrou bastante útil, poupando muito tempo que seria investido em buscar a documentação de funções específicas das bibliotecas. Em algumas correções de bugs mais difíceis de depurar, a IA também se mostrou útil recebendo o código das funções problemáticas como entrada e gerando o código corrigido. O que a IA mais pecou foi na organização do código, que, muitas vezes, era gerado em um arquivo único e extenso, contendo "valores mágicos" de difícil compreensão e sem seguir a arquitetura geral do projeto.
 
 ## Imagens
 
@@ -74,7 +74,7 @@ cmake --build build -- run
 
 ## Créditos
 
-Para desenvolver o trabalho, foram usados assets de mesh disponíveis em sites ou repositórios do github, cujos créditos são listados à seguir:
+Para desenvolver o trabalho, foram usados assets de meshes disponíveis em sites ou repositórios do github, cujos créditos são listados à seguir:
 
 - **Nave:** https://free3d.com/3d-model/uss-yeager-ncc-61947-spaceship-80266.html
 - **Sol e Planeta:** https://gist.github.com/svmhdvn/efc5779e79780e8b72fb3040423f512f
