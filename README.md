@@ -11,6 +11,8 @@ Asteroids-3D trata-se de um jogo baseado em Outer Wilds e Asteroids, desenvolvid
 
 A dupla fez uso de IA, utilizando a ferramenta Github Copilot (com os agentes GPT-5.2-Codex, GPT-5.3-Codex e Claude Haiku), além do Claude Chat (com o agente Sonnet 4.6). Ela foi usada para gerar as implementações inciais de grande parte das funcionalidades, que foram, posteriormente, alteradas manualmente para se alinharem corretamente à especificação e arquitetura do projeto. Neste sentido (da IA ser usada como o "ponta-pé" inicial do desenvolvimento), ela se demonstrou bastante útil, poupando muito tempo que seria investido em buscar a documentação de funções específicas das bibliotecas. Em algumas correções de bugs mais difíceis de depurar, a IA também se mostrou útil recebendo o código das funções problemáticas como entrada e gerando o código corrigido. O que a IA mais pecou foi na organização do código, que, muitas vezes, era gerado em um arquivo único e extenso, contendo "valores mágicos" de difícil compreensão e sem seguir a arquitetura geral do projeto.
 
+**Obs:** Os prompts podem ser lidos individualmente através da pasta [prompts/](https://github.com/Rafael-Petry/computer-graphics-final-project/tree/main/prompts) ou pode ser feita a visualização de todos em um só arquivo [./PROMPTS.md](https://github.com/Rafael-Petry/computer-graphics-final-project/blob/main/PROMPTS.md). Vale destacar que o último item (38-textures) corresponde à conversa utilizada para gerar os seguintes commits que acabaram ficando sem a informação de prompt no histórico do repositório: [visual_updated (856b624ee1a3d4a06bb100c74358be8e97c85849)](https://github.com/Rafael-Petry/computer-graphics-final-project/commit/856b624ee1a3d4a06bb100c74358be8e97c85849), [test_asteroid (8bdb222a4b31f42cc17027d995117787397cc8d2)](https://github.com/Rafael-Petry/computer-graphics-final-project/commit/8bdb222a4b31f42cc17027d995117787397cc8d2), [asteroid completed (d7ea042f9f37bfbd46da06310d20bd4eb3d7bbfa)](https://github.com/Rafael-Petry/computer-graphics-final-project/commit/d7ea042f9f37bfbd46da06310d20bd4eb3d7bbfa), [laser_update and procedural texture for sun and planet (37620d0837f9457d7472d79a5169101733a8aa67)](https://github.com/Rafael-Petry/computer-graphics-final-project/commit/37620d0837f9457d7472d79a5169101733a8aa67) e [skybox added (df006fa736d585b2796ff168c1db5a62ff4e55aa)](https://github.com/Rafael-Petry/computer-graphics-final-project/commit/df006fa736d585b2796ff168c1db5a62ff4e55aa).
+
 ## Imagens
 
 ---
@@ -74,7 +76,7 @@ cmake --build build -- run
 
 ## Créditos
 
-Para desenvolver o trabalho, foram usados assets de meshes disponíveis em sites ou repositórios do github, cujos créditos são listados à seguir:
+Para desenvolver o trabalho, foram usados assets de meshes disponíveis em sites ou repositórios do github, cujas fontes são listadas à seguir:
 
 - **Nave:** https://free3d.com/3d-model/uss-yeager-ncc-61947-spaceship-80266.html
 - **Sol e Planeta:** https://gist.github.com/svmhdvn/efc5779e79780e8b72fb3040423f512f

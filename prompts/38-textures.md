@@ -1,9 +1,11 @@
+**Obs:** Este item corresponde à conversa utilizada para gerar os seguintes commits: [visual_updated (856b624ee1a3d4a06bb100c74358be8e97c85849)](https://github.com/Rafael-Petry/computer-graphics-final-project/commit/856b624ee1a3d4a06bb100c74358be8e97c85849), [test_asteroid (8bdb222a4b31f42cc17027d995117787397cc8d2)](https://github.com/Rafael-Petry/computer-graphics-final-project/commit/8bdb222a4b31f42cc17027d995117787397cc8d2), [asteroid completed (d7ea042f9f37bfbd46da06310d20bd4eb3d7bbfa)](https://github.com/Rafael-Petry/computer-graphics-final-project/commit/d7ea042f9f37bfbd46da06310d20bd4eb3d7bbfa), [laser_update and procedural texture for sun and planet (37620d0837f9457d7472d79a5169101733a8aa67)](https://github.com/Rafael-Petry/computer-graphics-final-project/commit/37620d0837f9457d7472d79a5169101733a8aa67) e [skybox added (df006fa736d585b2796ff168c1db5a62ff4e55aa)](https://github.com/Rafael-Petry/computer-graphics-final-project/commit/df006fa736d585b2796ff168c1db5a62ff4e55aa).
+
 # Aide pour un projet étape par étape
 
 **Created:** 6/9/2026 20:53:30  
 **Updated:** 6/22/2026 12:48:47  
 **Exported:** 6/24/2026 12:50:05  
-**Link:** [https://claude.ai/chat/c60ef376-bf81-4f0d-8e4b-14d0587ea7af](https://claude.ai/chat/c60ef376-bf81-4f0d-8e4b-14d0587ea7af)  
+**Link:** [https://claude.ai/chat/c60ef376-bf81-4f0d-8e4b-14d0587ea7af](https://claude.ai/chat/c60ef376-bf81-4f0d-8e4b-14d0587ea7af)
 
 ## User:
 
@@ -69,7 +71,7 @@ Peux-tu partager les fichiers suivants :
 
 > File: scene.cpp
 
-les old sont mes anciens vertex et fragment, les deux autres sont les disney.  Spaceship est un des objets avec lesquels je travaille. D'ailleurs ils ont tous la même un .h .cpp et .obj.
+les old sont mes anciens vertex et fragment, les deux autres sont les disney. Spaceship est un des objets avec lesquels je travaille. D'ailleurs ils ont tous la même un .h .cpp et .obj.
 
 ## Assistant:
 
@@ -86,6 +88,7 @@ les old sont mes anciens vertex et fragment, les deux autres sont les disney.  S
 OK, j'ai une vue claire de tout. Voici le diagnostic :
 
 **Ce que tu as actuellement :**
+
 - `vertex_old` / `fragment_old` : shaders ultra-basiques (pas de normales, pas d'éclairage, juste une couleur unie)
 - `vertex.glsl` (Disney) : bon, il calcule `position_world` et `normal` — c'est ce qu'il faut
 - `fragment.glsl` (Disney) : contient le BRDF Disney, **mais avec des problèmes de compatibilité** avec ton projet
@@ -125,6 +128,7 @@ d'ailleurs le sun doit etre une source de lumière je sais pas si tu l'as pris e
 Oui, j'en ai bien pris note — c'est justement le point 2 de mon plan : les lumières sont actuellement **hardcodées** dans le fragment shader comme des directions fixes, alors que le soleil de ton projet est un objet avec une **position dynamique** dans la scène.
 
 Concrètement, il faudra :
+
 - Ajouter un `uniform vec3 sunPosition` dans le fragment shader
 - Calculer la direction lumière dynamiquement : `normalize(sunPosition - fragmentPosition)` au lieu des directions fixes
 - Passer la position du soleil depuis le C++ à chaque frame
@@ -150,11 +154,13 @@ voici mes render, je t'ai mis le mesh en plus dans le doute
 Parfait, j'ai maintenant tout ce qu'il me faut. Le tableau est très clair :
 
 **Ce qui existe déjà et fonctionne :**
+
 - Le VAO envoie exactement `layout location 0 = vec4 position`, `location 1 = vec4 normal`, `location 2 = vec2 uv` — **le vertex shader Disney est 100% compatible** tel quel, rien à changer
 - La texture procédurale désertique est déjà générée côté CPU et stockée dans `mesh.textureId`
 - `renderModelTextured` existe déjà avec `useTextureUniform` et `textureSamplerUniform`
 
 **Ce qui manque :**
+
 - Le fragment shader doit remplacer `object_id`/SPHERE/BUNNY/PLANE par `objectColor` + paramètres PBR uniformes
 - Les lumières hardcodées doivent être remplacées par la position du soleil en `uniform`
 - Le fragment doit gérer la texture (`sampler2D` + UV)
@@ -241,6 +247,7 @@ c'est à dire la position ?
 Le soleil dans ton projet est un objet 3D qui se déplace (comme les planètes qui ont `orbitRadius`, `orbitSpeed`, etc.). Pour que l'éclairage soit correct, le fragment shader doit savoir **où est le soleil dans le monde** à chaque frame, pour calculer la direction de la lumière vers chaque fragment.
 
 Concrètement dans le shader :
+
 ```glsl
 vec3 L = normalize(sunPosition - p.xyz); // direction lumière = fragment → soleil
 ```
@@ -277,6 +284,7 @@ Je modifie `window.cpp` pour passer tous les uniforms PBR + position du soleil :
 Voilà les 3 fichiers mis à jour. Résumé de ce qui a changé :
 
 **`window.cpp`** — `updateShaderProgram` :
+
 - `glUseProgram` déplacé **avant** les `glUniform` (c'était un bug potentiel dans l'original — il faut activer le program avant de lui envoyer des uniforms)
 - Position du soleil passée à chaque frame via `Sun::getInstance().getPosition()`
 - Tous les paramètres PBR Disney passés avec des valeurs par défaut raisonnables
@@ -318,7 +326,7 @@ C'est tout. Le reste (passer la position du soleil, les paramètres PBR, etc.) e
 
 j'ai eu ce problème quand j'ai voulu éxécuter le projet :
 PS C:\Users\33785\Desktop\computer-graphics-final-project\bin\Debug> ."C:/Users/33785/Desktop/computer-graphics-final-project/bin/Debug/main.exe"
-OBJ load warning: Material file [ UFO_Empty.mtl ] not found in a path : 
+OBJ load warning: Material file [ UFO_Empty.mtl ] not found in a path :
 Failed to load material file(s). Use default material.
 material [ 'UFO' ] not found in .mtl
 material [ 'UFO' ] not found in .mtl
@@ -346,10 +354,10 @@ material [ 'UFO' ] not found in .mtl
 material [ 'UFO' ] not found in .mtl
 material [ 'UFO' ] not found in .mtl
 material [ 'UFO' ] not found in .mtl
-OBJ load warning: Material file [ moon.mtl ] not found in a path : 
+OBJ load warning: Material file [ moon.mtl ] not found in a path :
 Failed to load material file(s). Use default material.
 material [ '01___Default' ] not found in .mtl
-OBJ load warning: Material file [ Tree.mtl ] not found in a path : 
+OBJ load warning: Material file [ Tree.mtl ] not found in a path :
 Failed to load material file(s). Use default material.
 material [ 'Trank_bark' ] not found in .mtl
 material [ 'polySurface1SG1' ] not found in .mtl
@@ -365,6 +373,7 @@ Tu as deux types de problèmes distincts :
 **1. Les `.mtl` manquants** — pas grave pour l'instant, c'est juste que tes fichiers `.obj` référencent des fichiers de matériaux qui ne sont pas dans le bon dossier. Ça n'empêche pas le rendu, les objets s'affichent juste avec le matériau par défaut.
 
 **2. Les shaders introuvables** — c'est le vrai problème bloquant :
+
 ```
 Failed to open file: ../../src/shaders/vertex.glsl
 Failed to open file: ../../src/shaders/fragment.glsl
@@ -375,22 +384,24 @@ Le programme cherche les shaders à `../../src/shaders/vertex.glsl` et `fragment
 Tu as deux options :
 
 **Option A** — Renommer mes fichiers pour qu'ils correspondent aux noms attendus :
+
 - `shader_vertex.glsl` → `vertex.glsl`
 - `shader_fragment.glsl` → `fragment.glsl`
 
 Et les placer dans `src/shaders/`.
 
 **Option B** — Changer le chemin dans `main.cpp` :
+
 ```cpp
 // Ligne actuelle :
 const GLuint shaderProgram = ShaderLoader::createShaderProgram(
-    "../../src/shaders/vertex.glsl", 
+    "../../src/shaders/vertex.glsl",
     "../../src/shaders/fragment.glsl"
 );
 
 // Changer en :
 const GLuint shaderProgram = ShaderLoader::createShaderProgram(
-    "../../src/shaders/shader_vertex.glsl", 
+    "../../src/shaders/shader_vertex.glsl",
     "../../src/shaders/shader_fragment.glsl"
 );
 ```
@@ -401,8 +412,7 @@ const GLuint shaderProgram = ShaderLoader::createShaderProgram(
 
 > 6/9/2026 21:15:38
 
-ok ça à l'air de fonctionner pour les ombres et les lumières désormais pourquoi chaque objet à une couleur uniforme, c'est comme si c'était que des sphères lisses pour les planètes or j'ai copié des modèles .obj qui avait du relief. De même pour le spaceship ? Est ce que ce ne serait pas l'étape - [] Make textures work
-    - [] For planets, make an algorithm to generate the texture procedurally
+ok ça à l'air de fonctionner pour les ombres et les lumières désormais pourquoi chaque objet à une couleur uniforme, c'est comme si c'était que des sphères lisses pour les planètes or j'ai copié des modèles .obj qui avait du relief. De même pour le spaceship ? Est ce que ce ne serait pas l'étape - [] Make textures work - [] For planets, make an algorithm to generate the texture procedurally
 
 ## Assistant:
 
@@ -413,6 +423,7 @@ Oui exactement, tu as deux problèmes distincts :
 **1. Le relief des .obj n'apparaît pas** — ce n'est pas un problème de texture, c'est un problème de **normales**. Le PBR Disney utilise les normales pour calculer comment la lumière rebondit. Si les normales de ton .obj sont toutes similaires (ou si le modèle est vraiment une sphère lisse), ça donnera cet effet uniforme. Est-ce que tes .obj ont bien des normales (`vn`) dedans ? Tu peux vérifier en ouvrant le fichier et cherchant des lignes qui commencent par `vn`.
 
 **2. Les textures ne sont pas appliquées** — oui c'est exactement l'étape "Make textures work". Actuellement `renderModel` est appelé pour tout, qui passe juste `objectColor` au shader. Pour les planètes il faut :
+
 - Appeler `generateDesertPlanetTexture` à l'init de chaque planète
 - Appeler `renderModelTextured` au lieu de `renderModel`
 
@@ -523,7 +534,7 @@ Tu peux me partager `object.h` et `celestialBody.h` pour que je génère des fic
 
 > File: celestialBody.h
 
-juste pour être sur j'ai aussi un celestialBody.obj et un object.obj mais je crois que c'est des anciens fichiers pour quand j'avais pas encore de .obj pour chaque item de mon projet donc maintenant il me semble qu'ils servent  à rien mais je ne suis pas sur à 100%
+juste pour être sur j'ai aussi un celestialBody.obj et un object.obj mais je crois que c'est des anciens fichiers pour quand j'avais pas encore de .obj pour chaque item de mon projet donc maintenant il me semble qu'ils servent à rien mais je ne suis pas sur à 100%
 
 ## Assistant:
 
@@ -613,7 +624,7 @@ j'ai ces erreurs :
 [build] Starting build
 [proc] Executing command: C:\Users\33785\Desktop\cmake-4.3.1-windows-x86_64\cmake-4.3.1-windows-x86_64\bin\cmake.exe --build C:/Users/33785/Desktop/computer-graphics-final-project/build --target main --
 [build] Version MSBuild 18.6.3+84d3e95b4 pour .NET Framework
-[build] 
+[build]
 [build]   sun.cpp
 [build]   planet.cpp
 [build]   scene.cpp
@@ -622,25 +633,25 @@ j'ai ces erreurs :
 [build]       voir la déclaration de 'CelestialBody::boundingSphere'
 [build]       C:\Users\33785\Desktop\computer-graphics-final-project\src\objects\celestialBody\celestialBody.h(13,7):
 [build]       voir la déclaration de 'CelestialBody'
-[build]   
+[build]
 [build] C:\Users\33785\Desktop\computer-graphics-final-project\src\objects\celestialBody\planet\planet.cpp(57,41): error C2248: 'CelestialBody::boundingSphere' : impossible d'accéder à private membre déclaré(e) dans la classe 'CelestialBody' [C:\Users\33785\Desktop\computer-graphics-final-project\build\main.vcxproj]
 [build]       C:\Users\33785\Desktop\computer-graphics-final-project\src\objects\celestialBody\celestialBody.h(26,27):
 [build]       voir la déclaration de 'CelestialBody::boundingSphere'
 [build]       C:\Users\33785\Desktop\computer-graphics-final-project\src\objects\celestialBody\celestialBody.h(13,7):
 [build]       voir la déclaration de 'CelestialBody'
-[build]   
+[build]
 [build] C:\Users\33785\Desktop\computer-graphics-final-project\src\objects\celestialBody\planet\planet.cpp(58,36): error C2248: 'CelestialBody::boundingSphere' : impossible d'accéder à private membre déclaré(e) dans la classe 'CelestialBody' [C:\Users\33785\Desktop\computer-graphics-final-project\build\main.vcxproj]
 [build]       C:\Users\33785\Desktop\computer-graphics-final-project\src\objects\celestialBody\celestialBody.h(26,27):
 [build]       voir la déclaration de 'CelestialBody::boundingSphere'
 [build]       C:\Users\33785\Desktop\computer-graphics-final-project\src\objects\celestialBody\celestialBody.h(13,7):
 [build]       voir la déclaration de 'CelestialBody'
-[build]   
+[build]
 [build] C:\Users\33785\Desktop\computer-graphics-final-project\src\scene\scene.cpp(107,15): error C2660: 'Spaceship::update' : la fonction ne prend pas 5 arguments [C:\Users\33785\Desktop\computer-graphics-final-project\build\main.vcxproj]
 [build]       C:\Users\33785\Desktop\computer-graphics-final-project\src\objects\spaceship\spaceship.h(25,10):
 [build]       voir la déclaration de 'Spaceship::update'
 [build]       C:\Users\33785\Desktop\computer-graphics-final-project\src\scene\scene.cpp(107,15):
 [build]       lors de la tentative de mise en correspondance de la liste des arguments '(GLint, GLint, Window *, GLint, GLint)'
-[build]   
+[build]
 [build]   window.cpp
 [build] C:\Users\33785\Desktop\computer-graphics-final-project\src\window\window.cpp(156,58): warning C4305: 'argument' : troncation de 'double' à 'float' [C:\Users\33785\Desktop\computer-graphics-final-project\build\main.vcxproj]
 [build]   Génération de code en cours...
@@ -756,7 +767,7 @@ Bonne idée !
 
 Les `.obj` sont parfaits — normales bien variées, aucune dégénérée. Le problème n'est donc pas dans les fichiers.
 
-Le vrai problème est **structurel** : le spaceship et le soleil ont un mesh `static` partagé entre toutes les instances, et surtout **`Object::mesh` est une référence `const`** initialisée dans le constructeur. Quand `planet.cpp` utilise `instanceMesh`, ça fonctionne parce qu'on passe la référence avant l'init — mais pour le spaceship et le soleil, le mesh statique est chargé *après* que la référence soit liée, donc `renderModelTextured` reçoit bien le bon mesh.
+Le vrai problème est **structurel** : le spaceship et le soleil ont un mesh `static` partagé entre toutes les instances, et surtout **`Object::mesh` est une référence `const`** initialisée dans le constructeur. Quand `planet.cpp` utilise `instanceMesh`, ça fonctionne parce qu'on passe la référence avant l'init — mais pour le spaceship et le soleil, le mesh statique est chargé _après_ que la référence soit liée, donc `renderModelTextured` reçoit bien le bon mesh.
 
 Le vrai problème est ailleurs : **le spaceship appelle `Object::update` qui appelle `renderModelTextured`, mais `Spaceship::update` override et rappelle `Object::update` — donc ça devrait fonctionner.** Voyons exactement ce que reçoit le shader pour ces objets :
 
@@ -865,7 +876,7 @@ Enfin, pour le spaceship — ses paramètres PBR dans `window.cpp`. Le vaisseau 
 
 > 6/10/2026 2:27:34
 
-est ce que c'est possible de diminuer la taille des spaceship  ?
+est ce que c'est possible de diminuer la taille des spaceship ?
 
 ## Assistant:
 
@@ -915,17 +926,17 @@ D'après le code que tu m'as partagé, les ennemis sont les **astéroïdes** (`A
 
 Il n'y a pas d'autre vaisseau ennemi dans le code que j'ai vu. La scène contient : spaceship, sun, planets, asteroids, trees, bushes — pas de vaisseau ennemi séparé.
 
-Tu veux peut-être que les ennemis *ressemblent* à des vaisseaux ? Dans ce cas on pourrait remplacer `asteroid_updated.obj` par un modèle de vaisseau ennemi. Tu as un `.obj` de vaisseau ennemi quelque part dans ton projet ?
+Tu veux peut-être que les ennemis _ressemblent_ à des vaisseaux ? Dans ce cas on pourrait remplacer `asteroid_updated.obj` par un modèle de vaisseau ennemi. Tu as un `.obj` de vaisseau ennemi quelque part dans ton projet ?
 
 ## User:
 
 > 6/10/2026 2:39:21
 
 j'ai changé le .obj de l'astéroid car je n'aimais pas sa forme et quand j'execute j'ai cette erreur :
-OBJ load warning: Material file [ 10464_Asteroid_v1_Iterations-2.mtl ] not found in a path : 
+OBJ load warning: Material file [ 10464_Asteroid_v1_Iterations-2.mtl ] not found in a path :
 Failed to load material file(s). Use default material.
 material [ '_10464_Asteroid_v1_max201010464_Asteroid_v1' ] not found in .mtl
-OBJ load warning: Material file [ Tree.mtl ] not found in a path : 
+OBJ load warning: Material file [ Tree.mtl ] not found in a path :
 Failed to load material file(s). Use default material.
 material [ 'Trank_bark' ] not found in .mtl
 material [ 'polySurface1SG1' ] not found in .mtl
@@ -939,6 +950,7 @@ Ces erreurs ne sont pas bloquantes — le jeu tourne quand même. C'est juste qu
 Tu as deux options :
 
 **Option A (la plus simple)** — ouvrir le `.obj` avec un éditeur de texte et supprimer la ligne qui référence le `.mtl` :
+
 ```
 mtllib 10464_Asteroid_v1_Iterations-2.mtl  ← supprimer cette ligne
 ```
@@ -966,10 +978,12 @@ C'est une modification assez conséquente. Actuellement ton pipeline ignore comp
 Mais avant de se lancer là-dedans, je veux m'assurer que c'est vraiment utile pour toi. Les `.mtl` basiques contiennent `Kd` (couleur diffuse), `Ks` (spéculaire), `Ns` (shininess) — c'est du Phong, pas du PBR. La conversion vers Disney BRDF est approximative.
 
 **Ce que ça t'apporterait concrètement :**
+
 - Chaque sous-mesh d'un `.obj` aurait sa propre couleur/matériau
 - Plus besoin de passer `objectColor` manuellement
 
 **Ce que ça ne ferait pas :**
+
 - Les textures `.mtl` (`map_Kd`, etc.) nécessiteraient un chargement d'images supplémentaire
 
 Est-ce que ton besoin principal c'est juste d'avoir **des couleurs différentes par partie du mesh** (ex: le vaisseau avec cockpit d'une couleur, fuselage d'une autre) ? Ou tu veux vraiment les textures image complètes ?
@@ -1038,10 +1052,10 @@ material [ 'UFO' ] not found in .mtl
 material [ 'UFO' ] not found in .mtl
 material [ 'UFO' ] not found in .mtl
 material [ 'UFO' ] not found in .mtl
-OBJ load warning: Material file [ moon.mtl ] not found in a path : 
+OBJ load warning: Material file [ moon.mtl ] not found in a path :
 Failed to load material file(s). Use default material.
 material [ '01___Default' ] not found in .mtl
-OBJ load warning: Material file [ Tree.mtl ] not found in a path : 
+OBJ load warning: Material file [ Tree.mtl ] not found in a path :
 Failed to load material file(s). Use default material.
 material [ 'Trank_bark' ] not found in .mtl
 material [ 'polySurface1SG1' ] not found in .mtl
@@ -1092,7 +1106,7 @@ Car le problème actuel c'est que `tinyobjloader` cherche les `.mtl` dans le mê
 
 > File: 10464_Asteroid_v1_Iterations-2.mtl
 
-le premier c'est celui du spaceship le second celui de  l'asteroid
+le premier c'est celui du spaceship le second celui de l'asteroid
 
 ## Assistant:
 
@@ -1106,6 +1120,7 @@ le premier c'est celui du spaceship le second celui de  l'asteroid
 C'est clair maintenant. Le spaceship a **30 matériaux avec des textures `.jpg`** (sbmaintext1.jpg, sbbrown1.jpg, etc.) et l'astéroïde a **1 matériau avec `10464_Asteroid_v1_diffuse.jpg`**.
 
 C'est un vrai chantier — il faut :
+
 - Charger les images `.jpg` avec `stb_image`
 - Stocker un tableau de matériaux dans `Mesh` avec leurs textures GPU
 - Splitter le rendu par groupe de matériau
@@ -1281,6 +1296,7 @@ Pour le spaceship (`saberncc61947.mtl`), voici la liste complète des textures n
 - `sbfire2.jpg`
 
 Pour l'astéroïde (`10464_Asteroid_v1_Iterations-2.mtl`) :
+
 - `10464_Asteroid_v1_diffuse.jpg`
 
 Tous ces fichiers doivent être placés dans le **même dossier** que leur `.obj` respectif.
@@ -1296,7 +1312,7 @@ j'ai cette erreur :
 [build] Starting build
 [proc] Executing command: C:\Users\33785\Desktop\cmake-4.3.1-windows-x86_64\cmake-4.3.1-windows-x86_64\bin\cmake.exe --build C:/Users/33785/Desktop/computer-graphics-final-project/build --target main --
 [build] Version MSBuild 18.6.3+84d3e95b4 pour .NET Framework
-[build] 
+[build]
 [build]   boundingBox.cpp
 [build]   boundingSphere.cpp
 [build]   collision.cpp
@@ -1465,7 +1481,7 @@ Le vrai problème est ailleurs — c'est dans `object.cpp`. Regarde ce que j'ai 
 void Object::update(...) {
     if (isEmissiveUniform >= 0)
         glUniform1i(isEmissiveUniform, isEmissive ? 1 : 0);
-    
+
     const glm::mat4 model = translate(window) * rotate(window) * scale(window) ...
     RenderHelper::renderModelMTL(...);
     ...
@@ -1826,7 +1842,7 @@ La vraie solution : **toujours remettre `useTexture=0` et `isEmissive=0` après 
 
 > 6/17/2026 1:25:46
 
-> File: 
+> File:
 
 est ce que je respecte bien ces consignes pour l'instant ?
 
@@ -1837,6 +1853,7 @@ est ce que je respecte bien ces consignes pour l'instant ?
 Voici une analyse de tes consignes par rapport à ce que tu as implémenté :
 
 **✅ Déjà respecté :**
+
 - Malhas poligonais complexas — spaceship, planets, asteroids, sun, trees, bushes
 - Transformações geométricas — rotation, translation, scale sur tous les objets
 - Controle de câmera — tu as déjà deux caméras (première personne et troisième personne, touche C)
@@ -1848,9 +1865,11 @@ Voici une analyse de tes consignes par rapport à ce que tu as implémenté :
 - Interação mouse e teclado — contrôle du vaisseau, tir, atterrissage
 
 **⚠️ Partiellement respecté :**
+
 - **Mapeamento de texturas** — les planètes ont des textures procédurales, le spaceship et l'astéroïde ont des textures `.jpg`, mais **tous les objets doivent avoir des textures** — trees, bushes, sun n'en ont pas encore
 
 **❌ Pas encore respecté :**
+
 - **Mínimo três imagens distintas** — il faut au moins 3 textures image différentes appliquées, et tous les objets doivent avoir leurs couleurs définies par textures
 
 Donc la priorité maintenant c'est d'ajouter des textures au **soleil**, aux **arbres** et aux **buissons**. Tu as des textures pour ces objets ?
@@ -2077,14 +2096,13 @@ et donc là normalement c'est tout bon ?
 Pas tout à fait — il reste encore ces points non résolus :
 
 **Problèmes actifs :**
+
 1. **Astéroïdes invisibles** — le bug `mesh.vao == 0` avec le nouveau `.obj` n'est pas encore résolu proprement
 2. **Laser noir** — les uniforms `isEmissive`/`useTexture` mal remis après le rendu des objets avec subMeshes
 
-**Consignes pas encore complètes :**
-3. **Arbres et buissons sans texture** — la consigne dit tous les objets doivent avoir une texture image
-4. **Spaceship sans texture** — le `.mtl` est là mais le pipeline multi-matériaux n'est pas encore testé
+**Consignes pas encore complètes :** 3. **Arbres et buissons sans texture** — la consigne dit tous les objets doivent avoir une texture image 4. **Spaceship sans texture** — le `.mtl` est là mais le pipeline multi-matériaux n'est pas encore testé
 
-Je te recommande de tester d'abord la compilation avec les 4 fichiers que je viens de générer, et de me dire ce qui se passe — est-ce que ça compile ? Est-ce que les planètes ont bien la texture herbe ? Est-ce que le soleil a une texture ? 
+Je te recommande de tester d'abord la compilation avec les 4 fichiers que je viens de générer, et de me dire ce qui se passe — est-ce que ça compile ? Est-ce que les planètes ont bien la texture herbe ? Est-ce que le soleil a une texture ?
 
 Ensuite on s'attaque aux problèmes restants dans l'ordre.
 
@@ -2092,10 +2110,10 @@ Ensuite on s'attaque aux problèmes restants dans l'ordre.
 
 > 6/17/2026 1:39:08
 
-1) le problème a été réglé
-2) le laser noir je crois que ça vient du fait qu'il n'est pas considéré comme un laser au sens qu'on l'imagine, c'est juste un objet et donc quand on est dos au soleil qui est la source de lumière il est dans le noir mais quand on est face au soleil il est rouge (c'est mon hypothèse qu'en penses tu ?)
-3) je crois que c'est fait on pourra vérifier ensemble plus tard
-4) on peut faire ça
+1. le problème a été réglé
+2. le laser noir je crois que ça vient du fait qu'il n'est pas considéré comme un laser au sens qu'on l'imagine, c'est juste un objet et donc quand on est dos au soleil qui est la source de lumière il est dans le noir mais quand on est face au soleil il est rouge (c'est mon hypothèse qu'en penses tu ?)
+3. je crois que c'est fait on pourra vérifier ensemble plus tard
+4. on peut faire ça
 
 ## Assistant:
 
@@ -2281,6 +2299,7 @@ ok parfait, que devait on gérer comme problème sur le spaceship déja ?
 On avait identifié que le **spaceship n'a pas de texture** — il est censé utiliser les textures du `.mtl` (`saberncc61947.mtl`) avec ses `.jpg` associés, mais on n'a pas encore vérifié si ça fonctionne correctement en jeu.
 
 Pour tester, il faut que tous les fichiers suivants soient dans le même dossier que `spaceship.obj` :
+
 - `saberncc61947.mtl`
 - Tous les `.jpg` (`sbmaintext1.jpg`, `sbbrown1.jpg`, `sbred1.jpg`, etc.)
 
@@ -2296,11 +2315,12 @@ oui je l'ai bien fait, il a l'ai texturé
 
 > 6/17/2026 1:54:33
 
-Alors le spaceship est réglé ! 
+Alors le spaceship est réglé !
 
 Faisons le bilan de ce qui reste à faire selon les consignes :
 
 **Textures** — il faut vérifier que **tous** les objets ont une texture :
+
 - ✅ Spaceship — textures `.mtl`
 - ✅ Astéroïde — `10464_Asteroid_v1_diffuse.jpg`
 - ✅ Planètes — texture herbe procédurale
@@ -2359,6 +2379,7 @@ qu'est ce qui est le mieux, quel est l'intérêt de chaque ?
 > 6/17/2026 1:57:44
 
 **Textures procédurales (comme planètes/soleil) :**
+
 - ✅ Pas de fichiers externes à gérer
 - ✅ Infiniment personnalisable dans le code
 - ✅ Peut varier selon un seed (chaque arbre différent)
@@ -2366,6 +2387,7 @@ qu'est ce qui est le mieux, quel est l'intérêt de chaque ?
 - ❌ Prend du temps CPU à générer au démarrage
 
 **Textures image `.jpg` (comme spaceship/astéroïde) :**
+
 - ✅ Beaucoup plus réaliste visuellement
 - ✅ Fait par des artistes, détails fins
 - ❌ Faut trouver/créer les fichiers `.jpg`
@@ -2379,7 +2401,7 @@ Je te recommande donc les textures procédurales pour les arbres et buissons. Tu
 
 > 6/17/2026 1:59:16
 
-> File: 
+> File:
 
 voici les consignes que j'ai, est ce que je les respecte bien ? est ce que j'utilise des fonctions interdites ?
 
@@ -2390,6 +2412,7 @@ voici les consignes que j'ai, est ce que je les respecte bien ? est ce que j'uti
 Analysons point par point :
 
 **✅ Respecté :**
+
 - Malhas poligonais complexas — spaceship, planets, asteroids, sun, trees, bushes
 - Transformações geométricas — rotation, translation, scale contrôlées par clavier/souris
 - Controle de câmera — première personne ET troisième personne (touche C)
@@ -2401,16 +2424,19 @@ Analysons point par point :
 - Interação mouse e teclado — souris pour viser, clavier pour bouger/tirer
 
 **⚠️ À vérifier :**
+
 - **Mapeamento de texturas** — arbres et buissons pas encore texturés, et la consigne dit **minimum 3 images distinctes** — tu en as combien actuellement ? Les textures procédurales comptent-elles comme "imagens" ? C'est ambigu — je dirais que non, elles doivent être des fichiers image. Tu as `10464_Asteroid_v1_diffuse.jpg` et les `.jpg` du spaceship — ça fait plus de 3 ✅
 
 **❌ Fonctions interdites — à vérifier dans ton code :**
 Cherche dans tout le projet si tu utilises :
+
 - `glm::rotate()`, `glm::scale()`, `glm::translate()`
 - `glm::lookAt()`, `glm::perspective()`
 
 Tu utilises `matrices.h` du vendor pour tes transformations — c'est bien. Mais ton partenaire n'a pas ajouté des fonctions GLM interdites quelque part ?
 
 **❓ Point ambigu :**
+
 - Les textures procédurales — le prof pourrait considérer que ça ne compte pas comme "imagens". Je te recommande d'ajouter au moins une texture `.jpg` pour les arbres/buissons pour être safe.
 
 ## User:
@@ -2429,7 +2455,7 @@ Tu utilises `matrices.h` du vendor pour tes transformations — c'est bien. Mais
 
 > File: AlienPlanet.ply
 
-je souhaite utiliser ceci pour les planets à la place de ce que  j'ai actuellement, est ce qu'il manque des fichiers pour le faire, si oui dis moi quoi ? sinon peux tu implémenter ?
+je souhaite utiliser ceci pour les planets à la place de ce que j'ai actuellement, est ce qu'il manque des fichiers pour le faire, si oui dis moi quoi ? sinon peux tu implémenter ?
 
 ## Assistant:
 
@@ -2492,11 +2518,13 @@ Maintenant `planet.cpp` — remplacer le mesh procédural par `AlienPlanet.obj` 
 3 fichiers. Voici ce qu'il faut faire :
 
 **Placer dans `src/objects/celestialBody/planet/` :**
+
 - `AlienPlanet.obj` — le mesh avec normales générées
 - `AlienPlanet.mtl` — le matériau adapté
 - `planet_Bog1200.png` — la texture (déjà dans tes fichiers)
 
 **Remplacer :**
+
 - `planet.cpp` par le nouveau
 
 Toutes les planètes auront maintenant la même texture `planet_Bog1200.png` — c'est plus réaliste que la procédurale. Si tu veux des planètes différentes à l'avenir, il faudra d'autres textures. Note aussi que `nextSeed++` a été supprimé puisqu'il ne sert plus.
@@ -2606,6 +2634,7 @@ Je vois que ton partenaire a une version différente de `scene.cpp` avec des sig
 **Créer un nouveau dossier** `src/objects/skybox/` et y mettre `skybox.h` et `skybox.cpp`.
 
 **Ce que fait la skybox :**
+
 - Grande sphère de rayon 900 centrée sur la caméra (suit toujours le joueur)
 - Texture 2048×1024 générée procéduralement avec 2000 étoiles — points blancs, blancs chauds et blancs froids de tailles variées avec un petit halo pour les plus brillantes
 - Rendue avec `isEmissive=true` (pas d'éclairage, couleur pure)
@@ -2654,6 +2683,7 @@ Ton partenaire a beaucoup changé `scene.h/cpp` — les uniforms sont déjà tou
 3. **Ajouter** `skybox.cpp` dans ton `CMakeLists.txt` avec les autres sources
 
 Pour le `CMakeLists.txt`, cherche la liste des `.cpp` et ajoute :
+
 ```cmake
 src/objects/skybox/skybox.cpp
 ```
@@ -2673,36 +2703,36 @@ src/objects/skybox/skybox.cpp
 j'ai cette erreur quand je sauvegarde le cmakelist.tkt :
 
 ```Log
-[main] Configuring project: computer-graphics-final-project 
+[main] Configuring project: computer-graphics-final-project
 [proc] Executing command: C:\Users\33785\Desktop\cmake-4.3.1-windows-x86_64\cmake-4.3.1-windows-x86_64\bin\cmake.exe -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -S C:/Users/33785/Desktop/computer-graphics-final-project -B C:/Users/33785/Desktop/computer-graphics-final-project/build
 [cmake] CMake Deprecation Warning at CMakeLists.txt:37 (cmake_minimum_required):
 [cmake]   Compatibility with CMake < 3.10 will be removed from a future version of
 [cmake]   CMake.
-[cmake] 
+[cmake]
 [cmake]   Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
 [cmake]   to tell CMake that the project requires at least <min> but has been updated
 [cmake]   to work with policies introduced by <max> or earlier.
-[cmake] 
-[cmake] 
+[cmake]
+[cmake]
 [cmake] -- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.26200.
 [cmake] -- Build type: Debug
-[cmake] 
+[cmake]
 [cmake]                Change the build type on the command line with
-[cmake] 
+[cmake]
 [cmake]                    -DCMAKE_BUILD_TYPE=type
-[cmake] 
+[cmake]
 [cmake]                for type in {Release, Debug, RelWithDebInfo}.
-[cmake] 
+[cmake]
 [cmake] CMake Error at CMakeLists.txt:76 (message):
-[cmake] 
-[cmake] 
+[cmake]
+[cmake]
 [cmake]   O arquivo
 [cmake]   C:/Users/33785/Desktop/computer-graphics-final-project/src/objects/skybox/skybox.cpp
 [cmake]   não existe.
-[cmake] 
+[cmake]
 [cmake]   Por favor, atualize a lista de arquivos fonte no arquivo CMakeLists.txt.
-[cmake] 
-[cmake] 
+[cmake]
+[cmake]
 [cmake] -- Configuring incomplete, errors occurred!
 [proc] The command: C:\Users\33785\Desktop\cmake-4.3.1-windows-x86_64\cmake-4.3.1-windows-x86_64\bin\cmake.exe -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -S C:/Users/33785/Desktop/computer-graphics-final-project -B C:/Users/33785/Desktop/computer-graphics-final-project/build exited with code: 1
 ```
@@ -2748,6 +2778,7 @@ Le soleil est une **source de lumière ponctuelle dynamique** — sa position es
 **Pipeline de textures complet**
 
 Tu as implémenté un pipeline multi-matériaux qui supporte les fichiers `.mtl` et les textures `.jpg`/`.png`. Concrètement :
+
 - `loadObjMesh` lit le `.mtl`, regroupe les faces par matériau, charge chaque texture via `stb_image`, et crée un `SubMesh` par matériau avec son propre VAO et sa texture GPU
 - `renderModelMTL` binde la bonne texture et les bonnes propriétés PBR pour chaque sous-mesh avant de le rendre
 - Les propriétés Phong du `.mtl` (Ns, Ks, Kd) sont converties approximativement en paramètres PBR Disney
@@ -2757,6 +2788,7 @@ Tu as implémenté un pipeline multi-matériaux qui supporte les fichiers `.mtl`
 **Textures procédurales**
 
 Pour les objets sans fichier texture externe, tu génères les textures algorithmiquement en CPU :
+
 - **Planètes** — texture herbe avec bruit fractal (fbm), warping, et bruit haute fréquence pour simuler les brins
 - **Soleil** — texture surface solaire avec cellules de convection, turbulence et taches solaires sombres
 - **Skybox** — 2000 étoiles placées aléatoirement avec halos et teintes variées (blanc chaud, blanc froid)
