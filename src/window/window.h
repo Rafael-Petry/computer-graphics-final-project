@@ -28,11 +28,11 @@ public:
     float getCurrentFrame() const;
     GLuint getShaderProgram() { return shaderProgram; };
     void setShaderProgram(GLuint shaderProgram);
+    void updateViewAndProjection();
 
 private:
     static void framebufferSizeCallback(GLFWwindow *glfwWindow, int width, int height);
     static void keyCallback(GLFWwindow *glfwWindow, int key, int scancode, int action, int mods);
-    void updateShaderProgram();
     void updateTime();
     void updateScene();
 

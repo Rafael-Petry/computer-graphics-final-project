@@ -107,7 +107,7 @@ private:
     float rayVisibleDuration = 0.12f;
     float rayMaxRange = 50.0f;
     float rayRadius = 0.02f;
-    float crosshairDistance = 5.0f;
+    float crosshairDistance = 6.0f;
     float crosshairLength = 0.08f;
     float crosshairThickness = 0.008f;
 
@@ -130,10 +130,6 @@ private:
 
     float invencibilityTimer = 0.0f;
     float takeOffSpeed = 0.0f;
-
-    glm::vec4 cameraPosition;
-    glm::vec4 cameraFront;
-    glm::vec4 cameraUp;
 
     static Mesh mesh;
     static BoundingBox boundingBox;

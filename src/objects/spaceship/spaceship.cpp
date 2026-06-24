@@ -78,18 +78,6 @@ void Spaceship::update(GLint modelUniform,
     updateRotation(window);
 
     Object::update(modelUniform, colorUniform, window, useTextureUniform, texSamplerUniform, isEmissiveUniform, false, metallicUniform, roughnessUniform, specularUniform);
-
-    cameraUp = up;
-
-    if (cameraIsFirstPerson) {
-        cameraPosition = glm::vec4(position, 1.0f) + front * 3.0f;
-        cameraFront = front;
-    } else {
-        const float cameraDistance = 6.0f;
-        const float cameraHeight = 2.0f;
-        cameraPosition = glm::vec4(position, 1.0f) - front * cameraDistance + up * cameraHeight;
-        cameraFront = glm::normalize(glm::vec4(position, 1.0f) - cameraPosition);
-    }
 }
 
 void Spaceship::updateShooting(GLint modelUniform, GLint colorUniform, Window *window, GLint isEmissiveUniform)
@@ -299,13 +287,14 @@ glm::mat4 Spaceship::translate(Window *window)
     if (isLanded && landedPlanet != nullptr && takeOffSpeed <= 0.0f) {
         if (glfwGetKey(window->getGlfwWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
             takeOffSpeed = 60.0f;
-        } else if (takeOffSpeed <= 0.0f) {
+        } else {
             front = landedFront;
             up = landedUp;
             right = landedRight;
             const glm::vec3 planetCenter = landedPlanet->getPosition();
             const glm::vec3 shipCenter = planetCenter + (landedNormal * landedDistance);
             position = shipCenter - landedShipCenterOffset;
+            window->updateViewAndProjection();
             return Matrix_Translate(position.x, position.y, position.z);
         }
     }
@@ -344,6 +333,7 @@ glm::mat4 Spaceship::translate(Window *window)
 
     position += glm::vec3(velocity) * deltaTime;
 
+    window->updateViewAndProjection();
     return Matrix_Translate(position.x, position.y, position.z);
 }
 
@@ -363,7 +353,7 @@ void Spaceship::shoot(Window *window, std::list<Asteroid> &asteroids)
     lastShotTime = currentTime;
     rayVisibleUntil = currentTime + rayVisibleDuration;
 
-    rayOrigin = getCameraPosition();
+    rayOrigin = position;
     rayDirection = glm::normalize(glm::vec3(front));
 
     collideRayWithAsteroids(*this, asteroids, rayOrigin, rayDirection);
@@ -375,7 +365,7 @@ void Spaceship::renderCrosshair(GLint modelUniform, GLint colorUniform, GLint is
         return;
     }
 
-    const glm::vec3 center = getCameraPosition() + glm::vec3(front) * crosshairDistance;
+    const glm::vec3 center = position + glm::vec3(front) * crosshairDistance;
     const glm::mat4 orientation = getOrientationMatrix();
 
     glDisable(GL_DEPTH_TEST);
@@ -425,9 +415,27 @@ void Spaceship::renderRay(GLint modelUniform, GLint colorUniform, GLint isEmissi
         glUniform1i(isEmissiveUniform, 0);
 }
 
-glm::mat4 Spaceship::getViewMatrix() const { return Matrix_cameraView(cameraPosition, cameraFront, cameraUp); }
+glm::mat4 Spaceship::getViewMatrix() const
+{
+    glm::vec4 cameraFront = front;
 
-glm::vec3 Spaceship::getCameraPosition() const { return position + glm::vec3(front); }
+    if (!cameraIsFirstPerson) {
+        cameraFront = glm::normalize(glm::vec4(position, 1.0f) - glm::vec4(getCameraPosition(), 1.0f));
+    }
+
+    return Matrix_cameraView(glm::vec4(getCameraPosition(), 1.0f), cameraFront, up);
+}
+
+glm::vec3 Spaceship::getCameraPosition() const
+{
+    if (cameraIsFirstPerson) {
+        return glm::vec3(glm::vec4(position, 1.0f) + front * 3.0f);
+    }
+
+    const float cameraDistance = 6.0f;
+    const float cameraHeight = 2.0f;
+    return glm::vec3(glm::vec4(position, 1.0f) - front * cameraDistance + up * cameraHeight);
+}
 
 glm::vec3 Spaceship::getFrontVector() const { return glm::vec3(front); }
 

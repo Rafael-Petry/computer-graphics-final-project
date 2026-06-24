@@ -132,7 +132,6 @@ void Window::update()
 
     updateTime();
     updateScene();
-    updateShaderProgram();
 
     if (imguiInitialized) {
         ImGui::Render();
@@ -144,7 +143,7 @@ void Window::update()
     glfwPollEvents();
 }
 
-void Window::updateShaderProgram()
+void Window::updateViewAndProjection()
 {
     // ── Matrices view / projection ───────────────────────────────────────────
     const GLint viewUniform = glGetUniformLocation(shaderProgram, "view");
